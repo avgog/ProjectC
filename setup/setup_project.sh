@@ -5,16 +5,19 @@ echo "What domain name do you use? " && read DOMAIN
 git clone https://github.com/avgog/ProjectC && cd ProjectC
 
 apt-get update
-apt-get install mysql-server-5.7 haproxy -y
+apt-get install mysql-server-5.7 haproxy git curl -y
 
+/usr/bin/curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+
+apt-get install nodejs npm -y
 PATH=$(pwd)
 
-mkdir -p /opt/projectc/db_api/settings
+/bin/mkdir -p /opt/projectc/db_api/settings
 
-cp -r ${PATH}/Api/db_api/* /opt/projectc/db_api/
+/bin/cp -r ${PATH}/ProjectC/Api/db_api/* /opt/projectc/db_api/
 
 cd /opt/projectc/db_api/
-printf "
+printf '
 {
   "name": "project-c",
   "version": "1.0.0",
@@ -30,16 +33,18 @@ printf "
     "mysql": "^2.17.1"
   }
 }
-" > package.json
-npm install --save express
-npm install pm2@latest -g
-npm install --save mysql
+' > package.json
 
-pm2 start index.js
+/bin/ln -s /usr/bin/nodejs /usr/bin/node
+/usr/bin/npm install --save express
+/usr/bin/npm install pm2@latest -g
+/usr/bin/npm install --save mysql
 
-mysql -u root -p projectc < ${PATH}/Db/dumps/projectc_prod.sql
+/usr/local/bin/pm2 start index.js
 
-mv /etc/haproxy/haproxy.cfg /etc/haproxy/default_config.cfg
+/bin/cat ${PATH}/ProjectC/Db/dumps/projectc_prod.sql | /usr/bin/mysql -u root -p projectc
+
+/bin/mv /etc/haproxy/haproxy.cfg /etc/haproxy/default_config.cfg
 
 printf "
 global
@@ -97,7 +102,7 @@ backend backend_default-deny
         http-request deny
 " > /etc/haproxy/haproxy.cfg
 
-systemctl reload haproxy.service
+/bin/systemctl reload haproxy.service
 
 echo 'alias projectc="systemctl start haproxy.service && systemctl start mysql.service && pm2 start /opt/projectc/db_api/index.js"' >> ~/.bashrc && source ~/.bashrc
 
