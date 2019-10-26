@@ -1,5 +1,7 @@
 #!/bin/bash
 
+## NOTE: It's recommended to run apt-get update && apt-get upgrade before you use this script.
+
 echo "What domain name do you use? " && read DOMAIN
 
 git clone https://github.com/avgog/ProjectC && cd ProjectC
