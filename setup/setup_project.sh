@@ -4,14 +4,14 @@
 
 echo "What domain name do you use? " && read DOMAIN
 
-git clone https://github.com/avgog/ProjectC && cd ProjectC
+git clone https://github.com/avgog/ProjectC
 
 apt-get update
 apt-get install mysql-server-5.7 haproxy git curl -y
 
 /usr/bin/curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 
-apt-get install nodejs npm -y
+apt-get install nodejs -y
 PATH=$(pwd)
 
 /bin/mkdir -p /opt/projectc/db_api/settings
@@ -44,6 +44,7 @@ printf '
 
 /usr/local/bin/pm2 start index.js
 
+/usr/bin/mysql -u root -e "CREATE DATABASE projectc;"
 /bin/cat ${PATH}/ProjectC/Db/dumps/projectc_prod.sql | /usr/bin/mysql -u root -p projectc
 
 /bin/mv /etc/haproxy/haproxy.cfg /etc/haproxy/default_config.cfg
