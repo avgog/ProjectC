@@ -11,6 +11,15 @@ app.use(bodyparser.urlencoded({ extended: false }));
 const app_settings = JSON.parse( fs.readFileSync(__dirname + "/settings/unsafe.json") );
 const db_tables = JSON.parse( fs.readFileSync(__dirname + "/settings/db.json") );
 
+const exec = (query) => {
+    db.connect();
+    db.query(query, function(err){
+      db.end();
+      if(!err) { console.log("Query [ " + query + " ] succeded!"); res.send("succeded!");}
+      else { console.log(err); res.send("Error!"); }
+    });
+  };
+  
 // NOTE: Make sure the user in the unsafe.json has plugin 'mysql_native_password', otherwise it will crash.
 var db = mysql.createConnection({
   host: app_settings.db.host,
@@ -19,7 +28,7 @@ var db = mysql.createConnection({
   database: app_settings.db.database
 });
 
-app.get('/', function (req, res) {
+app.get('/select', function (req, res) {
   let data = req.body;
   let data_field = data.data;
   let table = data.key;
@@ -51,14 +60,10 @@ app.get('/', function (req, res) {
   query = query + ";"
   res.send(query);
   
-  db.connect();
-  db.query(query, function(err){
-    if(!err) {console.log("Select has succeded!");}
-    else {console.log(err);}
-  });
+  exec(query);
 });
 
-app.post('/', function(req, res) {
+app.post('/insert', function(req, res) {
   let data = req.body;
   let data_field = data.data;
   let table = data.key;
@@ -86,12 +91,7 @@ app.post('/', function(req, res) {
     }
     let query = "INSERT INTO " + table + " (" + val1 + ") VALUES (" + val2 + ");";
     
-    db.connect();
-    db.query(query, function(err) {
-      db.end();
-      if (!err){ console.log( "QUERY [ " + query + " ] succeeded." ); res.send("succeded!"); }
-      else { console.log( "QUERY [ " + query + " ] failed.\n" + err ); res.send("failed!"); }
-    });
+    exec(query);
   }
   else {
     res.send("ERROR: the given body is not valid.");
@@ -105,14 +105,8 @@ app.post('/query', function(req, res) {
     
   console.log(Object.keys(data));
   console.log(query);
-    db.connect();
-    db.query(query, function(err) {
-      db.end();
-      if (!err){ console.log( "QUERY [ " + query + " ] succeeded." ); res.send("succeded!"); }
-      else { console.log( "QUERY [ " + query + " ] failed.\n" + err ); res.send(err); }
-    });
   
-
+  exec(query);
 });
 
 
