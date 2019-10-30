@@ -11,11 +11,11 @@ app.use(bodyparser.urlencoded({ extended: false }));
 const app_settings = JSON.parse( fs.readFileSync(__dirname + "/settings/unsafe.json") );
 const db_tables = JSON.parse( fs.readFileSync(__dirname + "/settings/db.json") );
 
-const exec = (query) => {
-    db.connect();
-    db.query(query, function(err){
-      db.end();
-      if(!err) { console.log("Query [ " + query + " ] succeded!"); res.send("succeded!");}
+const exec = (query, res) => {
+//    db.connect();
+    db.query(query, function(err,resp){
+//      db.end();
+      if(!err) { console.log("Query [ " + query + " ] succeded!"); res.send(resp);}
       else { console.log(err); res.send("Error!"); }
     });
   };
@@ -60,7 +60,7 @@ app.get('/select', function (req, res) {
   query = query + ";"
   res.send(query);
   
-  exec(query);
+  exec(query, res);
 });
 
 app.post('/insert', function(req, res) {
@@ -91,7 +91,7 @@ app.post('/insert', function(req, res) {
     }
     let query = "INSERT INTO " + table + " (" + val1 + ") VALUES (" + val2 + ");";
     
-    exec(query);
+    exec(query, res);
   }
   else {
     res.send("ERROR: the given body is not valid.");
@@ -106,7 +106,7 @@ app.post('/query', function(req, res) {
   console.log(Object.keys(data));
   console.log(query);
   
-  exec(query);
+  exec(query,res);
 });
 
 
