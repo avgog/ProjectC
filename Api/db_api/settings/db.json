@@ -2,25 +2,5 @@
   "test": [
     "column1",
     "column2"
-  ],
-  "Routes": [
-    "start",
-    "end",
-    "user_id"
-  ],
-  "User": [
-    "username",
-    "password"
-  ],
-  "Stops": [
-    "town",
-    "name",
-    "stopareacode",
-    "longitude",
-    "latitude"
-  ],
-  "Times": [
-    "route_id",
-    "timeofarival"
   ]
 }
