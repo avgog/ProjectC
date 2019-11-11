@@ -2,17 +2,18 @@ const fs = require('fs');
 
 //create a route table, deletes existing one if it exists before creation
 module.exports.recreate_table = async function(){
-    const query = `
-    drop table if exists routes;
+    let query1 = "drop table if exists routes;"
+    let query2 = `
     create table routes(
-        route_id serial not null, 
+        route_id int AUTO_INCREMENT not null, 
         user_id int, 
         start_point varchar(255), 
         end_point varchar(255), 
         route_name varchar(255), 
         primary key(route_id)
     );`;
-    executeQuery(query);  
+    executeQuery(query1);
+    executeQuery(query2);
 }
 
 module.exports.add_route = async function(user_id, start_point, end_point, name){
@@ -58,31 +59,32 @@ module.exports.remove_route = async function(route_id){
 }
 
 async function executeQuery(query){
-    const {Client } = require('pg')
+    const mysql = require('mysql');
 
     try{
         const dbConfig = JSON.parse( fs.readFileSync(__dirname + "/temp_db_config.json") );
         
-        const client = new Client({
+        const database = mysql.createConnection({
             user: dbConfig.user,
             host: dbConfig.host,
             database: dbConfig.database,
             password: dbConfig.password,
             port: dbConfig.port
         })
-        client.connect(err => {
+        database.connect(err => {
             if (err) {
                 console.error('connection error', err.stack)
             }
         })
-        client.query(query, (err, res) => {
+
+        database.query(query, (err, res) => {
             if(err){
                 console.log(err, res)
             }
-            if(query.toLowerCase().startsWith("select") && res && res.rows){
-                console.log(res.rows)
+            if(query.toLowerCase().startsWith("select") && res){
+                console.log(res)
             }
-            client.end()
+            database.end()
         })
     }
     catch(error){

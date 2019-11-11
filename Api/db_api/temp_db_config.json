@@ -1,8 +1,8 @@
 {
-    "port": "1234",
-    "user": "postgres",
-    "password": "1234",
-    "host": "localhost",
-    "database": "myDatabase"
+    "port": "3306",
+    "user": "root",
+    "password": "",
+    "host": "127.0.0.1",
+    "database": "mydatabase"
 }
   
