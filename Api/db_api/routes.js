@@ -12,48 +12,48 @@ module.exports.recreate_table = async function(){
         route_name varchar(255), 
         primary key(route_id)
     );`;
-    database.executeQuery(query1);
-    database.executeQuery(query2);
+    database.executeQuery(query1, null);
+    database.executeQuery(query2, null);
 }
 
-module.exports.add_route = async function(user_id, start_point, end_point, name){
+module.exports.add_route = async function(user_id, start_point, end_point, name, callbackObject=null){
     const query = `
     insert into routes 
     (user_id, start_point, end_point, route_name) 
     VALUES (`+user_id+`,'`+start_point+`','`+end_point+`','`+name+`');`;
-    database.executeQuery(query);
+    database.executeQuery(query, callbackObject);
 }
 
-module.exports.get_route = async function(route_id){
+module.exports.get_route = async function(route_id, callbackObject=null){
     const query = `select * from routes where route_id = ` + route_id;
-    database.executeQuery(query);
+    database.executeQuery(query, callbackObject);
 }
 
-module.exports.get_user_routes = async function(user_id){
+module.exports.get_user_routes = async function(user_id, callbackObject=null){
     const query = `select * from routes where user_id = ` + user_id;
-    database.executeQuery(query);
+    database.executeQuery(query, callbackObject);
 }
 
-module.exports.change_start_point = async function(route_id, start_point){
+module.exports.change_start_point = async function(route_id, start_point, callbackObject=null){
     const query = `update routes set start_point = '` + start_point + `' where route_id = '` + route_id + `'`;
-    database.executeQuery(query);
+    database.executeQuery(query, callbackObject);
     
 }
 
-module.exports.change_end_point = async function(route_id, end_point){
+module.exports.change_end_point = async function(route_id, end_point, callbackObject=null){
     const query = `update routes set end_point = '` + end_point + `' where route_id = '` + route_id + `'`;
-    database.executeQuery(query);
+    database.executeQuery(query, callbackObject);
     
 }
 
-module.exports.change_route_name = async function(route_id, route_name){
+module.exports.change_route_name = async function(route_id, route_name, callbackObject=null){
     const query = `update routes set route_name = '` + route_name + `' where route_id = '` + route_id + `'`;
-    database.executeQuery(query);
+    database.executeQuery(query, callbackObject);
 }
 
-module.exports.remove_route = async function(route_id){
+module.exports.remove_route = async function(route_id, callbackObject=null){
     const query = `delete from routes where route_id = ` + route_id+ ``;
-    database.executeQuery(query);
+    database.executeQuery(query, callbackObject);
 }
 
 

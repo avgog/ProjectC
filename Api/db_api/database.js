@@ -1,10 +1,18 @@
 const fs = require('fs');
 
-module.exports.executeQuery = async function(query){
+/*
+Execute a mysql query on the database.
+callback object format:
+{
+    callback [type: function, params: error,result,data]
+    data [type:Object, put your parameters for the callback here] 
+}
+*/
+module.exports.executeQuery = async function(query, callbackObject){
     const mysql = require('mysql');
 
     try{
-        const dbConfig = JSON.parse( fs.readFileSync(__dirname + "/temp_db_config.json") );
+        const dbConfig = JSON.parse( fs.readFileSync(__dirname + "/db_config.json") );
         
         const database = mysql.createConnection({
             user: dbConfig.user,
@@ -25,6 +33,9 @@ module.exports.executeQuery = async function(query){
             }
             if(query.toLowerCase().startsWith("select") && res){
                 console.log(res)
+            }
+            if(callbackObject!=null){
+                callbackObject.callback(err, res, callbackObject.data);
             }
             database.end()
         })
