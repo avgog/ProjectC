@@ -72,7 +72,7 @@ app.post("/routes/remove", (req, res) => {
 app.post("/times/get/from_id", (req, res) => {
     console.log("got post request [url: '" + req.url +"']")
     let callbackObject = {"callback":defaultCallback, "data":{res}}
-    times.get_route(req.body.time_id, callbackObject)
+    times.get_time(req.body.time_id, callbackObject)
 });
 
 app.post("/times/get/from_route", (req, res) => {
