@@ -11,12 +11,14 @@ app.use(bodyparser.urlencoded({ extended: false }));
 const app_settings = JSON.parse( fs.readFileSync(__dirname + "/settings/unsafe.json") );
 const db_tables = JSON.parse( fs.readFileSync(__dirname + "/settings/db.json") );
 
-const exec = (query) => {
+const exec = (query, res) => {
     db.connect();
-    db.query(query, function(err){
+    db.query(query, function(err, result){
       db.end();
-      if(!err) { console.log("Query [ " + query + " ] succeded!"); res.send("succeded!");}
-      else { console.log(err); res.send("Error!"); }
+      console.log(query);
+      console.log(result);
+      if(!err) { res.send(JSON.stringify(result)); }
+      else { console.log(err); res.send("ERROR"); }
     });
   };
   
@@ -58,9 +60,12 @@ app.get('/select', function (req, res) {
     }
   }
   query = query + ";"
-  res.send(query);
+  //res.send(query);
   
-  exec(query);
+  //let RESULT = exec(query);
+  //console.log("Result: " + RESULT);
+  //res.send(RESULT);
+  exec(query, res);
 });
 
 app.post('/insert', function(req, res) {
@@ -91,7 +96,7 @@ app.post('/insert', function(req, res) {
     }
     let query = "INSERT INTO " + table + " (" + val1 + ") VALUES (" + val2 + ");";
     
-    exec(query);
+    exec(query, res);
   }
   else {
     res.send("ERROR: the given body is not valid.");
@@ -99,14 +104,53 @@ app.post('/insert', function(req, res) {
 
 });
 
+app.post('/delete', function (req, res) {
+  let data = req.body;
+  let data_field = data.data;
+  let table = data.key;
+
+  let user = data.user;
+  let user_pass = data.pass;
+
+  query = "DELETE FROM " + table;
+  let filter = data_field.filter;
+  if (Object.keys(filter).length > 0) {
+    let names = Object.keys(filter);
+    for (let i = 0; i < names.length; i++){
+      if (i == 0) {
+        query = query + " WHERE " + names[i] + " = '" + filter[names[i]] + "'";
+      }
+      else {
+        query = query + " AND " + names[i] + " = '" + filter[names[i]] + "'";
+      }
+    }
+  }
+  query = query + ";"
+  res.send(query);
+  
+  exec(query, res);
+});
+
 app.post('/query', function(req, res) {
   let data = req.body;
   let query = data.query;
     
   console.log(Object.keys(data));
+  console.log(req); console.log(data)
   console.log(query);
   
-  exec(query);
+  exec(query, res);
+});
+
+app.get('/auth', (req, res) => {
+  let data = req.body;
+  console.log(data);
+  let username = data.user;
+  let password = data.password;
+  let query = "SELECT * FROM Users WHERE username='" + username + "' AND password='" + password + "';";
+    
+  console.log(query);
+  exec(query, res);
 });
 
 
