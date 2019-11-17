@@ -31,8 +31,8 @@ import static android.app.PendingIntent.getActivity;
 public class MainActivity extends AppCompatActivity {
     Button profileButton;
     ListView listView;
-    String mTitle[] = {"Work","School","Home","Route1","Route2","Route3","Route4","Route5","Route6"};
-    int images[] = {R.drawable.pointer,R.drawable.pointer,R.drawable.pointer,R.drawable.pointer,R.drawable.pointer,R.drawable.pointer,R.drawable.pointer,R.drawable.pointer,R.drawable.pointer};
+    String mTitle[] = {};
+    //int images[] = {R.drawable.pointer,R.drawable.pointer,R.drawable.pointer,R.drawable.pointer,R.drawable.pointer,R.drawable.pointer,R.drawable.pointer,R.drawable.pointer,R.drawable.pointer};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         listView = findViewById(R.id.mainlistview);
         profileButton = (findViewById(R.id.profileButton));
-        MyAdapter adapter = new MyAdapter(this, mTitle, images);
+
+
+        MyAdapter adapter = new MyAdapter(this, mTitle);
         listView.setAdapter(adapter);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
@@ -87,15 +89,12 @@ public class MainActivity extends AppCompatActivity {
     class MyAdapter extends ArrayAdapter<String> {
         Context context;
         String rTitle[];
-        int rImgs[];
 
 
-        MyAdapter (Context c, String title[], int imgs[]) {
+        MyAdapter (Context c, String title[]) {
             super(c, R.layout.row, R.id.textView1,title);
             this.context = c;
             this.rTitle = title;
-            this.rImgs = imgs;
-
         }
 
 
@@ -121,12 +120,10 @@ public class MainActivity extends AppCompatActivity {
             TextView myTitle = row.findViewById(R.id.textView1);
             myTitle.setTypeface(Typeface.DEFAULT_BOLD);
             myTitle.setTextSize(19);
-            images.setImageResource(rImgs[position]);
+            images.setImageResource(R.drawable.pointer);
             myTitle.setText(rTitle[position]);
             return row;
         }
-
-
-            }
-        }
+    }
+}
 

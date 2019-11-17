@@ -1,10 +1,10 @@
-package nl.hr.ov_notifier;
+package com.example.design;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import nl.hr.ov_notifier.R;
+import com.example.design.R;
 
 public class LoginPage extends AppCompatActivity {
 
