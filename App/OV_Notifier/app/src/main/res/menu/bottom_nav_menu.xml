@@ -6,10 +6,10 @@
         android:icon="@drawable/ic_directions_bus_black_24dp"
         android:title="Routes" />
 
+
     <item
-        android:id="@+id/navigation_add"
-        android:icon="@drawable/ic_add_circle_outline_black_24dp"
-        android:title="Add" />
-
-
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="Home"
+        />
 </menu>

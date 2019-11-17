@@ -19,17 +19,23 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"
         android:layout_marginTop="13dp"
-        android:layout_marginRight="75dp"
         android:text="@string/main_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="#000000"
         android:textStyle="normal"
         app:fontFamily="@font/proxima" />
 
-    <ImageView
-        android:id="@+id/image2"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+    <ToggleButton
+        android:id="@+id/notificationbutton"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginLeft="50dp"
         android:layout_marginTop="10dp"
-        android:src="@mipmap/ic_launcher_round" />
+        android:layout_marginRight="5dp"
+        android:background="@drawable/emptybell"
+        android:text="ToggleButton"
+        android:textOff=" "
+        android:textOn=" "
+        android:focusable="false"/>
+
 </LinearLayout>

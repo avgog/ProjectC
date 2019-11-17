@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="nl.hr.ov_notifier">
+    package="com.example.design">
 
     <application
         android:allowBackup="true"
@@ -9,11 +9,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginPage"></activity>
-        <activity android:name=".Settings"></activity>
-        <activity android:name=".RoutePage"></activity>
         <activity
-            android:name="nl.hr.ov_notifier.MainActivity"
+            android:name=".Home"
+            android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".RoutePage"
+            android:label="@string/title_activity_route_page"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,6 +26,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Settings"
+            android:theme="@style/AppTheme.CustomTheme"></activity>
 
         <meta-data
             android:name="preloaded_fonts"

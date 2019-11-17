@@ -8,7 +8,7 @@
     android:background="#85FFFFFF">
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/homeDate"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_weight="0"
@@ -18,7 +18,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/homeTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
