@@ -1,5 +1,6 @@
 package com.example.design;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.io.Console;
+import java.util.Calendar;
 
 public class RoutePage extends AppCompatActivity {
 
@@ -35,11 +38,15 @@ public class RoutePage extends AppCompatActivity {
     TextView editTextView;
     AlertDialog alertDialog;
     EditText editText;
+    Calendar calender;
+    String date;
+    DatePickerDialog datepicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_route_page);
+        Button AgendaButton = findViewById(R.id.agenda);
         final ToggleButton Monday = (findViewById(R.id.mondaybutton));
         final ToggleButton Tuesday = (findViewById(R.id.tuesdaybutton));
         final ToggleButton Wednesday = (findViewById(R.id.wednesdaybutton));
@@ -64,6 +71,23 @@ public class RoutePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        AgendaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calender = Calendar.getInstance();
+                int day = calender.get(Calendar.DAY_OF_MONTH);
+                int month = calender.get(Calendar.MONTH);
+                int year = calender.get(Calendar.YEAR);
+
+                datepicker = new DatePickerDialog(RoutePage.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int mYear, int mMonth, int mDay) {
+                        date = (mDay + "/" + mMonth + "/" + mYear);
+                    }
+                },day , month, year);
             }
         });
 
@@ -168,6 +192,8 @@ public class RoutePage extends AppCompatActivity {
             this.rTime = time;
 
         }
+
+
 
         @NonNull
         @Override
