@@ -1,20 +1,11 @@
 package com.example.design.routes;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.design.request.PostRequest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,12 +19,20 @@ public class RouteManager {
         queue = Volley.newRequestQueue(context);
     }
 
-    private void getRoutesByUserId(int id, Response.Listener listener, Response.ErrorListener errorListener){
+    public void getRoutesByUserId(int id, Response.Listener listener, Response.ErrorListener errorListener){
         Map<String,String> params = new HashMap<>();
-        params.put("user_id","1");
+        params.put("user_id",String.valueOf(id));
         PostRequest request = new PostRequest(serverURL + "/routes/get/from_user", params, listener, errorListener);
         queue.add(request);
     }
 
-
+    public void addRoute(Route route, Response.Listener listener, Response.ErrorListener errorListener){
+        Map<String,String> params = new HashMap<>();
+        params.put("user_id",String.valueOf(route.getUserId()));
+        params.put("start_point",route.start_point);
+        params.put("end_point",route.end_point);
+        params.put("route_name",route.route_name);
+        PostRequest request = new PostRequest(serverURL + "/routes/add", params, listener, errorListener);
+        queue.add(request);
+    }
 }

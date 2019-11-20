@@ -1,4 +1,4 @@
-package com.example.design.routes;
+package com.example.design.request;
 
 import android.util.Log;
 
@@ -15,6 +15,7 @@ public class PostRequest extends StringRequest {
 
     public PostRequest(String url, Map<String,String> postParameters, Response.Listener listener, Response.ErrorListener errorListener){
         super(Method.POST, url, listener, errorListener);
+        this.postParameters = postParameters;
     }
 
     @Override
