@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import android.text.InputFilter;
 import android.view.LayoutInflater;
@@ -23,24 +24,27 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.io.Console;
+import java.util.ArrayList;
 import java.util.Calendar;
 
-public class RoutePage extends AppCompatActivity {
+public class RoutePage extends AppCompatActivity implements  TimePickerFragment.TimePickerListener , DatePickerDialog.OnDateSetListener {
 
     ListView listView;
-    String mTime[] = {"9:00","16:00","21:30"};
-    String mDate[] = {"26-04-2019","Friday","Wednesday"};
+    ArrayList<String> mTime = new ArrayList<>();
+    ArrayList<String> mDate = new ArrayList<>();
     String activity;
     TextView editTextView;
     AlertDialog alertDialog;
     EditText editText;
     Calendar calender;
-    String date;
-    DatePickerDialog datepicker;
+    static String date;
+    static String time;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,17 +81,9 @@ public class RoutePage extends AppCompatActivity {
         AgendaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calender = Calendar.getInstance();
-                int day = calender.get(Calendar.DAY_OF_MONTH);
-                int month = calender.get(Calendar.MONTH);
-                int year = calender.get(Calendar.YEAR);
-
-                datepicker = new DatePickerDialog(RoutePage.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int mYear, int mMonth, int mDay) {
-                        date = (mDay + "/" + mMonth + "/" + mYear);
-                    }
-                },day , month, year);
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.setCancelable(false);
+                datePicker.show(getSupportFragmentManager(),"datepicker");
             }
         });
 
@@ -109,83 +105,100 @@ public class RoutePage extends AppCompatActivity {
         Monday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    Monday.setTextColor(Color.BLACK);
-                } else {
-                    Monday.setTextColor(getResources().getColor(R.color.colorPrimary));
-                }
+                RoutePage.date = "Monday";
+                DialogFragment timePickerFragment = new TimePickerFragment();
+                timePickerFragment.setCancelable(false);
+                timePickerFragment.show(getSupportFragmentManager(), "timePicker");
+
             }
         });
         Tuesday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    Tuesday.setTextColor(Color.BLACK);
-                } else {
-                    Tuesday.setTextColor(getResources().getColor(R.color.colorPrimary));
-                }
+                RoutePage.date = "Tuesday";
+                DialogFragment timePickerFragment = new TimePickerFragment();
+                timePickerFragment.setCancelable(false);
+                timePickerFragment.show(getSupportFragmentManager(), "timePicker");
+
             }
         });
         Wednesday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    Wednesday.setTextColor(Color.BLACK);
-                } else {
-                    Wednesday.setTextColor(getResources().getColor(R.color.colorPrimary));
-                }
+                RoutePage.date = "Wednesday";
+                DialogFragment timePickerFragment = new TimePickerFragment();
+                timePickerFragment.setCancelable(false);
+                timePickerFragment.show(getSupportFragmentManager(), "timePicker");
+
             }
         });
         Thursday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    Thursday.setTextColor(Color.BLACK);
-                } else {
-                    Thursday.setTextColor(getResources().getColor(R.color.colorPrimary));
-                }
+                RoutePage.date = "Thursday";
+                DialogFragment timePickerFragment = new TimePickerFragment();
+                timePickerFragment.setCancelable(false);
+                timePickerFragment.show(getSupportFragmentManager(), "timePicker");
+
             }
         });
         Friday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    Friday.setTextColor(Color.BLACK);
-                } else {
-                    Friday.setTextColor(getResources().getColor(R.color.colorPrimary));
-                }
+                RoutePage.date = "Friday";
+                DialogFragment timePickerFragment = new TimePickerFragment();
+                timePickerFragment.setCancelable(false);
+                timePickerFragment.show(getSupportFragmentManager(), "timePicker");
+
             }
         });
         Saturday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    Saturday.setTextColor(Color.BLACK);
-                } else {
-                    Saturday.setTextColor(getResources().getColor(R.color.colorPrimary));
-                }
+                RoutePage.date = "Saturday";
+                DialogFragment timePickerFragment = new TimePickerFragment();
+                timePickerFragment.setCancelable(false);
+                timePickerFragment.show(getSupportFragmentManager(), "timePicker");
+
             }
         });
         Sunday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    Sunday.setTextColor(Color.BLACK);
-                } else {
-                    Sunday.setTextColor(getResources().getColor(R.color.colorPrimary));
-                }
+                RoutePage.date = "Sunday";
+                DialogFragment timePickerFragment = new TimePickerFragment();
+                timePickerFragment.setCancelable(false);
+                timePickerFragment.show(getSupportFragmentManager(), "timePicker");
+
             }
         });
+    }
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+        String time = (hour + ":" + minute);
+        mTime.add(time);
+        mDate.add(RoutePage.date);
+        MyAdapter adapter = new MyAdapter(RoutePage.this,mTime,mDate);
+        listView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        RoutePage.date = String.valueOf(dayOfMonth) + "/" + String.valueOf(month) + "/" +String.valueOf(year);
+        DialogFragment timePickerFragment = new TimePickerFragment();
+        timePickerFragment.setCancelable(false);
+        timePickerFragment.show(getSupportFragmentManager(), "timePicker");
     }
 
 
     class MyAdapter extends ArrayAdapter<String> {
         Context context;
-        String rTime[];
-        String rDate[];
+        ArrayList<String> rTime;
+        ArrayList<String> rDate;
 
 
-        MyAdapter(Context c, String time[], String date[]) {
+        MyAdapter(Context c, ArrayList<String> time, ArrayList<String> date) {
             super(c, R.layout.rowroutepage, R.id.homeDate, date);
             this.context = c;
             this.rDate = date;
@@ -197,13 +210,23 @@ public class RoutePage extends AppCompatActivity {
 
         @NonNull
         @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View row = layoutInflater.inflate(R.layout.rowroutepage, parent, false);
+            Button deletebutton =  row.findViewById(R.id.delete);
+            deletebutton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mTime.remove(position);
+                    mDate.remove(position);
+                    MyAdapter adapter = new MyAdapter(RoutePage.this,mTime,mDate);
+                    listView.setAdapter(adapter);
+                }
+            });
             TextView myDate = row.findViewById(R.id.homeDate);
             TextView myTime = row.findViewById(R.id.homeTime);
-            myDate.setText(rDate[position]);
-            myTime.setText(rTime[position]);
+            myDate.setText(rDate.get(position));
+            myTime.setText(rTime.get(position));
             return row;
         }
     }
