@@ -3,7 +3,7 @@
 # Api
 
 ----------------------
-
+```
 URL PATH,                          Request type,       Parameters
 /public/routes/add                 POST                user_id, start_point, end_point, route_name
 /public/routes/get/from_id         POST                route_id
@@ -18,9 +18,9 @@ URL PATH,                          Request type,       Parameters
 /public/times/change/time          POST                time_id, end_time, date
 /public/times/remove               POST                time_id
 /public/auth                       GET                 username, password
-
+```
 ----------------------
-###
+```
 PATH:/public/routes/add
 JSON: {"auth_token": "AUTH_TOKEN", "user_id": "USER_ID", "start_point": "START_PLACE", "end_point": "END_PLACE", "route_name": "ROUTE_NAME"}
 Voorbeeld: {"auth_token": "fTgfd42he34esg5hregsrtfgweg", "user_id": "22095", "start_point": "Capelsebrug, Rotterdam", "end_point": "Beurs, Rotterdam", "route_name": "A naar B"}
@@ -87,9 +87,10 @@ Voorbeeld: {"username": "piet", "password": "pa$$w0rd"}
 Response Goedgekeurd: [{"id":1,"auth_token":"tdg46dh6435hd46dg53ggdhs"}]
 Response Error: { "ERROR": "Unauthorized" }
 OPMERKING: Het verkrijgen van een authenticatie token
-###
+```
 ----------------------
 
+```
 Een Api call is een HTTP request, deze stuur je naar:
 http://HOST:PORT/PATH
 
@@ -101,9 +102,11 @@ PATH: zie api url paths.
 
 Bijvoorbeeld:
 http://projectc.caslayoort.nl:80/routes/get/from_id
+```
 
 ----------------------
 
+```
 Response format van de public API (uitzondering van de auth api)
 {
     "error":"",
@@ -113,4 +116,6 @@ Response format van de public API (uitzondering van de auth api)
         ...
     ]
 }
+```
+
 ----------------------
