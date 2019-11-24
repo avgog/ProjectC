@@ -20,7 +20,7 @@ URL PATH,                          Request type,       Parameters
 /public/auth                       GET                 username, password
 
 ----------------------
-
+###
 PATH:/public/routes/add
 JSON: {"auth_token": "AUTH_TOKEN", "user_id": "USER_ID", "start_point": "START_PLACE", "end_point": "END_PLACE", "route_name": "ROUTE_NAME"}
 Voorbeeld: {"auth_token": "fTgfd42he34esg5hregsrtfgweg", "user_id": "22095", "start_point": "Capelsebrug, Rotterdam", "end_point": "Beurs, Rotterdam", "route_name": "A naar B"}
@@ -87,7 +87,7 @@ Voorbeeld: {"username": "piet", "password": "pa$$w0rd"}
 Response Goedgekeurd: [{"id":1,"auth_token":"tdg46dh6435hd46dg53ggdhs"}]
 Response Error: { "ERROR": "Unauthorized" }
 OPMERKING: Het verkrijgen van een authenticatie token
-
+###
 ----------------------
 
 Een Api call is een HTTP request, deze stuur je naar:
