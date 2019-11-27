@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
 
     RouteManager routeManager;
-    final int USER_ID = 1;
+    public static final int USER_ID = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
                         Route route = new Route(
                                 jsonRoute.getInt("route_id"),
                                 jsonRoute.getInt("user_id"),
-                                jsonRoute.getString("start_point"),
-                                jsonRoute.getString("end_point"),
+                                jsonRoute.getString("start"),
+                                jsonRoute.getString("end"),
                                 jsonRoute.getString("route_name")
                         );
 
@@ -125,8 +125,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final Button addButton = (Button)v;
                 addButton.setEnabled(false); //temporary disables the button
-
-                routeManager.addRoute(new Route(0, USER_ID, "[0,0]", "[0,0]", "new route"), new Response.Listener() {
+                Route route = new Route(0, USER_ID, "[0,0]", "[0,0]", "new route");
+                routeManager.addRoute(route, new Response.Listener() {
                     @Override
                     public void onResponse(Object response) {
                         routeManager.getRoutesByUserId(USER_ID, routeListListener, routeListErrorListener);

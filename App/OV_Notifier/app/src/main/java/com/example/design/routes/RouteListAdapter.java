@@ -2,10 +2,12 @@ package com.example.design.routes;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,12 +16,14 @@ import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.example.design.MainActivity;
 import com.example.design.R;
 
 public class RouteListAdapter extends ArrayAdapter<Route> {
     Context context;
     Route routes[];
-
 
     public RouteListAdapter (Context c, Route routes[]) {
         super(c, R.layout.row, R.id.textView1,routes);
@@ -29,10 +33,13 @@ public class RouteListAdapter extends ArrayAdapter<Route> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = layoutInflater.inflate(R.layout.row, parent, false);
         final ToggleButton bellbutton = row.findViewById(R.id.notificationbutton);
+        Button removeRouteButton = row.findViewById(R.id.deleteRouteButton);
+        //todo: voeg een onclicklistener voor removeRouteButton
+
         bellbutton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
