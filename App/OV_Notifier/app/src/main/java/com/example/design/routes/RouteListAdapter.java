@@ -37,7 +37,7 @@ public class RouteListAdapter extends ArrayAdapter<Route> {
         LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = layoutInflater.inflate(R.layout.row, parent, false);
         final ToggleButton bellbutton = row.findViewById(R.id.notificationbutton);
-        Button removeRouteButton = row.findViewById(R.id.deleteRouteButton);
+        //Button removeRouteButton = row.findViewById(R.id.deleteRouteButton);
         //todo: voeg een onclicklistener voor removeRouteButton
 
         bellbutton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
