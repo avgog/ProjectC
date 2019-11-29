@@ -67,9 +67,9 @@ public class RouteManager {
         queue.add(request);
     }
 
-    public void removeRoute(Route route, Response.Listener listener, Response.ErrorListener errorListener){
+    public void removeRoute(int id, Response.Listener listener, Response.ErrorListener errorListener){
         Map<String,String> params = new HashMap<>();
-        params.put("route_id",String.valueOf(route.getRouteId()));
+        params.put("route_id",String.valueOf(id));
         PostRequest request = new PostRequest(serverURL + "/routes/remove", params, listener, errorListener);
         queue.add(request);
     }

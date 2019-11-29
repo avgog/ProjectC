@@ -22,8 +22,11 @@ import android.widget.ToggleButton;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.example.design.routes.OnRemoveRouteClickListener;
 import com.example.design.routes.Route;
 import com.example.design.routes.RouteListAdapter;
+import com.example.design.routes.RouteListErrorListener;
+import com.example.design.routes.RouteListListener;
 import com.example.design.routes.RouteManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -54,7 +57,17 @@ public class MainActivity extends AppCompatActivity {
         listView = findViewById(R.id.mainlistview);
         profileButton = (findViewById(R.id.profileButton));
 
-        RouteListAdapter adapter = new RouteListAdapter(this, new Route[]{});
+        //responsible for calling route related functions of the server API
+        routeManager = new RouteManager(this);
+
+        //create and send a request to receive all routes of an user. After receiving a response, display the routes on the listview
+        routeManager.getRoutesByUserId(
+                USER_ID,
+                new RouteListListener(listView, new OnRemoveRouteClickListener(routeManager, listView)),
+                new RouteListErrorListener(listView)
+        );
+
+        RouteListAdapter adapter = new RouteListAdapter(this, new Route[]{}, new OnRemoveRouteClickListener(routeManager, listView));
         listView.setAdapter(adapter); //connect the listview with adapter which is responsible for filling the list with routes
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
@@ -76,48 +89,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Listener object for loading routes that will get executed when the client receives a response from the server.
-        final Response.Listener routeListListener = new Response.Listener() {
-            @Override
-            public void onResponse(Object response) {
-                List<Route> routes = new ArrayList<>();
-                try{
-                    JSONObject json = new JSONObject(response.toString());
-                    JSONArray array = json.getJSONArray("result");
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject jsonRoute = array.getJSONObject(i);
-
-                        Route route = new Route(
-                                jsonRoute.getInt("route_id"),
-                                jsonRoute.getInt("user_id"),
-                                jsonRoute.getString("start"),
-                                jsonRoute.getString("end"),
-                                jsonRoute.getString("route_name")
-                        );
-
-                        routes.add(route);
-                    }
-                    Route[] routeArray = new Route[routes.size()];
-                    routes.toArray(routeArray);
-                    listView.setAdapter(new RouteListAdapter(listView.getContext(), routeArray));
-                }
-                catch (JSONException e){
-                    Log.e("route request", "json error: " + e.toString());
-                }
-            }
-        };
-
-        //ErrorListener object that will be executed when something wrong happened with the request (local/server error)
-        final Response.ErrorListener routeListErrorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("route request", error.toString());
-                listView.setAdapter(new RouteListAdapter(listView.getContext(), new Route[]{}));
-            }
-        };
-
-        routeManager = new RouteManager(this);
-        routeManager.getRoutesByUserId(USER_ID, routeListListener, routeListErrorListener);
 
         Button addRouteButton = findViewById(R.id.addRouteButton);
         addRouteButton.setOnClickListener(new View.OnClickListener() { //When clicked: adds a route to the database and reload the list of routes
@@ -129,7 +100,11 @@ public class MainActivity extends AppCompatActivity {
                 routeManager.addRoute(route, new Response.Listener() {
                     @Override
                     public void onResponse(Object response) {
-                        routeManager.getRoutesByUserId(USER_ID, routeListListener, routeListErrorListener);
+                        routeManager.getRoutesByUserId(
+                                USER_ID,
+                                new RouteListListener(listView,new OnRemoveRouteClickListener(routeManager, listView)),
+                                new RouteListErrorListener(listView)
+                        );
                         addButton.setEnabled(true);
                     }
                 }, new Response.ErrorListener() {
