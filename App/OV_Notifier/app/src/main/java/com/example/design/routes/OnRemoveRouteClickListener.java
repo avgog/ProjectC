@@ -6,29 +6,32 @@ import android.widget.ListView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.example.design.routes.response.RouteListErrorListener;
+import com.example.design.routes.response.RouteListListener;
 
 public class OnRemoveRouteClickListener implements View.OnClickListener {
 
     private RouteManager manager;
-    public int routeId; //routeId must be set from the outside
+    private Route route;
     private ListView listView; //listview with routes
 
-    public OnRemoveRouteClickListener(RouteManager manager, ListView listView){
+    public OnRemoveRouteClickListener(RouteManager manager, ListView listView, Route route){
         this.manager = manager;
         this.listView = listView;
+        this.route = route;
     }
 
     @Override
     public void onClick(View view){
         manager.removeRoute(
-                routeId,
+                route.getRouteId(),
                 new Response.Listener() {
                     @Override
                     public void onResponse(Object response) {
-                        manager.getRouteByRouteId(
-                                routeId,
-                                new RouteListListener(listView, new OnRemoveRouteClickListener(manager, listView)),
-                                new RouteListErrorListener(listView)
+                        manager.getRoutesByUserId(
+                                route.getUserId(),
+                                new RouteListListener(listView,manager),
+                                new RouteListErrorListener(listView,manager)
                                 );
                     }
                 },

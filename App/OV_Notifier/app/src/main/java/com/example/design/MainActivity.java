@@ -1,45 +1,27 @@
 package com.example.design;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 
-import android.content.Context;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.example.design.routes.OnRemoveRouteClickListener;
 import com.example.design.routes.Route;
-import com.example.design.routes.RouteListAdapter;
-import com.example.design.routes.RouteListErrorListener;
-import com.example.design.routes.RouteListListener;
+import com.example.design.routes.response.RouteListAdapter;
+import com.example.design.routes.response.RouteListErrorListener;
+import com.example.design.routes.response.RouteListListener;
 import com.example.design.routes.RouteManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static android.app.PendingIntent.getActivity;
 
@@ -63,11 +45,11 @@ public class MainActivity extends AppCompatActivity {
         //create and send a request to receive all routes of an user. After receiving a response, display the routes on the listview
         routeManager.getRoutesByUserId(
                 USER_ID,
-                new RouteListListener(listView, new OnRemoveRouteClickListener(routeManager, listView)),
-                new RouteListErrorListener(listView)
+                new RouteListListener(listView,routeManager),
+                new RouteListErrorListener(listView,routeManager)
         );
 
-        RouteListAdapter adapter = new RouteListAdapter(this, new Route[]{}, new OnRemoveRouteClickListener(routeManager, listView));
+        RouteListAdapter adapter = new RouteListAdapter(this, new Route[]{}, routeManager, listView);
         listView.setAdapter(adapter); //connect the listview with adapter which is responsible for filling the list with routes
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
@@ -102,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(Object response) {
                         routeManager.getRoutesByUserId(
                                 USER_ID,
-                                new RouteListListener(listView,new OnRemoveRouteClickListener(routeManager, listView)),
-                                new RouteListErrorListener(listView)
+                                new RouteListListener(listView,routeManager),
+                                new RouteListErrorListener(listView,routeManager)
                         );
                         addButton.setEnabled(true);
                     }

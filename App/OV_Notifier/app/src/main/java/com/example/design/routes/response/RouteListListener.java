@@ -1,9 +1,11 @@
-package com.example.design.routes;
+package com.example.design.routes.response;
 
 import android.util.Log;
 import android.widget.ListView;
 
 import com.android.volley.Response;
+import com.example.design.routes.Route;
+import com.example.design.routes.RouteManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,11 +16,11 @@ import java.util.List;
 
 public class RouteListListener implements Response.Listener {
     private ListView listView;
-    private OnRemoveRouteClickListener removeRouteListener;
+    RouteManager manager;
 
-    public RouteListListener(ListView listView, OnRemoveRouteClickListener removeRouteListener){
+    public RouteListListener(ListView listView, RouteManager manager){
         this.listView = listView;
-        this.removeRouteListener = removeRouteListener;
+        this.manager = manager;
     }
 
     @Override
@@ -42,7 +44,7 @@ public class RouteListListener implements Response.Listener {
             }
             Route[] routeArray = new Route[routes.size()];
             routes.toArray(routeArray);
-            listView.setAdapter(new RouteListAdapter(listView.getContext(), routeArray, removeRouteListener));
+            listView.setAdapter(new RouteListAdapter(listView.getContext(), routeArray, manager,listView));
         }
         catch (JSONException e){
             Log.e("route request", "json error: " + e.toString());
