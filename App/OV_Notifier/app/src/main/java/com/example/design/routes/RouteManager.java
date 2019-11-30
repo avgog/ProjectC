@@ -22,7 +22,7 @@ public class RouteManager {
     public void getRouteByRouteId(int id, Response.Listener listener, Response.ErrorListener errorListener){
         Map<String,String> params = new HashMap<>();
         params.put("route_id",String.valueOf(id));
-        PostRequest request = new PostRequest(serverURL + "/routes/get/from_user", params, listener, errorListener);
+        PostRequest request = new PostRequest(serverURL + "/routes/get/from_id", params, listener, errorListener);
         queue.add(request);
     }
 

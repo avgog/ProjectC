@@ -1,5 +1,16 @@
 package com.example.design.routes;
 
+import android.util.Log;
+
+import com.example.design.routes.response.RouteListAdapter;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Route {
     private int route_id;
     private int user_id;
@@ -21,5 +32,32 @@ public class Route {
 
     public int getUserId(){
         return  user_id;
+    }
+
+    //convert json object array to route array
+    public static Route[] fromJSONRoutes(JSONArray array){
+        List<Route> routes = new ArrayList<>();
+        try{
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject jsonRoute = array.getJSONObject(i);
+
+                Route route = new Route(
+                        jsonRoute.getInt("route_id"),
+                        jsonRoute.getInt("user_id"),
+                        jsonRoute.getString("start"),
+                        jsonRoute.getString("end"),
+                        jsonRoute.getString("route_name")
+                );
+
+                routes.add(route);
+            }
+
+        }
+        catch (JSONException e){
+            Log.e("JSON -> Routes", "json error: " + e.toString());
+        }
+        Route[] routeArray = new Route[routes.size()];
+        routes.toArray(routeArray);
+        return routeArray;
     }
 }

@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(view.getContext(), RoutePage.class);
+                int routeId = ((Route)parent.getItemAtPosition(position)).getRouteId();
+                intent.putExtra("routeId", routeId); //store the route in the new intent
                 startActivity(intent);
             }
         });

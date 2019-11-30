@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.example.design.routes.Route;
+import com.example.design.routes.RouteManager;
+import com.example.design.routes.response.RouteListAdapter;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Console;
 
 public class RoutePage extends AppCompatActivity {
@@ -35,6 +46,8 @@ public class RoutePage extends AppCompatActivity {
     TextView editTextView;
     AlertDialog alertDialog;
     EditText editText;
+
+    RouteManager routeManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +62,37 @@ public class RoutePage extends AppCompatActivity {
         final ToggleButton Sunday = (findViewById(R.id.sundaybutton));
         listView = findViewById(R.id.listview2);
 
+        routeManager = new RouteManager(this);
         Button closeButton = findViewById(R.id.CloseButton);
         editTextView = findViewById(R.id.routeTitle);
+
+        int routeId = getIntent().getIntExtra("routeId",-1); //get the routeId value that was stored by the MainActivity
+        editTextView.setText("Unknown Route");
+        if(routeId != -1){
+            routeManager.getRouteByRouteId(routeId, new Response.Listener() {
+                @Override
+                public void onResponse(Object response) {
+                    try{
+                        JSONObject json = new JSONObject(response.toString());
+                        JSONArray array = json.getJSONArray("result");
+                        Route[] routes = Route.fromJSONRoutes(array);
+                        if(routes.length > 0){
+                            editTextView.setText(routes[0].route_name);
+                        }
+                    }
+                    catch (JSONException e){
+                        Log.e("route request", "json error: " + e.toString());
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("Route request", error.toString());
+                }
+            });
+        }
+
+
         alertDialog = new AlertDialog.Builder(this).create();
         editText = new EditText(this);
         editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
