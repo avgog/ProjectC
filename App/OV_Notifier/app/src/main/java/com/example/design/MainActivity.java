@@ -41,16 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
         //responsible for calling route related functions of the server API
         routeManager = new RouteManager(this);
-
-        //create and send a request to receive all routes of an user. After receiving a response, display the routes on the listview
-        routeManager.getRoutesByUserId(
-                USER_ID,
-                new RouteListListener(listView,routeManager),
-                new RouteListErrorListener(listView,routeManager)
-        );
-
-        RouteListAdapter adapter = new RouteListAdapter(this, new Route[]{}, routeManager, listView);
-        listView.setAdapter(adapter); //connect the listview with adapter which is responsible for filling the list with routes
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
         Menu menu = bottomNavigationView.getMenu();
@@ -73,14 +63,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         Button addRouteButton = findViewById(R.id.addRouteButton);
         addRouteButton.setOnClickListener(new View.OnClickListener() { //When clicked: adds a route to the database and reload the list of routes
             @Override
             public void onClick(View v) {
                 final Button addButton = (Button)v;
                 addButton.setEnabled(false); //temporary disables the button
-                Route route = new Route(0, USER_ID, "[0,0]", "[0,0]", "new route");
+                Route route = new Route(0, USER_ID, "-", "-", "new route");
                 routeManager.addRoute(route, new Response.Listener() {
                     @Override
                     public void onResponse(Object response) {
@@ -101,6 +90,21 @@ public class MainActivity extends AppCompatActivity {
                 v.setEnabled(true);
             }
         });
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+        //create and send a request to receive all routes of an user. After receiving a response, display the routes on the listview
+        routeManager.getRoutesByUserId(
+                USER_ID,
+                new RouteListListener(listView,routeManager),
+                new RouteListErrorListener(listView,routeManager)
+        );
+
+        RouteListAdapter adapter = new RouteListAdapter(this, new Route[]{}, routeManager, listView);
+        listView.setAdapter(adapter); //connect the listview with adapter which is responsible for filling the list with routes
     }
 
 

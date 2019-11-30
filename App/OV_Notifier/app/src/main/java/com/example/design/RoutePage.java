@@ -48,6 +48,7 @@ public class RoutePage extends AppCompatActivity {
     EditText editText;
 
     RouteManager routeManager;
+    Route currentRoute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +66,9 @@ public class RoutePage extends AppCompatActivity {
         routeManager = new RouteManager(this);
         Button closeButton = findViewById(R.id.CloseButton);
         editTextView = findViewById(R.id.routeTitle);
+        final EditText fromLocationField = findViewById(R.id.FromLocationButton);
+        final EditText toLocationField = findViewById(R.id.ToLocationButton);
+        Button saveButton = findViewById(R.id.Save);
 
         int routeId = getIntent().getIntExtra("routeId",-1); //get the routeId value that was stored by the MainActivity
         editTextView.setText("Unknown Route");
@@ -76,8 +80,11 @@ public class RoutePage extends AppCompatActivity {
                         JSONObject json = new JSONObject(response.toString());
                         JSONArray array = json.getJSONArray("result");
                         Route[] routes = Route.fromJSONRoutes(array);
-                        if(routes.length > 0){
+                        if(routes.length > 0){ //check if a route has been found
                             editTextView.setText(routes[0].route_name);
+                            fromLocationField.setText(routes[0].start_point);
+                            toLocationField.setText(routes[0].end_point);
+                            currentRoute = routes[0];
                         }
                     }
                     catch (JSONException e){
@@ -92,10 +99,38 @@ public class RoutePage extends AppCompatActivity {
             });
         }
 
+        //add event to the button for storing new values on the database
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Route update", "updating route...");
+                Response.Listener listener = new Response.Listener() {
+                    @Override
+                    public void onResponse(Object response) {
+                        Log.i("Route update request", response.toString());
+                    }
+                };
+                Response.ErrorListener errorListener = new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Route update request", "error:"+error.toString());
+                    }
+                };
+                currentRoute.start_point = fromLocationField.getText().toString();
+                currentRoute.end_point = toLocationField.getText().toString();
+                currentRoute.route_name = editTextView.getText().toString();
+
+                routeManager.changeRouteName(currentRoute, listener,errorListener);
+                routeManager.changeRouteStartPoint(currentRoute, listener,errorListener);
+                routeManager.changeRouteEndPoint(currentRoute, listener,errorListener);
+            }
+        });
+
+
 
         alertDialog = new AlertDialog.Builder(this).create();
         editText = new EditText(this);
-        editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
+        editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(26)});
         alertDialog.setTitle(" Edit the text ");
         alertDialog.setView(editText);
 

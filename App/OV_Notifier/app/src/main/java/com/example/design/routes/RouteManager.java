@@ -63,7 +63,7 @@ public class RouteManager {
         Map<String,String> params = new HashMap<>();
         params.put("route_id",String.valueOf(route.getRouteId()));
         params.put("route_name",route.route_name);
-        PostRequest request = new PostRequest(serverURL + "/change/route_name", params, listener, errorListener);
+        PostRequest request = new PostRequest(serverURL + "/routes/change/route_name", params, listener, errorListener);
         queue.add(request);
     }
 
