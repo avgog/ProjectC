@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:2:1-35:12
-INJECTED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:2:1-35:12
-INJECTED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:2:1-35:12
-INJECTED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:2:1-35:12
+ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:2:1-45:12
+INJECTED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:2:1-45:12
+INJECTED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:2:1-45:12
+INJECTED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:2:1-45:12
 MERGED from [com.google.firebase:firebase-analytics:17.2.0] C:\Users\Lucas Oudhuis\.gradle\caches\transforms-2\files-2.1\7be9aa1e893d44c0169f088f051003c1\firebase-analytics-17.2.0\AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.navigation:navigation-ui:2.0.0] C:\Users\Lucas Oudhuis\.gradle\caches\transforms-2\files-2.1\8dbc1d10f729b3c1f8ca325be3a78511\jetified-navigation-ui-2.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.android.material:material:1.0.0] C:\Users\Lucas Oudhuis\.gradle\caches\transforms-2\files-2.1\4f3544d200097d1926e6df3e9bf8bd41\material-1.0.0\AndroidManifest.xml:17:1-24:12
@@ -59,25 +59,35 @@ MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\Lucas Oudhuis\.g
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\Lucas Oudhuis\.gradle\caches\transforms-2\files-2.1\0572fb836b13754ec5229a66c998d409\localbroadcastmanager-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.print:print:1.0.0] C:\Users\Lucas Oudhuis\.gradle\caches\transforms-2\files-2.1\02d004519efdfd015e4b7e0ffb8ccafe\print-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\Lucas Oudhuis\.gradle\caches\transforms-2\files-2.1\145ceaebca7e3ab74e3fcbc7ad97f821\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
-INJECTED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:2:1-35:12
-INJECTED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:2:1-35:12
-INJECTED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:2:1-35:12
+INJECTED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:2:1-45:12
+INJECTED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:2:1-45:12
+INJECTED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:2:1-45:12
 	package
-		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:3:5-32
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:4:5-32
 		INJECTED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml
 		INJECTED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml
 	android:versionName
 		INJECTED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:2:1-35:12
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:2:1-45:12
 		INJECTED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml
+	xmlns:tools
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:3:5-51
 	android:versionCode
 		INJECTED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:2:1-35:12
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:2:1-45:12
 		INJECTED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml
 	xmlns:android
 		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:2:11-69
+supports-screens
+ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:6:5-9:39
+	android:largeScreens
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:7:9-36
+	android:smallScreens
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:9:9-36
+	android:normalScreens
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:8:9-37
 application
-ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:5:5-33:19
+ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:11:5-43:19
 MERGED from [com.google.firebase:firebase-analytics:17.2.0] C:\Users\Lucas Oudhuis\.gradle\caches\transforms-2\files-2.1\7be9aa1e893d44c0169f088f051003c1\firebase-analytics-17.2.0\AndroidManifest.xml:7:5-20
 MERGED from [com.google.firebase:firebase-analytics:17.2.0] C:\Users\Lucas Oudhuis\.gradle\caches\transforms-2\files-2.1\7be9aa1e893d44c0169f088f051003c1\firebase-analytics-17.2.0\AndroidManifest.xml:7:5-20
 MERGED from [com.google.android.material:material:1.0.0] C:\Users\Lucas Oudhuis\.gradle\caches\transforms-2\files-2.1\4f3544d200097d1926e6df3e9bf8bd41\material-1.0.0\AndroidManifest.xml:22:5-20
@@ -125,59 +135,67 @@ MERGED from [androidx.lifecycle:lifecycle-process:2.0.0] C:\Users\Lucas Oudhuis\
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.0.1] C:\Users\Lucas Oudhuis\.gradle\caches\transforms-2\files-2.1\576da1d0dffd769126e261a00deab8bb\core-1.0.1\AndroidManifest.xml:22:18-86
 	android:supportsRtl
-		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:10:9-35
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:16:9-35
 	android:label
-		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:8:9-41
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:14:9-41
+	tools:ignore
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:18:9-48
 	android:roundIcon
-		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:9:9-54
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:15:9-54
 	android:icon
-		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:7:9-43
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:13:9-43
 	android:allowBackup
-		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:6:9-35
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:12:9-35
 	android:theme
-		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:11:9-40
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:17:9-40
+activity#nl.hr.ov_notifier.register
+ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:19:9-55
+	android:name
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:19:19-43
 service#nl.hr.ov_notifier.CloudMessaging
-ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:12:9-15:47
-	android:enabled
-		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:14:13-35
-	android:exported
-		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:15:13-36
+ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:21:9-25:19
 	android:name
-		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:13:13-43
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:21:18-48
+intent-filter#action:name:com.google.firebase.MESSAGING_EVENT
+ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:22:13-24:29
+action#com.google.firebase.MESSAGING_EVENT
+ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:23:17-78
+	android:name
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:23:25-75
 activity#nl.hr.ov_notifier.LoginPage
-ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:17:9-47
+ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:27:9-47
 	android:name
-		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:17:19-44
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:27:19-44
 activity#nl.hr.ov_notifier.Settings
-ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:18:9-46
+ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:28:9-46
 	android:name
-		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:18:19-43
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:28:19-43
 activity#nl.hr.ov_notifier.RoutePage
-ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:19:9-47
+ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:29:9-47
 	android:name
-		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:19:19-44
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:29:19-44
 activity#nl.hr.ov_notifier.MainActivity
-ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:20:9-28:20
+ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:30:9-38:20
 	android:label
-		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:22:13-45
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:32:13-45
 	android:name
-		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:21:13-41
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:31:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:23:13-27:29
+ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:33:13-37:29
 action#android.intent.action.MAIN
-ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:24:17-69
+ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:34:17-69
 	android:name
-		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:24:25-66
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:34:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:26:17-77
+ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:36:17-77
 	android:name
-		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:26:27-74
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:36:27-74
 meta-data#preloaded_fonts
-ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:30:9-32:57
+ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:40:9-42:57
 	android:resource
-		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:32:13-54
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:42:13-54
 	android:name
-		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:31:13-43
+		ADDED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:41:13-43
 uses-sdk
 INJECTED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\Lucas Oudhuis\Desktop\EWAv2\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml
@@ -308,14 +326,6 @@ ADDED from [com.google.firebase:firebase-messaging:20.0.1] C:\Users\Lucas Oudhui
 		ADDED from [com.google.firebase:firebase-messaging:20.0.1] C:\Users\Lucas Oudhuis\.gradle\caches\transforms-2\files-2.1\361eb99a576a838dc7224697df42d314\jetified-firebase-messaging-20.0.1\AndroidManifest.xml:30:13-37
 	android:name
 		ADDED from [com.google.firebase:firebase-messaging:20.0.1] C:\Users\Lucas Oudhuis\.gradle\caches\transforms-2\files-2.1\361eb99a576a838dc7224697df42d314\jetified-firebase-messaging-20.0.1\AndroidManifest.xml:29:13-82
-intent-filter#action:name:com.google.firebase.MESSAGING_EVENT
-ADDED from [com.google.firebase:firebase-messaging:20.0.1] C:\Users\Lucas Oudhuis\.gradle\caches\transforms-2\files-2.1\361eb99a576a838dc7224697df42d314\jetified-firebase-messaging-20.0.1\AndroidManifest.xml:31:13-33:29
-	android:priority
-		ADDED from [com.google.firebase:firebase-messaging:20.0.1] C:\Users\Lucas Oudhuis\.gradle\caches\transforms-2\files-2.1\361eb99a576a838dc7224697df42d314\jetified-firebase-messaging-20.0.1\AndroidManifest.xml:31:28-51
-action#com.google.firebase.MESSAGING_EVENT
-ADDED from [com.google.firebase:firebase-messaging:20.0.1] C:\Users\Lucas Oudhuis\.gradle\caches\transforms-2\files-2.1\361eb99a576a838dc7224697df42d314\jetified-firebase-messaging-20.0.1\AndroidManifest.xml:32:17-78
-	android:name
-		ADDED from [com.google.firebase:firebase-messaging:20.0.1] C:\Users\Lucas Oudhuis\.gradle\caches\transforms-2\files-2.1\361eb99a576a838dc7224697df42d314\jetified-firebase-messaging-20.0.1\AndroidManifest.xml:32:25-75
 uses-permission#android.permission.INTERNET
 ADDED from [com.google.android.gms:play-services-measurement:17.2.0] C:\Users\Lucas Oudhuis\.gradle\caches\transforms-2\files-2.1\dc7946cb0a16efc7a30c1935709dc083\play-services-measurement-17.2.0\AndroidManifest.xml:23:5-67
 MERGED from [com.google.android.gms:play-services-measurement-api:17.2.0] C:\Users\Lucas Oudhuis\.gradle\caches\transforms-2\files-2.1\1ae8fcb846c0e3131b3e9b422fa55563\play-services-measurement-api-17.2.0\AndroidManifest.xml:22:5-67

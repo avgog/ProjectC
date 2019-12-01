@@ -1308,17 +1308,17 @@ public final class R {
         public static final int character_counter_pattern = 0x7f11002b;
         public static final int fab_transformation_scrim_behavior = 0x7f11003f;
         public static final int fab_transformation_sheet_behavior = 0x7f110040;
-        public static final int hide_bottom_view_on_scroll_behavior = 0x7f110047;
-        public static final int mtrl_chip_close_icon_content_description = 0x7f110049;
-        public static final int nav_app_bar_navigate_up_description = 0x7f11004a;
-        public static final int nav_app_bar_open_drawer_description = 0x7f11004b;
-        public static final int password_toggle_content_description = 0x7f11004c;
-        public static final int path_password_eye = 0x7f11004d;
-        public static final int path_password_eye_mask_strike_through = 0x7f11004e;
-        public static final int path_password_eye_mask_visible = 0x7f11004f;
-        public static final int path_password_strike_through = 0x7f110050;
-        public static final int search_menu_title = 0x7f110052;
-        public static final int status_bar_notification_info_overflow = 0x7f110053;
+        public static final int hide_bottom_view_on_scroll_behavior = 0x7f110048;
+        public static final int mtrl_chip_close_icon_content_description = 0x7f11004a;
+        public static final int nav_app_bar_navigate_up_description = 0x7f11004b;
+        public static final int nav_app_bar_open_drawer_description = 0x7f11004c;
+        public static final int password_toggle_content_description = 0x7f11004d;
+        public static final int path_password_eye = 0x7f11004e;
+        public static final int path_password_eye_mask_strike_through = 0x7f11004f;
+        public static final int path_password_eye_mask_visible = 0x7f110050;
+        public static final int path_password_strike_through = 0x7f110051;
+        public static final int search_menu_title = 0x7f110053;
+        public static final int status_bar_notification_info_overflow = 0x7f110054;
     }
     public static final class style {
         private style() {}

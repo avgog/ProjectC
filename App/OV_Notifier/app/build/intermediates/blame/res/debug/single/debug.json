@@ -472,6 +472,10 @@
         "source": "C:\\Users\\Lucas Oudhuis\\Desktop\\EWAv2\\ProjectC\\App\\OV_Notifier\\app\\build\\generated\\res\\pngs\\debug\\drawable-xxhdpi\\ic_mode_edit_black_24dp.png"
     },
     {
+        "merged": "C:\\Users\\Lucas Oudhuis\\Desktop\\EWAv2\\ProjectC\\App\\OV_Notifier\\app\\build\\intermediates\\res\\merged\\debug\\layout-small_activity_settings.xml.flat",
+        "source": "C:\\Users\\Lucas Oudhuis\\Desktop\\EWAv2\\ProjectC\\App\\OV_Notifier\\app\\src\\main\\res\\layout-small\\activity_settings.xml"
+    },
+    {
         "merged": "C:\\Users\\Lucas Oudhuis\\Desktop\\EWAv2\\ProjectC\\App\\OV_Notifier\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldrtl-hdpi-v17_abc_ic_menu_cut_mtrl_alpha.png.flat",
         "source": "C:\\Users\\Lucas Oudhuis\\.gradle\\caches\\transforms-2\\files-2.1\\3ca7664084ef6174ed0d76f6cd5121b0\\appcompat-1.0.2\\res\\drawable-ldrtl-hdpi-v17\\abc_ic_menu_cut_mtrl_alpha.png"
     },
@@ -1198,6 +1202,10 @@
     {
         "merged": "C:\\Users\\Lucas Oudhuis\\Desktop\\EWAv2\\ProjectC\\App\\OV_Notifier\\app\\build\\intermediates\\res\\merged\\debug\\layout_abc_dialog_title_material.xml.flat",
         "source": "C:\\Users\\Lucas Oudhuis\\.gradle\\caches\\transforms-2\\files-2.1\\3ca7664084ef6174ed0d76f6cd5121b0\\appcompat-1.0.2\\res\\layout\\abc_dialog_title_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lucas Oudhuis\\Desktop\\EWAv2\\ProjectC\\App\\OV_Notifier\\app\\build\\intermediates\\res\\merged\\debug\\layout-small_activity_main.xml.flat",
+        "source": "C:\\Users\\Lucas Oudhuis\\Desktop\\EWAv2\\ProjectC\\App\\OV_Notifier\\app\\src\\main\\res\\layout-small\\activity_main.xml"
     },
     {
         "merged": "C:\\Users\\Lucas Oudhuis\\Desktop\\EWAv2\\ProjectC\\App\\OV_Notifier\\app\\build\\intermediates\\res\\merged\\debug\\layout-v16_notification_template_custom_big.xml.flat",

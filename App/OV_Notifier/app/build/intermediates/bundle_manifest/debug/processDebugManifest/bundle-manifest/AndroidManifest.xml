@@ -8,6 +8,11 @@
         android:minSdkVersion="16"
         android:targetSdkVersion="29" />
 
+    <supports-screens
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true" />
+
     <!-- Required permission for App measurement to run. -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -24,10 +29,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-        <service
-            android:name="nl.hr.ov_notifier.CloudMessaging"
-            android:enabled="true"
-            android:exported="true" />
+        <activity android:name="nl.hr.ov_notifier.register" />
+
+        <service android:name="nl.hr.ov_notifier.CloudMessaging" >
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <activity android:name="nl.hr.ov_notifier.LoginPage" />
         <activity android:name="nl.hr.ov_notifier.Settings" />
