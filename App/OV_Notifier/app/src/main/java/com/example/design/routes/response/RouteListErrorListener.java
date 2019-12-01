@@ -18,6 +18,6 @@ public class RouteListErrorListener implements Response.ErrorListener {
     }
     public void onErrorResponse(VolleyError error) {
         Log.e("route request", error.toString());
-        listView.setAdapter(new RouteListAdapter(listView.getContext(), new Route[]{}, null, listView));
+        listView.setAdapter(new RouteManager.RouteListAdapter(listView.getContext(), new Route[]{}, null, listView));
     }
 }

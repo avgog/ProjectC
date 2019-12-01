@@ -14,7 +14,6 @@ import android.widget.ListView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.design.routes.Route;
-import com.example.design.routes.response.RouteListAdapter;
 import com.example.design.routes.response.RouteListErrorListener;
 import com.example.design.routes.response.RouteListListener;
 import com.example.design.routes.RouteManager;
@@ -103,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 new RouteListErrorListener(listView,routeManager)
         );
 
-        RouteListAdapter adapter = new RouteListAdapter(this, new Route[]{}, routeManager, listView);
+        RouteManager.RouteListAdapter adapter = new RouteManager.RouteListAdapter(this, new Route[]{}, routeManager, listView);
         listView.setAdapter(adapter); //connect the listview with adapter which is responsible for filling the list with routes
     }
 

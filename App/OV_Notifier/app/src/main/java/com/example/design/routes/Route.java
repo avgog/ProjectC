@@ -2,8 +2,6 @@ package com.example.design.routes;
 
 import android.util.Log;
 
-import com.example.design.routes.response.RouteListAdapter;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

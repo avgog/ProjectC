@@ -11,9 +11,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class RouteListListener implements Response.Listener {
     private ListView listView;
     RouteManager manager;
@@ -29,7 +26,7 @@ public class RouteListListener implements Response.Listener {
             JSONObject json = new JSONObject(response.toString());
             JSONArray array = json.getJSONArray("result");
             Route[] routes = Route.fromJSONRoutes(array);
-            listView.setAdapter(new RouteListAdapter(listView.getContext(), routes, manager,listView));
+            listView.setAdapter(new RouteManager.RouteListAdapter(listView.getContext(), routes, manager,listView));
         }
         catch (JSONException e){
             Log.e("route request", "json error: " + e.toString());

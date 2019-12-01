@@ -1,4 +1,4 @@
-package com.example.design.routes.response;
+package com.example.design.routes;
 
 import android.content.Context;
 import android.graphics.Typeface;

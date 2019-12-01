@@ -2,7 +2,6 @@ package com.example.design;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -22,20 +21,16 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.design.routes.Route;
 import com.example.design.routes.RouteManager;
-import com.example.design.routes.response.RouteListAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.Console;
 
 public class RoutePage extends AppCompatActivity {
 
