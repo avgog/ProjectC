@@ -43,7 +43,6 @@ public class Home extends AppCompatActivity {
         profileButton = (findViewById(R.id.profileButton));
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
-        Button addbutton = findViewById(R.id.addbutton);
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(1);
         menuItem.setChecked(true);
@@ -66,12 +65,6 @@ public class Home extends AppCompatActivity {
             }
 
         });
-        addbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Home.this, RoutePage.class));
-            }
-    });
     }
 
     @Override
