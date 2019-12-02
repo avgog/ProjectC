@@ -1,0 +1,9 @@
+{
+  "port": "666",
+  "db": {
+    "user": "root",
+    "pass": "",
+    "host": "localhost",
+    "database": "projectc"
+  }
+}

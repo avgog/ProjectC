@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Lucas Oudhuis\\Desktop\\EWAv2\\ProjectC\\App\\OV_Notifier\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v23\\values-v23.xml",
+            "outputFile": "C:\\Users\\Audi\\Projects\\Android Studio\\OV_Notifier\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v23\\values-v23.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Lucas Oudhuis\\.gradle\\caches\\transforms-2\\files-2.1\\3ca7664084ef6174ed0d76f6cd5121b0\\appcompat-1.0.2\\res\\values-v23\\values-v23.xml",
+                    "source": "C:\\Users\\Audi\\.gradle\\caches\\transforms-2\\files-2.1\\f6a183f8595ca34f3d5cc99d1f8bc322\\appcompat-1.0.2\\res\\values-v23\\values-v23.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,19,32,33,34,35,36",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4",
@@ -15,7 +15,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Lucas Oudhuis\\.gradle\\caches\\transforms-2\\files-2.1\\9ada9e59480a6739c9fc4544e5e5116b\\cardview-1.0.0\\res\\values-v23\\values-v23.xml",
+                    "source": "C:\\Users\\Audi\\.gradle\\caches\\transforms-2\\files-2.1\\ccc4f60e4549c263b614feec2a027fa2\\cardview-1.0.0\\res\\values-v23\\values-v23.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

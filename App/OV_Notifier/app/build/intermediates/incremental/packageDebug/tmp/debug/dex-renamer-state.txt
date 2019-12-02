@@ -1,4 +1,4 @@
-#Sun Nov 24 23:56:15 CET 2019
-base.0=C\:\\Users\\Lucas Oudhuis\\Desktop\\EWAv2\\ProjectC\\App\\OV_Notifier\\app\\build\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
+#Sun Oct 27 14:46:45 CET 2019
+base.0=C\:\\Users\\Audi\\Projects\\Android Studio\\OV_Notifier\\app\\build\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
 path.0=classes.dex
 renamed.0=classes.dex

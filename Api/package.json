@@ -1,0 +1,16 @@
+{
+  "name": "project-c",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run index.js && exit 0"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "express": "^4.17.1",
+    "mysql": "^2.17.1"
+  }
+}
