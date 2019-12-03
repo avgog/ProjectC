@@ -5,16 +5,32 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -23,34 +39,71 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import java.io.Console;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import org.json.JSONObject;
 
-public class RoutePage extends AppCompatActivity implements  TimePickerFragment.TimePickerListener , DatePickerDialog.OnDateSetListener {
+public class RoutePage extends AppCompatActivity implements TimePickerFragment.TimePickerListener, DatePickerDialog.OnDateSetListener, MenuItem.OnMenuItemClickListener, PopupMenu.OnMenuItemClickListener {
 
     ListView listView;
-    ArrayList<String> mTime = new ArrayList<>();
-    ArrayList<String> mDate = new ArrayList<>();
+    static ArrayList<String> emptylist = new ArrayList<>();
+    static ArrayList<String> mTime = new ArrayList<>();
+    static ArrayList<String> mDate = new ArrayList<>();
+    static ArrayList<Integer> mTimeid = new ArrayList<>();
     String activity;
     TextView editTextView;
     AlertDialog alertDialog;
     EditText editText;
-    Calendar calender;
+    Calendar calender127;
     static String date;
     static String time;
+    static String toLocation;
+    static String fromLocation;
+    static Button activeButton;
+    static String routeid;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_route_page);
+        Log.i("okidoki","HELOOOOOOOOOO" + mDate.toString());
+        routeid = "1";
+        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/get/from_route",routeid,null,null, null,"startup");
         Button AgendaButton = findViewById(R.id.agenda);
+        Button SaveButton = findViewById(R.id.Save);
+
+        final Button fromLocationButton = findViewById(R.id.FromLocationButton);
+        final Button toLocationButton = findViewById(R.id.ToLocationButton);
         final ToggleButton Monday = (findViewById(R.id.mondaybutton));
         final ToggleButton Tuesday = (findViewById(R.id.tuesdaybutton));
         final ToggleButton Wednesday = (findViewById(R.id.wednesdaybutton));
@@ -59,7 +112,7 @@ public class RoutePage extends AppCompatActivity implements  TimePickerFragment.
         final ToggleButton Saturday = (findViewById(R.id.saterdaybutton));
         final ToggleButton Sunday = (findViewById(R.id.sundaybutton));
         listView = findViewById(R.id.listview2);
-
+        listView.setAdapter(null);
         Button closeButton = findViewById(R.id.CloseButton);
         editTextView = findViewById(R.id.routeTitle);
         alertDialog = new AlertDialog.Builder(this).create();
@@ -67,9 +120,9 @@ public class RoutePage extends AppCompatActivity implements  TimePickerFragment.
         editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
         alertDialog.setTitle(" Edit the text ");
         alertDialog.setView(editText);
-
         MyAdapter adapter = new MyAdapter(this, mTime, mDate);
         listView.setAdapter(adapter);
+
 
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,24 +225,141 @@ public class RoutePage extends AppCompatActivity implements  TimePickerFragment.
 
             }
         });
+              toLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RoutePage.activeButton = toLocationButton;
+                showPopup(v);
+            }
+        });
+        fromLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RoutePage.activeButton = fromLocationButton;
+                showPopup(v);
+
+
+
+            }
+        });
+        SaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listView.setAdapter(null);
+            }
+        });
+    }
+
+    public void jsonParse(Context context, String url, final String routeid, final String endtime, final String date,final String timeid, final String type) {
+        RequestQueue queue = Volley.newRequestQueue(context);
+        StringRequest sr = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i("okidoki", response);
+                if (type == "startup") {
+                    mTimeid.clear();
+                    mTime.clear();
+                    mDate.clear();
+                    try {
+                        JSONObject json = new JSONObject(response);
+                        JSONArray array = json.getJSONArray("result");
+                        Log.i("okidoki", array.toString());
+                        for (int i=0; i <array.length();i++) {
+                            JSONObject jsonTime = array.getJSONObject(i);
+                            RoutePage.mTimeid.add(jsonTime.getInt("id"));
+                            RoutePage.mTime.add(jsonTime.getString("timeofarrival"));
+                            RoutePage.mDate.add(jsonTime.getString("date"));
+                            Log.i("okidoki",mTimeid.toString()+ mTime.toString()+ mDate.toString());
+
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    listView.setAdapter(null);
+                    MyAdapter adapter = new MyAdapter(RoutePage.this, mTime, mDate);
+                    listView.setAdapter(adapter);
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("okidoki",error.toString());
+            }
+        }){
+            @Override
+            protected  Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                if(timeid!=null){
+                    params.put("time_id", timeid);
+                }
+                if(routeid != null) {
+                    params.put("route_id",routeid);
+                }
+                if(endtime != null) {
+                    params.put("end_time", endtime);
+                    Log.i("okidoki","executed");
+                }
+                if (date != null) {
+                    params.put("date", date);
+                }
+
+                return params;
+            }
+
+
+
+        };
+        queue.add(sr);
+    }
+
+
+    public void showPopup(View v){
+        PopupMenu popup = new PopupMenu(this, v);
+        popup.setOnMenuItemClickListener(this);
+        popup.inflate(R.menu.popupmenu);
+        popup.show();
     }
 
     @Override
     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
         String time = (hour + ":" + minute);
-        mTime.add(time);
-        mDate.add(RoutePage.date);
-        MyAdapter adapter = new MyAdapter(RoutePage.this,mTime,mDate);
-        listView.setAdapter(adapter);
+        /*mTime.add(time);
+        mDate.add(RoutePage.date);*/
+        boolean stop = true;
+        for (int i=0; stop ;i++) {
+            if(!mTimeid.contains(i)) {
+                stop = false;
+                mTimeid.add(i);
+            }
+
+        }
+
+        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/add",routeid,time,RoutePage.date,null,"add");
+        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/get/from_route",routeid,null,null, null,"startup");
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        RoutePage.date = String.valueOf(dayOfMonth) + "/" + String.valueOf(month) + "/" +String.valueOf(year);
+        RoutePage.date = String.valueOf(dayOfMonth) + "-" + String.valueOf(month) + "-" +String.valueOf(year);
         DialogFragment timePickerFragment = new TimePickerFragment();
         timePickerFragment.setCancelable(false);
         timePickerFragment.show(getSupportFragmentManager(), "timePicker");
     }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.beurs:
+                activeButton.setText("Beurs, Rotterdam");
+                break;
+            case R.id.capelsebrug:
+                activeButton.setText("Capelsebrug, Capelle aan den Ijssel");
+                break;
+        }
+        return false;    }
 
 
     class MyAdapter extends ArrayAdapter<String> {
@@ -217,10 +387,15 @@ public class RoutePage extends AppCompatActivity implements  TimePickerFragment.
             deletebutton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.i("okidoki",String.valueOf(position));
+                    Log.i("okidoki", String.valueOf(mTime));
+                    Log.i("okidoki", String.valueOf(mTimeid));
                     mTime.remove(position);
                     mDate.remove(position);
-                    MyAdapter adapter = new MyAdapter(RoutePage.this,mTime,mDate);
-                    listView.setAdapter(adapter);
+                    jsonParse(RoutePage.this, "http://projectc.caslayoort.nl:80/public/times/remove",null,null,null,String.valueOf(mTimeid.get(position)),"delete");
+                    mTimeid.remove(position);
+                    jsonParse(RoutePage.this, "http://projectc.caslayoort.nl:80/public/times/get/from_route",routeid,null,null, null,"startup");
+
                 }
             });
             TextView myDate = row.findViewById(R.id.homeDate);
@@ -230,5 +405,6 @@ public class RoutePage extends AppCompatActivity implements  TimePickerFragment.
             return row;
         }
     }
+
 
 }
