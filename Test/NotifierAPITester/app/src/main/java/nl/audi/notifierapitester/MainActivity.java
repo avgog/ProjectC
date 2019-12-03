@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
                 new Form("remove route", "/routes/remove", new String[]{"route_id"}),
                 new Form("get time by id","/times/get/from_id", new String[]{"time_id"}),
                 new Form("get times by route","/times/get/from_route", new String[]{"route_id"}),
-                new Form("add time","/times/add", new String[]{"route_id","end_time"}),
-                new Form("change time","/times/change/time", new String[]{"time_id","end_time"}),
+                new Form("add time","/times/add", new String[]{"route_id","end_time","date"}),
+                new Form("change time","/times/change/time", new String[]{"time_id","date","end_time"}),
                 new Form("remove time","/times/remove", new String[]{"time_id"})
         };
         forms[0].method = Request.Method.GET;
