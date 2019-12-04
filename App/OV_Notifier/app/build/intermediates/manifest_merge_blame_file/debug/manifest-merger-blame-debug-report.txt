@@ -1,0 +1,76 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="nl.hr.ov_notifier"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="15"
+8-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="29" />
+9-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml
+10
+11    <application
+11-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:5:5-28:19
+12        android:allowBackup="true"
+12-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:6:9-35
+13        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+13-->[androidx.core:core:1.0.1] C:\Users\joost\.gradle\caches\transforms-2\files-2.1\72b2b92ec4ab73ff21fb9bc348de3b22\core-1.0.1\AndroidManifest.xml:22:18-86
+14        android:debuggable="true"
+15        android:icon="@mipmap/ic_launcher"
+15-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:7:9-43
+16        android:label="@string/app_name"
+16-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:8:9-41
+17        android:roundIcon="@mipmap/ic_launcher_round"
+17-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:9:9-54
+18        android:supportsRtl="true"
+18-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:10:9-35
+19        android:theme="@style/AppTheme" >
+19-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:11:9-40
+20        <activity android:name="nl.hr.ov_notifier.LoginPage" />
+20-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:12:9-56
+20-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:12:19-44
+21        <activity android:name="nl.hr.ov_notifier.Settings" />
+21-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:13:9-55
+21-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:13:19-43
+22        <activity android:name="nl.hr.ov_notifier.RoutePage" />
+22-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:14:9-56
+22-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:14:19-44
+23        <activity
+23-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:15:9-23:20
+24            android:name="nl.hr.ov_notifier.MainActivity"
+24-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:16:13-58
+25            android:label="@string/app_name" >
+25-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:17:13-45
+26            <intent-filter>
+26-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:18:13-22:29
+27                <action android:name="android.intent.action.MAIN" />
+27-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:19:17-69
+27-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:19:25-66
+28
+29                <category android:name="android.intent.category.LAUNCHER" />
+29-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:21:17-77
+29-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:21:27-74
+30            </intent-filter>
+31        </activity>
+32
+33        <meta-data
+33-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:25:9-27:57
+34            android:name="preloaded_fonts"
+34-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:26:13-43
+35            android:resource="@array/preloaded_fonts" />
+35-->C:\Users\joost\OneDrive\Desktop\ProjectC\App\OV_Notifier\app\src\main\AndroidManifest.xml:27:13-54
+36
+37        <provider
+37-->[androidx.lifecycle:lifecycle-process:2.0.0] C:\Users\joost\.gradle\caches\transforms-2\files-2.1\bba9e662e9f4bf0da774229f97b853fc\lifecycle-process-2.0.0\AndroidManifest.xml:23:9-27:43
+38            android:name="androidx.lifecycle.ProcessLifecycleOwnerInitializer"
+38-->[androidx.lifecycle:lifecycle-process:2.0.0] C:\Users\joost\.gradle\caches\transforms-2\files-2.1\bba9e662e9f4bf0da774229f97b853fc\lifecycle-process-2.0.0\AndroidManifest.xml:24:13-79
+39            android:authorities="nl.hr.ov_notifier.lifecycle-process"
+39-->[androidx.lifecycle:lifecycle-process:2.0.0] C:\Users\joost\.gradle\caches\transforms-2\files-2.1\bba9e662e9f4bf0da774229f97b853fc\lifecycle-process-2.0.0\AndroidManifest.xml:25:13-69
+40            android:exported="false"
+40-->[androidx.lifecycle:lifecycle-process:2.0.0] C:\Users\joost\.gradle\caches\transforms-2\files-2.1\bba9e662e9f4bf0da774229f97b853fc\lifecycle-process-2.0.0\AndroidManifest.xml:26:13-37
+41            android:multiprocess="true" />
+41-->[androidx.lifecycle:lifecycle-process:2.0.0] C:\Users\joost\.gradle\caches\transforms-2\files-2.1\bba9e662e9f4bf0da774229f97b853fc\lifecycle-process-2.0.0\AndroidManifest.xml:27:13-40
+42    </application>
+43
+44</manifest>

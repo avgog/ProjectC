@@ -1,0 +1,12 @@
+[Unit]
+Description=Ovnotifier
+After=mysql.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+User=root
+ExecStart=/root/ovnotifier.sh
+
+[Install]
