@@ -43,7 +43,7 @@
                     android:ems="10"
                     android:hint="Server URL"
                     android:inputType="textPersonName"
-                    android:text="http://192.168.178.29:2900" />
+                    android:text="http://192.168.178.29:666" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

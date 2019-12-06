@@ -76,6 +76,11 @@ app.get('/public/auth', function(req, res){
   let data = req.body;
   let username = data.username;
   let password = data.password;
+  console.log("body: " + JSON.stringify(req.body));
+  console.log("query: " + JSON.stringify(req.query));
+  console.log("USERNAME: " + req.query.username);
+  console.log("PASSWORD: " + req.query.password);
+
   let string = username + "^63@431%32=21432*8421345fd2sSqla" + password;
   let auth_token = crypto.createHash('sha256').update(string).digest('hex');
   //let db_entry = db.execInternalResponse("SELECT user_id AS id, auth_token FROM Users WHERE username='" + username + "' AND password='" + password + "';");
@@ -112,6 +117,14 @@ function defaultCallback(err, res,callbackData){
         res=[]
     }
     callbackData.res.send({"error":err, "result":res})
+}
+
+function checkToken(token, user_id, response){
+  let query = "SELECT auth_token FROM Users WHERE user_id=" + user_id + ";";
+  let entry = db.execInternalResponse(query);
+  entry.then(function(result){
+    console.log(result)
+  });
 }
 
 //use this to test the connection between the client and server
