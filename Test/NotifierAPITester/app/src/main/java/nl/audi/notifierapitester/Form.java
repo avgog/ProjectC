@@ -16,6 +16,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,9 +31,10 @@ public class Form {
     String[] fieldnames;
     public int method = Request.Method.POST; //post = 1, //get = 0
 
-    private TextView resultText;
-    private EditText[] fields;
+    public TextView resultText;
+    public EditText[] fields;
 
+    public boolean isAuthenticationForm = false;
 
     public Form(String header, String localUrl, String[] fieldnames){
         this.header = header;
@@ -50,13 +55,16 @@ public class Form {
         TextView[] fieldnameTexts = new TextView[fieldnames.length];
         fields = new EditText[fieldnames.length];
 
-
         for(int i = 0; i < fieldnames.length; i++){
             fieldnameTexts[i] = new TextView(context);
             fieldnameTexts[i].setText(fieldnames[i]);
             formContent.addView(fieldnameTexts[i]);
 
             fields[i] = new EditText(context);
+
+            if(fieldnames[i] == "token"){
+                fields[i].setEnabled(false);
+            }
             formContent.addView(fields[i]);
         }
 
@@ -86,6 +94,20 @@ public class Form {
             public void onResponse(String response) {
                 Log.i("Request","Got a response");
                 resultText.setText("Result: " + response);
+
+                if(isAuthenticationForm){
+                    String token = "";
+                    try{
+                        JSONObject resObject = new JSONArray(response).getJSONObject(0);
+                        token = resObject.getString("auth_token");
+                    }
+                    catch (JSONException e){
+                        Log.e("json","error: " + e.toString());
+                    }
+                    finally {
+                        MainActivity.updateTokens(token);
+                    }
+                }
 
             }
         }, new Response.ErrorListener() {

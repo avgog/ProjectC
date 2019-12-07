@@ -5,7 +5,7 @@ const bodyparser = require('body-parser');
 const crypto = require('crypto');
 
 // IMPORTING FILES //
-const functions = require(__dirname + "/functions.js");
+const functions = require("./functions.js");
 const app_settings = JSON.parse( fs.readFileSync(__dirname + "/settings/unsafe.json") );
 const db = require(__dirname + "/db.js");
 
@@ -72,15 +72,10 @@ app.get('/public/route', function(req, res) {
   let type = data.type; /* normal / full / int */
 });
 
-app.get('/public/auth', function(req, res){
+app.post('/public/auth', function(req, res){
   let data = req.body;
   let username = data.username;
   let password = data.password;
-  console.log("body: " + JSON.stringify(req.body));
-  console.log("query: " + JSON.stringify(req.query));
-  console.log("USERNAME: " + req.query.username);
-  console.log("PASSWORD: " + req.query.password);
-
   let string = username + "^63@431%32=21432*8421345fd2sSqla" + password;
   let auth_token = crypto.createHash('sha256').update(string).digest('hex');
   //let db_entry = db.execInternalResponse("SELECT user_id AS id, auth_token FROM Users WHERE username='" + username + "' AND password='" + password + "';");
@@ -109,9 +104,28 @@ app.get('/public/auth', function(req, res){
 
 
 // AUDI //
+//list of API url's and query indices
+const requests = [
+  {url:"/public/routes/add", query:functions.Query.ROUTE_ADD},
+  {url:"/public/routes/get/from_id", query:functions.Query.ROUTE_GET_BY_ID},
+  {url:"/public/routes/get/from_user", query:functions.Query.ROUTE_GET_BY_USER},
+  {url:"/public/routes/change/start_point", query:functions.Query.ROUTE_CHANGE_START},
+  {url:"/public/routes/change/end_point", query:functions.Query.ROUTE_CHANGE_END},
+  {url:"/public/routes/change/route_name", query:functions.Query.ROUTE_CHANGE_NAME},
+  {url:"/public/routes/remove", query:functions.Query.ROUTE_REMOVE},
+  {url:"/public/times/get/from_id", query:functions.Query.TIME_GET_BY_ID},
+  {url:"/public/times/get/from_route", query:functions.Query.TIME_GET_BY_ROUTE},
+  {url:"/public/times/add", query:functions.Query.TIME_ADD},
+  {url:"/public/times/change/time", query:functions.Query.TIME_CHANGE_TIME},
+  {url:"/public/times/remove", query:functions.Query.TIME_REMOVE}
+];
+
 function defaultCallback(err, res,callbackData){
     if(!err){
         err=""
+    }
+    else{
+      console.log("callback error: " + err)
     }
     if(!res){
         res=[]
@@ -119,11 +133,26 @@ function defaultCallback(err, res,callbackData){
     callbackData.res.send({"error":err, "result":res})
 }
 
-function checkToken(token, user_id, response){
+function checkToken(token, user_id, callback){ //checks if the authentication token is valid
+  console.log("checktoken/user_id = " + user_id);
+  if(isNaN(parseInt(user_id))){
+    user_id = -1;
+  }
   let query = "SELECT auth_token FROM Users WHERE user_id=" + user_id + ";";
   let entry = db.execInternalResponse(query);
   entry.then(function(result){
-    console.log(result)
+    console.log("result:");
+    console.log(result);
+    console.log("-------");
+  });
+}
+
+for(let i = 0; i < requests.length; i++){
+  app.post(requests[i].url, (req,res) => {
+    checkToken(req.body.token, req.body.user_id, () => {
+      let callbackObject = {"callback":defaultCallback, "data":{res}}
+      functions.executeAPIQuery(requests[i].query, callbackObject, req.body);
+    });
   });
 }
 
@@ -132,10 +161,13 @@ app.get("/", (req, res) => {
     res.send({"error":"", "result":"callback from server"})
 });
 
-app.post("/public/routes/add", (req, res) => {
+
+/*app.post("/public/routes/add", (req, res) => {
     console.log("got post request [url: '" + req.url +"']")
     let callbackObject = {"callback":defaultCallback, "data":{res}}
-    functions.add_route(req.body.user_id, req.body.start_point, req.body.end_point, req.body.route_name, callbackObject)
+    checkToken(req.body.token, req.body.user_id, () => {
+      functions.add_route(req.body.user_id, req.body.start_point, req.body.end_point, req.body.route_name, callbackObject)
+    });
 });
 
 app.post("/public/routes/get/from_id", (req, res) => {
@@ -210,7 +242,7 @@ app.post("/public/times/remove", (req, res) => {
     console.log("got post request [url: '" + req.url +"']")
     let callbackObject = {"callback":defaultCallback, "data":{res}}
     functions.remove_time(req.body.time_id, callbackObject)
-});
+});*/
 
 
 // START NODEJS SERVER //
