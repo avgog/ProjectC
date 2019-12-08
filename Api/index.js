@@ -106,18 +106,18 @@ app.post('/public/auth', function(req, res){
 // AUDI //
 //list of API url's and query indices
 const requests = [
-  {url:"/public/routes/add", query:functions.Query.ROUTE_ADD},
-  {url:"/public/routes/get/from_id", query:functions.Query.ROUTE_GET_BY_ID},
-  {url:"/public/routes/get/from_user", query:functions.Query.ROUTE_GET_BY_USER},
-  {url:"/public/routes/change/start_point", query:functions.Query.ROUTE_CHANGE_START},
-  {url:"/public/routes/change/end_point", query:functions.Query.ROUTE_CHANGE_END},
-  {url:"/public/routes/change/route_name", query:functions.Query.ROUTE_CHANGE_NAME},
-  {url:"/public/routes/remove", query:functions.Query.ROUTE_REMOVE},
-  {url:"/public/times/get/from_id", query:functions.Query.TIME_GET_BY_ID},
-  {url:"/public/times/get/from_route", query:functions.Query.TIME_GET_BY_ROUTE},
-  {url:"/public/times/add", query:functions.Query.TIME_ADD},
-  {url:"/public/times/change/time", query:functions.Query.TIME_CHANGE_TIME},
-  {url:"/public/times/remove", query:functions.Query.TIME_REMOVE}
+  {url:"/public/routes/add", queryIndex:functions.Query.ROUTE_ADD},
+  {url:"/public/routes/get/from_id", queryIndex:functions.Query.ROUTE_GET_BY_ID},
+  {url:"/public/routes/get/from_user", queryIndex:functions.Query.ROUTE_GET_BY_USER},
+  {url:"/public/routes/change/start_point", queryIndex:functions.Query.ROUTE_CHANGE_START},
+  {url:"/public/routes/change/end_point", queryIndex:functions.Query.ROUTE_CHANGE_END},
+  {url:"/public/routes/change/route_name", queryIndex:functions.Query.ROUTE_CHANGE_NAME},
+  {url:"/public/routes/remove", queryIndex:functions.Query.ROUTE_REMOVE},
+  {url:"/public/times/get/from_id", queryIndex:functions.Query.TIME_GET_BY_ID},
+  {url:"/public/times/get/from_route", queryIndex:functions.Query.TIME_GET_BY_ROUTE},
+  {url:"/public/times/add", queryIndex:functions.Query.TIME_ADD},
+  {url:"/public/times/change/time", queryIndex:functions.Query.TIME_CHANGE_TIME},
+  {url:"/public/times/remove", queryIndex:functions.Query.TIME_REMOVE}
 ];
 
 function defaultCallback(err, res,callbackData){
@@ -133,7 +133,7 @@ function defaultCallback(err, res,callbackData){
     callbackData.res.send({"error":err, "result":res})
 }
 
-function checkToken(token, user_id, callback){ //checks if the authentication token is valid
+function checkToken(token, res, user_id, callback){ //checks if the authentication token is valid
   console.log("checktoken/user_id = " + user_id);
   if(isNaN(parseInt(user_id))){
     user_id = -1;
@@ -141,17 +141,33 @@ function checkToken(token, user_id, callback){ //checks if the authentication to
   let query = "SELECT auth_token FROM Users WHERE user_id=" + user_id + ";";
   let entry = db.execInternalResponse(query);
   entry.then(function(result){
-    console.log("result:");
-    console.log(result);
-    console.log("-------");
+    if(result.length > 0){
+      let dbToken = result[0].auth_token;
+      console.log("received token: " + token + ", stored token: " + dbToken);
+      //Check if the token from the database isn't empty (which can happen if the user of that user_id hasn't logged in)
+      //Then compare it to the token received from the request.
+      if(dbToken != null && dbToken != "" && token == dbToken){
+        console.log("valid token, executing callback...");
+        callback();
+      }
+      else{
+        console.log("token does not belong to the corresponding user_id, callback won't be executed.");
+        res.send({"error":"invalid token", "result":""})
+      }
+    }
+    else{
+      console.log("this user ("+user_id+") has no token stored in the database, callback won't be executed.");
+      res.send({"error":"invalid token", "result":""})
+    }
   });
 }
 
 for(let i = 0; i < requests.length; i++){
   app.post(requests[i].url, (req,res) => {
-    checkToken(req.body.token, req.body.user_id, () => {
+    checkToken(req.body.token, res, req.body.user_id, () => {
+      console.log("got post request [url: '" + req.url +"']")
       let callbackObject = {"callback":defaultCallback, "data":{res}}
-      functions.executeAPIQuery(requests[i].query, callbackObject, req.body);
+      functions.executeAPIQuery(requests[i].queryIndex, callbackObject, req.body);
     });
   });
 }
@@ -160,89 +176,6 @@ for(let i = 0; i < requests.length; i++){
 app.get("/", (req, res) => {
     res.send({"error":"", "result":"callback from server"})
 });
-
-
-/*app.post("/public/routes/add", (req, res) => {
-    console.log("got post request [url: '" + req.url +"']")
-    let callbackObject = {"callback":defaultCallback, "data":{res}}
-    checkToken(req.body.token, req.body.user_id, () => {
-      functions.add_route(req.body.user_id, req.body.start_point, req.body.end_point, req.body.route_name, callbackObject)
-    });
-});
-
-app.post("/public/routes/get/from_id", (req, res) => {
-    console.log("got post request [url: '" + req.url +"']")
-    let callbackObject = {"callback":defaultCallback, "data":{res}}
-    functions.get_route(req.body.route_id, callbackObject)
-});
-
-app.post("/public/routes/get/from_user", (req, res) => {
-    console.log("got post request [url: '" + req.url +"']")
-    let callbackObject = {"callback":defaultCallback, "data":{res}}
-    functions.get_user_routes(req.body.user_id, callbackObject)
-});
-
-app.post("/public/routes/change/start_point", (req, res) => {
-    console.log("got post request [url: '" + req.url +"']")
-    let callbackObject = {"callback":defaultCallback, "data":{res}}
-    functions.change_start_point(req.body.route_id, req.body.start_point, callbackObject)
-});
-
-app.post("/public/routes/change/end_point", (req, res) => {
-    console.log("got post request [url: '" + req.url +"']")
-    let callbackObject = {"callback":defaultCallback, "data":{res}}
-    functions.change_end_point(req.body.route_id, req.body.end_point, callbackObject)
-});
-
-app.post("/public/routes/change/route_name", (req, res) => {
-    console.log("got post request [url: '" + req.url +"']")
-    let callbackObject = {"callback":defaultCallback, "data":{res}}
-    functions.change_route_name(req.body.route_id, req.body.route_name, callbackObject)
-});
-
-app.post("/public/routes/remove", (req, res) => {
-    console.log("got post request [url: '" + req.url +"']")
-    let callbackObject = {"callback":defaultCallback, "data":{res}}
-    functions.remove_route(req.body.route_id, callbackObject)
-});
-
-
-
-app.post("/public/times/get/from_id", (req, res) => {
-    console.log("got post request [url: '" + req.url +"']")
-    let callbackObject = {"callback":defaultCallback, "data":{res}}
-    functions.get_time(req.body.time_id, callbackObject)
-});
-
-app.post("/public/times/get/from_route", (req, res) => {
-    console.log("got post request [url: '" + req.url +"']")
-    let callbackObject = {"callback":defaultCallback, "data":{res}}
-    functions.get_route_times(req.body.route_id, callbackObject)
-});
-
-app.post("/public/times/add", (req, res) => {
-    console.log("got post request [url: '" + req.url +"']")
-    let callbackObject = {"callback":defaultCallback, "data":{res}}
-    functions.add_time(req.body.route_id, req.body.date, req.body.end_time, callbackObject)
-});
-
-app.post("/public/times/change/time", (req, res) => {
-    console.log("got post request [url: '" + req.url +"']")
-    let callbackObject = {"callback":defaultCallback, "data":{res}}
-    functions.change_time(req.body.time_id, req.body.date, req.body.end_time, callbackObject)
-});
-
-//app.post("/public/times/change/time", (req, res) => {
-//    console.log("got post request [url: '" + req.url +"']")
-//    let callbackObject = {"callback":defaultCallback, "data":{res}}
-//    functions.change_time(req.body.time_id, req.body.date, req.body.end_time, callbackObject)
-//});
-
-app.post("/public/times/remove", (req, res) => {
-    console.log("got post request [url: '" + req.url +"']")
-    let callbackObject = {"callback":defaultCallback, "data":{res}}
-    functions.remove_time(req.body.time_id, callbackObject)
-});*/
 
 
 // START NODEJS SERVER //
