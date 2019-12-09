@@ -117,7 +117,8 @@ const requests = [
   {url:"/public/times/get/from_route", queryIndex:functions.Query.TIME_GET_BY_ROUTE},
   {url:"/public/times/add", queryIndex:functions.Query.TIME_ADD},
   {url:"/public/times/change/time", queryIndex:functions.Query.TIME_CHANGE_TIME},
-  {url:"/public/times/remove", queryIndex:functions.Query.TIME_REMOVE}
+  {url:"/public/times/remove", queryIndex:functions.Query.TIME_REMOVE},
+  {url:"/public/user/change", queryIndex:functions.Query.USER_CHANGE},  
 ];
 
 function defaultCallback(err, res,callbackData){

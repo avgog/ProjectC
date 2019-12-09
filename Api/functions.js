@@ -14,7 +14,9 @@ const Query = {
     TIME_GET_BY_ID              : 8,
     TIME_GET_BY_ROUTE           : 9,
     TIME_CHANGE_TIME            :10,
-    TIME_REMOVE                 :11
+    TIME_REMOVE                 :11,
+    USER_CHANGE                 :12,
+    USER_NAME_EXITS             :13
 };
 module.exports.Query = Query;
 
@@ -37,7 +39,6 @@ module.exports.executeAPIQuery = async function(queryIndex, callbackObject, body
         case Query.ROUTE_CHANGE_END:    query=`update Routes set end = ? where user_id = ? and route_id = ?;`; values=[body.end_point, body.user_id, body.route_id]; break;
         case Query.ROUTE_CHANGE_NAME:   query=`update Routes set route_name = ? where user_id = ? and route_id = ?;`; values=[body.route_name, body.user_id, body.route_id]; break;
         case Query.ROUTE_REMOVE:        query=`delete from Routes where user_id = ? and route_id = ?;`; values=[body.user_id, body.route_id]; break;
-        //case Query.TIME_ADD:          query=`insert into Times(route_id, date, timeofarrival) values (?,?,?)`; values=[body.route_id, body.date, body.end_time, body.user_id]; break;
         case Query.TIME_ADD:
             query=`insert into Times(route_id, date, timeofarrival) select ?,?,? where exists 
                    (select * from Routes where Routes.route_id = ? and Routes.user_id = ?)`; 
@@ -48,6 +49,10 @@ module.exports.executeAPIQuery = async function(queryIndex, callbackObject, body
         case Query.TIME_REMOVE:         
             query=`delete from Times where Times.id = ? and exists (select * from Times join Routes on Routes.user_id = ? and Routes.route_id = Times.route_id and Times.id = ?);`; 
             values=[body.time_id,body.user_id, body.time_id]; break;
+        case Query.USER_CHANGE: 
+            query=`UPDATE users SET username=?, password=?, auth_token='' where user_id=? and not exists(select count(*) from users where user_id != ? and username = ?)`; 
+            values=[body.username, body.password, body.user_id, body.user_id, body.username]; break;
+        //case Query.USER_NAME_EXITS: query=``; values=[]; break;
         default: executeQuery=false; callbackObject.callback("Server error: unknown queryIndex ("+queryIndex+")", "", callbackObject.data); //invalid queryIndex, don't execute any query.
     }
     if(executeQuery){ //if nothing went wrong, execute the query
