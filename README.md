@@ -17,6 +17,9 @@ URL PATH,                          Request type,       Parameters
 /public/times/add                  POST                token, user_id, route_id, end_time, date
 /public/times/change/time          POST                token, user_id, time_id, end_time, date
 /public/times/remove               POST                token, user_id, time_id
+/public/user/change                POST                token, user_id, username, password
+/public/user/exists                POST                username
+/public/user/register              POST                username, password
 /public/auth                       GET                 username, password
 ```
 ----------------------

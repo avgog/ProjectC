@@ -16,7 +16,8 @@ const Query = {
     TIME_CHANGE_TIME            :10,
     TIME_REMOVE                 :11,
     USER_CHANGE                 :12,
-    USER_NAME_EXITS             :13
+    USER_NAME_EXIST             :13,
+    USER_REGISTER               :14
 };
 module.exports.Query = Query;
 
@@ -24,6 +25,7 @@ module.exports.Query = Query;
 //queryIndex is used to select a query in the switch statement. Usage of the Query enum is recommended
 //callbackobject contains a callbackfunction and a data field. Go to database.js to view the format.
 //body must contain all the parameters for the sql query
+//returns a boolean which indicates whether a query is going to be executed.
 module.exports.executeAPIQuery = async function(queryIndex, callbackObject, body){
     let query = "";
     let values = [];
@@ -49,13 +51,27 @@ module.exports.executeAPIQuery = async function(queryIndex, callbackObject, body
         case Query.TIME_REMOVE:         
             query=`delete from Times where Times.id = ? and exists (select * from Times join Routes on Routes.user_id = ? and Routes.route_id = Times.route_id and Times.id = ?);`; 
             values=[body.time_id,body.user_id, body.time_id]; break;
-        case Query.USER_CHANGE: 
-            query=`UPDATE users SET username=?, password=?, auth_token='' where user_id=? and not exists(select count(*) from users where user_id != ? and username = ?)`; 
+        case Query.USER_CHANGE:
+            if(!body.username || !body.password){
+                callbackObject.callback("empty username/password are not allowed", "", callbackObject.data);
+                executeQuery = false;
+                break;
+            } 
+            query=`update users SET username=?, password=?, auth_token='' where user_id=? and not exists(select * from users where user_id != ? and username = ?)`; 
             values=[body.username, body.password, body.user_id, body.user_id, body.username]; break;
-        //case Query.USER_NAME_EXITS: query=``; values=[]; break;
+        case Query.USER_NAME_EXIST: query=`select count(*) as count from users where username = ?`; values=[body.username]; break;
+        case Query.USER_REGISTER:
+            if(!body.username || !body.password){
+                callbackObject.callback("empty username/password are not allowed", "", callbackObject.data);
+                executeQuery = false;
+                break;
+            }  
+            query=`insert into users(username, password) select ?,? where not exists(select * from users where username = ?);`; 
+            values = [body.username, body.password, body.username]; break;
         default: executeQuery=false; callbackObject.callback("Server error: unknown queryIndex ("+queryIndex+")", "", callbackObject.data); //invalid queryIndex, don't execute any query.
     }
     if(executeQuery){ //if nothing went wrong, execute the query
         database.executeQuery(query, values, callbackObject);
     }
+    return executeQuery;
 }

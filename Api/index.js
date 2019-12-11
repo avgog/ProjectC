@@ -118,7 +118,9 @@ const requests = [
   {url:"/public/times/add", queryIndex:functions.Query.TIME_ADD},
   {url:"/public/times/change/time", queryIndex:functions.Query.TIME_CHANGE_TIME},
   {url:"/public/times/remove", queryIndex:functions.Query.TIME_REMOVE},
-  {url:"/public/user/change", queryIndex:functions.Query.USER_CHANGE},  
+  {url:"/public/user/change", queryIndex:functions.Query.USER_CHANGE},
+  {url:"/public/user/name_exists", queryIndex:functions.Query.USER_NAME_EXIST, skipTokenCheck:true},
+  {url:"/public/user/register", queryIndex:functions.Query.USER_REGISTER, skipTokenCheck:true}
 ];
 
 function defaultCallback(err, res,callbackData){
@@ -165,11 +167,17 @@ function checkToken(token, res, user_id, callback){ //checks if the authenticati
 
 for(let i = 0; i < requests.length; i++){
   app.post(requests[i].url, (req,res) => {
-    checkToken(req.body.token, res, req.body.user_id, () => {
-      console.log("got post request [url: '" + req.url +"']")
-      let callbackObject = {"callback":defaultCallback, "data":{res}}
+    console.log("got post request [url: '" + req.url +"']")
+    let callbackObject = {"callback":defaultCallback, "data":{res}}
+    
+    if(!requests[i].skipTokenCheck){
+      checkToken(req.body.token, res, req.body.user_id, () => {
+        functions.executeAPIQuery(requests[i].queryIndex, callbackObject, req.body);
+      });
+    }
+    else{
       functions.executeAPIQuery(requests[i].queryIndex, callbackObject, req.body);
-    });
+    }
   });
 }
 

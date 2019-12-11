@@ -2,6 +2,7 @@ package nl.audi.notifierapitester;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -64,6 +65,9 @@ public class Form {
 
             if(fieldnames[i] == "token"){
                 fields[i].setEnabled(false);
+            }
+            else if(fieldnames[i] == "password"){
+                fields[i].setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             }
             formContent.addView(fields[i]);
         }
