@@ -29,7 +29,6 @@ public class OnRemoveRouteClickListener implements View.OnClickListener {
                     @Override
                     public void onResponse(Object response) {
                         manager.getRoutesByUserId(
-                                route.getUserId(),
                                 new RouteListListener(listView,manager),
                                 new RouteListErrorListener(listView,manager)
                                 );

@@ -98,7 +98,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Login failed. Incorrect username or password."
+                    android:text="Login failed."
                     android:textColor="#F44336"
                     android:visibility="invisible" />
 

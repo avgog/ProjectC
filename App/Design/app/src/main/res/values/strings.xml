@@ -1,4 +1,5 @@
 <resources>
+    <string name="server_url">http://192.168.178.29:666</string>
     <string name="app_name">OV Notifier</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>

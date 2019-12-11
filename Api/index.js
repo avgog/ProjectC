@@ -119,7 +119,7 @@ const requests = [
   {url:"/public/times/change/time", queryIndex:functions.Query.TIME_CHANGE_TIME},
   {url:"/public/times/remove", queryIndex:functions.Query.TIME_REMOVE},
   {url:"/public/user/change", queryIndex:functions.Query.USER_CHANGE},
-  {url:"/public/user/name_exists", queryIndex:functions.Query.USER_NAME_EXIST, skipTokenCheck:true},
+  {url:"/public/user/exists", queryIndex:functions.Query.USER_NAME_EXIST, skipTokenCheck:true},
   {url:"/public/user/register", queryIndex:functions.Query.USER_REGISTER, skipTokenCheck:true}
 ];
 

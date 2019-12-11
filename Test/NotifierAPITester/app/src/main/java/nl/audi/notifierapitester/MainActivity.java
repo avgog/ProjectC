@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         forms = new Form[]{
                 new Form("test connection",             "/",new String[]{}),
                 new Form("get authentication token",    "/public/auth", new String[]{"username","password"}),
-                new Form("check username",              "/public/user/name_exists", new String[]{"username"}),
+                new Form("check username",              "/public/user/exists", new String[]{"username"}),
                 new Form("register user",               "/public/user/register", new String[]{"username","password"}),
                 new Form("change user data",            "/public/user/change", new String[]{"token","user_id","username","password"}),
                 new Form("add route",                   "/public/routes/add", new String[]{"token","user_id","start_point","end_point","route_name"}),

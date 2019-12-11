@@ -4,7 +4,7 @@
 
 ----------------------
 ```
-URL PATH,                          Request type,       Parameters
+URL PATH,                          Request type,       Parameters                                           comment
 /public/routes/add                 POST                token, user_id, start_point, end_point, route_name
 /public/routes/get/from_id         POST                token, user_id, route_id
 /public/routes/get/from_user       POST                token, user_id
@@ -17,11 +17,15 @@ URL PATH,                          Request type,       Parameters
 /public/times/add                  POST                token, user_id, route_id, end_time, date
 /public/times/change/time          POST                token, user_id, time_id, end_time, date
 /public/times/remove               POST                token, user_id, time_id
-/public/user/change                POST                token, user_id, username, password
+/public/user/change                POST                token, user_id, username, password                   change won't be applied if username and/or password are empty.
 /public/user/exists                POST                username
-/public/user/register              POST                username, password
-/public/auth                       GET                 username, password
+/public/user/register              POST                username, password                                   account won't be made if username and/or password are empty.
+/public/auth                       GET                 username, password                                   returns a authentication token if both values are correct.
 ```
+----------------------
+Note about the API functions:
+If an API function requires a token and a user_id, the token must be generated from a login (/public/auth) with the account of the given user_id, or else
+the function won't be executed.
 ----------------------
 ```
 PATH:/public/routes/add
