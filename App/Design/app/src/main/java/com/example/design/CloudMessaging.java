@@ -1,5 +1,6 @@
 package com.example.design;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -11,17 +12,20 @@ import com.google.firebase.messaging.RemoteMessage;
 import static android.content.ContentValues.TAG;
 
 public class CloudMessaging extends FirebaseMessagingService {
-    public CloudMessaging() {
+
+    @Override
+    public void onNewToken(String token) {
+        Log.d(TAG, "Refreshed token: " + token);
     }
 
     @Override
-    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
+    public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
     }
 
-    @Override
-    public void onNewToken(@NonNull String s) {
-        super.onNewToken(s);
+    public static String getToken(Context context) {
+        return context.getSharedPreferences("_", MODE_PRIVATE).getString("fb", "empty");
     }
+
+
 }
