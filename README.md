@@ -20,7 +20,7 @@ URL PATH,                          Request type,       Parameters               
 /public/user/change                POST                token, user_id, username, password                   change won't be applied if username and/or password are empty.
 /public/user/exists                POST                username
 /public/user/register              POST                username, password                                   account won't be made if username and/or password are empty.
-/public/auth                       GET                 username, password                                   returns a authentication token if both values are correct.
+/public/auth                       GET/POST            username, password                                   returns a authentication token if both values are correct.
 ```
 ----------------------
 Note about the API functions:
