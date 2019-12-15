@@ -36,6 +36,14 @@ public class LoginPage extends AppCompatActivity {
         final TextView loginErrorText = findViewById(R.id.loginErrorText);
 
         Button loginButton = findViewById(R.id.loginButton);
+        Button registerButton = findViewById(R.id.registerButton);
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), register.class);
+                startActivity(intent);}
+        });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override

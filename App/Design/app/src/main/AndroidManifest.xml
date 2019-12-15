@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.design">
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
@@ -9,14 +10,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:ignore="GoogleAppIndexingWarning">
+        <service
+        android:name=".CloudMessaging"
+        android:stopWithTask="false">
+        <intent-filter>
+            <action android:name="com.google.firebase.MESSAGING_EVENT" />
+        </intent-filter>
+    </service>
+        <activity
+            android:name=".register"
+            android:label="@string/title_activity_register"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".Home"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_home"></activity>
+            android:label="@string/title_activity_home"/>
         <activity
             android:name=".RoutePage"
             android:label="@string/title_activity_route_page"
@@ -32,7 +45,7 @@
         </activity>
         <activity
             android:name=".Settings"
-            android:theme="@style/AppTheme.CustomTheme"></activity>
+            android:theme="@style/AppTheme.CustomTheme"/>
 
         <meta-data
             android:name="preloaded_fonts"
