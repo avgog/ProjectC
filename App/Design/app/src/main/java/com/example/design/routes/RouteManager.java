@@ -21,71 +21,84 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.example.design.R;
 import com.example.design.request.PostRequest;
+import com.example.design.user.UserToken;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class RouteManager {
-    public static RequestQueue queue;
-
-    public static String serverURL = "http://projectc.caslayoort.nl:80/public";
+    private RequestQueue queue;
+    private String serverURL;
 
     public RouteManager(Context context){
         queue = Volley.newRequestQueue(context);
+        serverURL = context.getResources().getString(R.string.server_url);
     }
 
     public void getRouteByRouteId(int id, Response.Listener listener, Response.ErrorListener errorListener){
         Map<String,String> params = new HashMap<>();
+        params.put("token", UserToken.currentUser.getToken());
+        params.put("user_id", String.valueOf(UserToken.currentUser.getUserId()));
         params.put("route_id",String.valueOf(id));
-        PostRequest request = new PostRequest(serverURL + "/routes/get/from_id", params, listener, errorListener);
+        PostRequest request = new PostRequest(serverURL + "/public/routes/get/from_id", params, listener, errorListener);
         queue.add(request);
     }
 
-    public void getRoutesByUserId(int id, Response.Listener listener, Response.ErrorListener errorListener){
+    public void getRoutesByUserId(Response.Listener listener, Response.ErrorListener errorListener){
         Map<String,String> params = new HashMap<>();
-        params.put("user_id",String.valueOf(id));
-        PostRequest request = new PostRequest(serverURL + "/routes/get/from_user", params, listener, errorListener);
+        params.put("token", UserToken.currentUser.getToken());
+        params.put("user_id", String.valueOf(UserToken.currentUser.getUserId()));
+        PostRequest request = new PostRequest(serverURL + "/public/routes/get/from_user", params, listener, errorListener);
         queue.add(request);
     }
 
     public void addRoute(Route route, Response.Listener listener, Response.ErrorListener errorListener){
         Map<String,String> params = new HashMap<>();
-        params.put("user_id",String.valueOf(route.getUserId()));
+        params.put("token", UserToken.currentUser.getToken());
+        params.put("user_id", String.valueOf(UserToken.currentUser.getUserId()));
         params.put("start_point",route.start_point);
         params.put("end_point",route.end_point);
         params.put("route_name",route.route_name);
-        PostRequest request = new PostRequest(serverURL + "/routes/add", params, listener, errorListener);
+        PostRequest request = new PostRequest(serverURL + "/public/routes/add", params, listener, errorListener);
         queue.add(request);
     }
 
     public void changeRouteStartPoint(Route route, Response.Listener listener, Response.ErrorListener errorListener){
         Map<String,String> params = new HashMap<>();
+        params.put("token", UserToken.currentUser.getToken());
+        params.put("user_id", String.valueOf(UserToken.currentUser.getUserId()));
         params.put("route_id",String.valueOf(route.getRouteId()));
         params.put("start_point",route.start_point);
-        PostRequest request = new PostRequest(serverURL + "/routes/change/start_point", params, listener, errorListener);
+        PostRequest request = new PostRequest(serverURL + "/public/routes/change/start_point", params, listener, errorListener);
         queue.add(request);
     }
 
     public void changeRouteEndPoint(Route route, Response.Listener listener, Response.ErrorListener errorListener){
         Map<String,String> params = new HashMap<>();
+        params.put("token", UserToken.currentUser.getToken());
+        params.put("user_id", String.valueOf(UserToken.currentUser.getUserId()));
         params.put("route_id",String.valueOf(route.getRouteId()));
         params.put("end_point",route.end_point);
-        PostRequest request = new PostRequest(serverURL + "/routes/change/end_point", params, listener, errorListener);
+        PostRequest request = new PostRequest(serverURL + "/public/routes/change/end_point", params, listener, errorListener);
         queue.add(request);
     }
 
     public void changeRouteName(Route route, Response.Listener listener, Response.ErrorListener errorListener){
         Map<String,String> params = new HashMap<>();
+        params.put("token", UserToken.currentUser.getToken());
+        params.put("user_id", String.valueOf(UserToken.currentUser.getUserId()));
         params.put("route_id",String.valueOf(route.getRouteId()));
         params.put("route_name",route.route_name);
-        PostRequest request = new PostRequest(serverURL + "/routes/change/route_name", params, listener, errorListener);
+        PostRequest request = new PostRequest(serverURL + "/public/routes/change/route_name", params, listener, errorListener);
         queue.add(request);
     }
 
     public void removeRoute(int id, Response.Listener listener, Response.ErrorListener errorListener){
         Map<String,String> params = new HashMap<>();
+        params.put("token", UserToken.currentUser.getToken());
+        params.put("user_id", String.valueOf(UserToken.currentUser.getUserId()));
         params.put("route_id",String.valueOf(id));
-        PostRequest request = new PostRequest(serverURL + "/routes/remove", params, listener, errorListener);
+        PostRequest request = new PostRequest(serverURL + "/public/routes/remove", params, listener, errorListener);
         queue.add(request);
     }
 

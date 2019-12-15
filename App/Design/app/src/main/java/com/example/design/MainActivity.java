@@ -17,6 +17,7 @@ import com.example.design.routes.Route;
 import com.example.design.routes.response.RouteListErrorListener;
 import com.example.design.routes.response.RouteListListener;
 import com.example.design.routes.RouteManager;
+import com.example.design.user.UserToken;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -29,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
 
     RouteManager routeManager;
-    public static final int USER_ID = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,12 +68,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final Button addButton = (Button)v;
                 addButton.setEnabled(false); //temporary disables the button
-                Route route = new Route(0, USER_ID, "-", "-", "new route");
+                Route route = new Route(0, UserToken.currentUser.getUserId(), "-", "-", "new route");
                 routeManager.addRoute(route, new Response.Listener() {
                     @Override
                     public void onResponse(Object response) {
                         routeManager.getRoutesByUserId(
-                                USER_ID,
                                 new RouteListListener(listView,routeManager),
                                 new RouteListErrorListener(listView,routeManager)
                         );
@@ -97,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
 
         //create and send a request to receive all routes of an user. After receiving a response, display the routes on the listview
         routeManager.getRoutesByUserId(
-                USER_ID,
                 new RouteListListener(listView,routeManager),
                 new RouteListErrorListener(listView,routeManager)
         );

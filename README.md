@@ -4,21 +4,28 @@
 
 ----------------------
 ```
-URL PATH,                          Request type,       Parameters
-/public/routes/add                 POST                user_id, start_point, end_point, route_name
-/public/routes/get/from_id         POST                route_id
-/public/routes/get/from_user       POST                user_id
-/public/routes/change/start_point  POST                route_id, start_point
-/public/routes/change/end_point    POST                route_id, end_point
-/public/routes/change/route_name   POST                route_id, route_name
-/public/routes/remove              POST                route_id
-/public/times/get/from_id          POST                time_id
-/public/times/get/from_route       POST                route_id
-/public/times/add                  POST                route_id, end_time, date
-/public/times/change/time          POST                time_id, end_time, date
-/public/times/remove               POST                time_id
-/public/auth                       GET                 username, password
+URL PATH,                          Request type,       Parameters                                           comment
+/public/routes/add                 POST                token, user_id, start_point, end_point, route_name
+/public/routes/get/from_id         POST                token, user_id, route_id
+/public/routes/get/from_user       POST                token, user_id
+/public/routes/change/start_point  POST                token, user_id, route_id, start_point
+/public/routes/change/end_point    POST                token, user_id, route_id, end_point
+/public/routes/change/route_name   POST                token, user_id, route_id, route_name
+/public/routes/remove              POST                token, user_id, route_id
+/public/times/get/from_id          POST                token, user_id, time_id
+/public/times/get/from_route       POST                token, user_id, route_id
+/public/times/add                  POST                token, user_id, route_id, end_time, date
+/public/times/change/time          POST                token, user_id, time_id, end_time, date
+/public/times/remove               POST                token, user_id, time_id
+/public/user/change                POST                token, user_id, username, password                   change won't be applied if username and/or password are empty.
+/public/user/exists                POST                username
+/public/user/register              POST                username, password                                   account won't be made if username and/or password are empty.
+/public/auth                       GET/POST            username, password                                   returns a authentication token if both values are correct.
 ```
+----------------------
+Note about the API functions:
+If an API function requires a token and a user_id, the token must be generated from a login (/public/auth) with the account of the given user_id, or else
+the function won't be executed.
 ----------------------
 ```
 PATH:/public/routes/add
