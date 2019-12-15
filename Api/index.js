@@ -5,7 +5,7 @@ const bodyparser = require('body-parser');
 const crypto = require('crypto');
 
 // IMPORTING FILES //
-const functions = require("./functions.js");
+const functions = require(__dirname + "/functions.js");
 const app_settings = JSON.parse( fs.readFileSync(__dirname + "/settings/unsafe.json") );
 const db = require(__dirname + "/db.js");
 
@@ -26,6 +26,8 @@ app.post('/query', function(req, res) {
 });
 
 // USED IN OVNOTIFIER SERVICE //
+
+// Get akk routes
 app.get('/routes', function(req, res) {
   let data = req.body;
   let route = data.route
@@ -33,11 +35,13 @@ app.get('/routes', function(req, res) {
   db.exec(query,res);
 });
 
+// Get all timeschemes
 app.get('/times', function(req, res) {
   let query = "SELECT * FROM Times;";
   db.exec(query,res);
 });
 
+// Get a specific timescheme
 app.get('/time', function(req, res) {
   let data = req.body;
   let time_id = data.id;
@@ -45,6 +49,7 @@ app.get('/time', function(req, res) {
   db.exec(query,res);
 });
 
+// Get a specific stop
 app.get('/stops', function(req, res) {
   let data = req.body;
   let stop = data.stop;
@@ -53,6 +58,7 @@ app.get('/stops', function(req, res) {
   db.exec(query,res);
 });
 
+// Set a starttime
 app.post('/starttime', function(req, res) {
   let data = req.body;
   let id = data.id;
@@ -61,8 +67,18 @@ app.post('/starttime', function(req, res) {
   db.exec(query,res);
 });
 
+// Update timestamp when it has checked
+app.post('/checked', function(req, res) {
+  let data = req.body;
+  let id = data.id;
+  let time = data.time;
+  let query = "UPDATE Times SET last_checked = '" + time + "' WHERE id = '" + id + "';";
+  db.exec(query,res);
+});
+
 
 // PUBLIC ACCESSABLE //
+// Get the data of a specific route which a user has to follow
 app.get('/public/route', function(req, res) {
   let data = req.body;
   let from = data.from;
@@ -72,6 +88,43 @@ app.get('/public/route', function(req, res) {
   let type = data.type; /* normal / full / int */
 });
 
+app.get('/public/all_stops', function(req, res) {
+  let query = "SELECT * FROM Stops;";
+  db.exec(query,res);
+});
+
+// Authentication GET
+app.get('/public/auth', function(req, res){
+  let data = req.body;
+  let username = data.username;
+  let password = data.password;
+  let string = username + "^63@431%32=21432*8421345fd2sSqla" + password;
+  let auth_token = crypto.createHash('sha256').update(string).digest('hex');
+  //let db_entry = db.execInternalResponse("SELECT user_id AS id, auth_token FROM Users WHERE username='" + username + "' AND password='" + password + "';");
+  let queryDatabase = db.execInternalResponse("UPDATE Users set auth_token='" + auth_token + "' WHERE username='" + username + "' AND password='" + password + "';")
+  let db_entry = db.execInternalResponse("SELECT user_id AS id, auth_token FROM Users WHERE username='" + username + "' AND password='" + password + "';");
+  db_entry.then(function(output) {
+    console.log("---");
+    console.log("[]");
+    console.log(typeof []);
+    console.log("---");
+    console.log(output);
+    console.log(typeof output);
+    console.log("---");
+    
+    if ( output.length > 0 ){
+      if ( JSON.parse(JSON.stringify(output[0])) != JSON.parse("{}") ) {
+        res.send(output);
+      } else {
+        res.send("{ \"ERROR\": \"Unauthorized\" }");
+      }
+    } else {
+        res.send("{ \"ERROR\": \"Unauthorized\" }");
+      }
+  });
+});
+
+// Authentication POST
 app.post('/public/auth', function(req, res){
   let data = req.body;
   let username = data.username;
