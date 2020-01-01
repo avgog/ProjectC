@@ -7,9 +7,8 @@ This project is made as a second year high school project.
 # Api
 
 We use the 1313.nl api to calculate our routes but in order to manage data we also created our own. Our api's are documented at the docs folder or projectc.caslayoort.nl/docs .
-----------------------
+
 Note about the API functions:
 If an API function requires a token and a user_id, the token must be generated from a login (/public/auth) with the account of the given user_id, or else
 the function won't be executed.
-----------------------
 
