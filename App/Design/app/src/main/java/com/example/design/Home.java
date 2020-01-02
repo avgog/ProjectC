@@ -67,11 +67,7 @@ public class Home extends AppCompatActivity {
         profileButton = (findViewById(R.id.profileButton));
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
-<<<<<<< HEAD
-        Button addbutton = findViewById(R.id.addbutton);
         jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/get/from_route",routeid,null,null, null,"startup");
-=======
->>>>>>> remotes/origin/master
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(1);
         menuItem.setChecked(true);

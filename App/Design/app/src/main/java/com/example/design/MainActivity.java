@@ -1,7 +1,7 @@
 package com.example.design;
 
 import android.content.Intent;
-<<<<<<< HEAD
+
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -10,23 +10,22 @@ import android.os.Bundle;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
-=======
+
 import android.os.Bundle;
 
 import android.util.Log;
->>>>>>> remotes/origin/master
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-<<<<<<< HEAD
+
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-=======
->>>>>>> remotes/origin/master
+
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -116,6 +115,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
 
+        //Refreshes the page onresume so new routes can be loaded
+        try{
+            if(Settings.shouldRestart == "yes"){
+                Settings.shouldRestart = "no";
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+                this.overridePendingTransition(0, 0);
+            } } catch (Exception e) { Log.i("okidoki",e.toString()); }
+
         //create and send a request to receive all routes of an user. After receiving a response, display the routes on the listview
         routeManager.getRoutesByUserId(
                 new RouteListListener(listView,routeManager),
@@ -126,17 +135,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(adapter); //connect the listview with adapter which is responsible for filling the list with routes
     }
 
-    protected void onResume(){
-        super.onResume();
-        try{
-            if(Settings.shouldRestart == "yes"){
-                Settings.shouldRestart = "no";
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
-                this.overridePendingTransition(0, 0);
-            } } catch (Exception e) { Log.i("okidoki",e.toString()); }
-    }
+
 
     public void setAppLocale(String appLocale){
         Locale locale = new Locale(appLocale);

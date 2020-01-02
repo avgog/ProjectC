@@ -40,7 +40,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-<<<<<<< HEAD
+
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -53,7 +53,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-=======
+
 import android.widget.ToggleButton;
 
 import com.android.volley.Response;
@@ -64,7 +64,7 @@ import com.example.design.routes.RouteManager;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
->>>>>>> remotes/origin/master
+
 import java.io.Console;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -103,13 +103,13 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
     static String routeid;
 
 
-<<<<<<< HEAD
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-=======
+
     RouteManager routeManager;
     Route currentRoute;
 
->>>>>>> remotes/origin/master
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,12 +129,12 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
         final ToggleButton Saturday = (findViewById(R.id.saterdaybutton));
         final ToggleButton Sunday = (findViewById(R.id.sundaybutton));
         listView = findViewById(R.id.listview2);
-<<<<<<< HEAD
+
         listView.setAdapter(null);
-=======
+
 
         routeManager = new RouteManager(this);
->>>>>>> remotes/origin/master
+
         Button closeButton = findViewById(R.id.CloseButton);
         editTextView = findViewById(R.id.routeTitle);
         final EditText fromLocationField = findViewById(R.id.FromLocationButton);
