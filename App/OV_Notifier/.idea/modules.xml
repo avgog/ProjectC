@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Design.iml" filepath="$PROJECT_DIR$/Design.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OV_Notifier.iml" filepath="$PROJECT_DIR$/OV_Notifier.iml" group="OV_Notifier" />
     </modules>
   </component>
 </project>

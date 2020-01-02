@@ -94,21 +94,5 @@
 
     </ListView>
 
-    <Button
-        android:id="@+id/addbutton"
-        android:layout_width="74dp"
-        android:layout_height="32dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="66dp"
-        android:layout_marginEnd="9dp"
-        android:layout_marginRight="9dp"
-        android:background="#00ffffff"
-        android:text="+ADD"
-        android:textColor="@color/colorPrimary"
-        android:textSize="16dp"
-        android:textStyle="bold" />
-
 
 </RelativeLayout>

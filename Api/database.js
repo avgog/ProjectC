@@ -2,15 +2,22 @@ const fs = require('fs');
 
 /*
 Execute a mysql query on the database.
+query is an mysql query string
+values parameter is an array of query parameters
+
 callback object format:
 {
     callback [type: function, params: error,result,data]
     data [type:Object, put your parameters for the callback here] 
 }
-*/
-module.exports.executeQuery = async function(query, callbackObject){
-    const mysql = require('mysql');
 
+example usage:
+database.executeQuery("select * from myTable where id = ? and color = ?", [1, 'red'], {callback:myFunction,data:{res}})
+*/
+module.exports.executeQuery = async function(query, values, callbackObject){
+    const mysql = require('mysql');
+    console.log("query: "+query);
+    console.log("query parameters: "+values);
     try{
         const dbConfig = JSON.parse( fs.readFileSync(__dirname + "/db_config.json") );
         
@@ -27,7 +34,7 @@ module.exports.executeQuery = async function(query, callbackObject){
             }
         })
 
-        database.query(query, (err, res) => {
+        database.query(query, values, (err, res) => {
             if(err){
                 console.log(err, res)
             }

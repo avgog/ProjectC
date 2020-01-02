@@ -1,6 +1,7 @@
 package com.example.design;
 
 import android.content.Intent;
+<<<<<<< HEAD
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -9,24 +10,34 @@ import android.os.Bundle;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+=======
+import android.os.Bundle;
+
+import android.util.Log;
+>>>>>>> remotes/origin/master
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.ListView;
+<<<<<<< HEAD
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+=======
+>>>>>>> remotes/origin/master
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.example.design.routes.Route;
+import com.example.design.routes.response.RouteListErrorListener;
+import com.example.design.routes.response.RouteListListener;
+import com.example.design.routes.RouteManager;
+import com.example.design.user.UserToken;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Locale;
@@ -36,8 +47,8 @@ import static android.app.PendingIntent.getActivity;
 public class MainActivity extends AppCompatActivity {
     Button profileButton;
     ListView listView;
-    String mTitle[] = {"Work","School","Home","Route1","Route2","Route3","Route4","Route5","Route6"};
-    int images[] = {R.drawable.pointer,R.drawable.pointer,R.drawable.pointer,R.drawable.pointer,R.drawable.pointer,R.drawable.pointer,R.drawable.pointer,R.drawable.pointer,R.drawable.pointer};
+
+    RouteManager routeManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +59,9 @@ public class MainActivity extends AppCompatActivity {
         }
         listView = findViewById(R.id.mainlistview);
         profileButton = (findViewById(R.id.profileButton));
-        MyAdapter adapter = new MyAdapter(this, mTitle, images);
-        listView.setAdapter(adapter);
+
+        //responsible for calling route related functions of the server API
+        routeManager = new RouteManager(this);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
         Menu menu = bottomNavigationView.getMenu();
@@ -60,8 +72,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(view.getContext(), RoutePage.class);
+                int routeId = ((Route)parent.getItemAtPosition(position)).getRouteId();
+                intent.putExtra("routeId", routeId); //store the route in the new intent
                 startActivity(intent);
-
             }
         });
         profileButton.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +84,46 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button addRouteButton = findViewById(R.id.addRouteButton);
+        addRouteButton.setOnClickListener(new View.OnClickListener() { //When clicked: adds a route to the database and reload the list of routes
+            @Override
+            public void onClick(View v) {
+                final Button addButton = (Button)v;
+                addButton.setEnabled(false); //temporary disables the button
+                Route route = new Route(0, UserToken.currentUser.getUserId(), "-", "-", "new route");
+                routeManager.addRoute(route, new Response.Listener() {
+                    @Override
+                    public void onResponse(Object response) {
+                        routeManager.getRoutesByUserId(
+                                new RouteListListener(listView,routeManager),
+                                new RouteListErrorListener(listView,routeManager)
+                        );
+                        addButton.setEnabled(true);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("route request", error.toString());
+                        addButton.setEnabled(true);
+                    }
+                });
+                v.setEnabled(true);
+            }
+        });
+    }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+        //create and send a request to receive all routes of an user. After receiving a response, display the routes on the listview
+        routeManager.getRoutesByUserId(
+                new RouteListListener(listView,routeManager),
+                new RouteListErrorListener(listView,routeManager)
+        );
+
+        RouteManager.RouteListAdapter adapter = new RouteManager.RouteListAdapter(this, new Route[]{}, routeManager, listView);
+        listView.setAdapter(adapter); //connect the listview with adapter which is responsible for filling the list with routes
     }
 
     protected void onResume(){
@@ -113,49 +165,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, Home.class));
     }
 
-    class MyAdapter extends ArrayAdapter<String> {
-        Context context;
-        String rTitle[];
-        int rImgs[];
 
-
-        MyAdapter (Context c, String title[], int imgs[]) {
-            super(c, R.layout.row, R.id.textView1,title);
-            this.context = c;
-            this.rTitle = title;
-            this.rImgs = imgs;
-
-        }
-
-
-
-        @NonNull
-        @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            LayoutInflater layoutInflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View row = layoutInflater.inflate(R.layout.row, parent, false);
-            final ToggleButton bellbutton = row.findViewById(R.id.notificationbutton);
-            bellbutton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        bellbutton.setBackgroundResource(R.drawable.bell);
-                    } else {
-                        bellbutton.setBackgroundResource(R.drawable.emptybell);
-                    }
-                }
-            });
-
-            ImageView images = row.findViewById(R.id.image);
-            TextView myTitle = row.findViewById(R.id.textView1);
-            myTitle.setTypeface(Typeface.DEFAULT_BOLD);
-            myTitle.setTextSize(19);
-            images.setImageResource(rImgs[position]);
-            myTitle.setText(rTitle[position]);
-            return row;
-        }
-
-
-            }
-        }
+}
 
