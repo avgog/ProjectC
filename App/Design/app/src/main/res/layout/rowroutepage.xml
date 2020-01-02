@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/homeDate"
-        android:layout_width="257dp"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:layout_weight="0"
         android:text="DD-MM-YY"

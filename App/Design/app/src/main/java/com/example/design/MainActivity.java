@@ -1,11 +1,13 @@
 package com.example.design;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +20,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -25,6 +28,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Locale;
 
 import static android.app.PendingIntent.getActivity;
 
@@ -38,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if(!(Settings.language == null)){
+            setAppLocale(Settings.language);
+        }
         listView = findViewById(R.id.mainlistview);
         profileButton = (findViewById(R.id.profileButton));
         MyAdapter adapter = new MyAdapter(this, mTitle, images);
@@ -63,6 +71,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    protected void onResume(){
+        super.onResume();
+        try{
+            if(Settings.shouldRestart == "yes"){
+                Settings.shouldRestart = "no";
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+                this.overridePendingTransition(0, 0);
+            } } catch (Exception e) { Log.i("okidoki",e.toString()); }
+    }
+
+    public void setAppLocale(String appLocale){
+        Locale locale = new Locale(appLocale);
+        Locale.setDefault(locale);
+        Configuration configuration = new Configuration();
+        configuration.locale = locale;
+        getBaseContext().getResources().updateConfiguration(configuration,getBaseContext().getResources().getDisplayMetrics());
 
     }
 

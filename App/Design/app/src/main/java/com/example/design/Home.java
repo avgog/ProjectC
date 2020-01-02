@@ -1,7 +1,9 @@
 package com.example.design;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
@@ -38,6 +40,7 @@ import org.json.JSONObject;
 import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class Home extends AppCompatActivity {
@@ -54,6 +57,9 @@ public class Home extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        if(!(Settings.language == null)){
+            setAppLocale(Settings.language);
+        }
         String routeid = "1";
         listView = findViewById(R.id.homeListview);
         MyAdapter adapter = new MyAdapter(this, mTitle, mImgs, mTime, mDate);
@@ -91,6 +97,27 @@ public class Home extends AppCompatActivity {
                 startActivity(new Intent(Home.this, RoutePage.class));
             }
     });
+    }
+
+    public void setAppLocale(String appLocale){
+        Locale locale = new Locale(appLocale);
+        Locale.setDefault(locale);
+        Configuration configuration = new Configuration();
+        configuration.locale = locale;
+        getBaseContext().getResources().updateConfiguration(configuration,getBaseContext().getResources().getDisplayMetrics());
+
+    }
+
+    protected void onResume(){
+        super.onResume();
+        try{
+        if(Settings.shouldRestart == "yes"){
+            Settings.shouldRestart = "no";
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+            this.overridePendingTransition(0, 0);
+        } } catch (Exception e) { Log.i("okidoki",e.toString()); }
     }
 
     @Override
@@ -142,6 +169,8 @@ public class Home extends AppCompatActivity {
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
+                params.put("token","081848afca7affee3e760bd18b80bf51ef1f1133ae70dbd5e26e64f553c33779");
+                params.put("user_id","1");
                 if(timeid!=null){
                     params.put("time_id", timeid);
                 }

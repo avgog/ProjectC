@@ -27,6 +27,7 @@ public class RoutePage extends AppCompatActivity {
     ListView listView;
     String mTime[] = {"9:00","16:00","21:30"};
     String mDate[] = {"26-04-2019","Friday","Wednesday"};
+    String timeSchemes[]
     Calendar calender;
     String date;
     DatePickerDialog datepicker;

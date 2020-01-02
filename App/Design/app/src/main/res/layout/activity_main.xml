@@ -75,7 +75,7 @@
         android:layout_marginStart="23dp"
         android:layout_marginLeft="23dp"
         android:layout_marginTop="15dp"
-        android:text="All Routes"
+        android:text="@string/all_routes"
         android:textSize="22dp"
         app:fontFamily="@font/proxima" />
 
