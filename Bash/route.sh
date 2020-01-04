@@ -1,16 +1,17 @@
 #!/bin/bash
 
-SENDGRID_API_KEY="<sendgris-api-key>"
+SENDGRID_API_KEY="<sendgrid-api-key>"
 
 ######################################################
 #                      Settings                      #
 ######################################################
-logfile="/var/log/ovnofifier.log"                    #
+logfile="/var/log/ovnotifier.log"                    #
 #logfile="/dev/null"                                 #
 saveRoutes="/routes"                                 #
 apiPort=666                                          #
 apiHost="localhost"                                  #
 intermediateStops="true"                             #
+from_email="email@email.email"                       #
 ######################################################
 #                      Commands                      #
 ######################################################
@@ -75,7 +76,13 @@ getTime(){ #extract the time
 getTimeScheme() { # Getting the time
   $curl -s -d "{ \"id\": \"${1}\"}" \
       -H "Content-Type:application/json"\
-      -X GET ${apiHost}:${apiPort}/time | jq '.[]'
+      -X GET ${apiHost}:${apiPort}/time | $jq '.[]'
+}
+
+getUser() { # Getting the time
+  $curl -s -d "{ \"id\": \"${1}\"}" \
+      -H "Content-Type:application/json"\
+      -X GET ${apiHost}:${apiPort}/user | $jq '.[]'
 }
 
 getRoute() { # Getting the routes
@@ -127,6 +134,9 @@ CURRENT_TIMESCHEME_ID=$1
   CURRENT_ROUTE=$(getRoute $( $echo $CURRENT_TIMESCHEME | $jq '.route_id') )
   LAST_NOTIFIED_EPOCH=$( $echo $CURRENT_TIMESCHEME | $jq '.notified' | sed 's/"//g' )
   LAST_CHECK=$( $echo $CURRENT_TIMESCHEME | $jq '.last_checked' | $sed 's/\"//g' )
+  user_id=$($echo $CURRENT_ROUTE | $jq '.[0].user_id' | $sed -e 's/"//g')
+  CURRENT_USER=$(getUser $user_id)
+  email=$($echo $CURRENT_USER | $jq '.email' | $sed -e 's/"//g')
   from=$(getPlace $($echo $CURRENT_ROUTE | $jq '.[0].start' | $sed -e 's/ /_/g') | $sed -e 's/"//g')
   to=$(getPlace $($echo $CURRENT_ROUTE | $jq '.[0].end' | $sed -e 's/ /_/g') | $sed -e 's/"//g')
   time=$( $echo $CURRENT_TIMESCHEME | $jq '.timeofarrival' | $sed -e 's/"//g')
@@ -163,7 +173,7 @@ Notify(){
         --url https://api.sendgrid.com/v3/mail/send \
         --header "Authorization: Bearer $SENDGRID_API_KEY" \
         --header 'Content-Type: application/json' \
-        --data '{"personalizations": [{"to": [{"email": "to@email.com"}]}],"from": {"email": "from@email.com"},"subject": "Route start binnen 10 minuten.","content": [{"type": "text/plain", "value": "Er begint een route binnen 10 minuten."}]}'
+	--data "{\"personalizations\": [{\"to\": [{\"email\": \"$email\"}]}],\"from\": {\"email\": \"$from_email\"},\"subject\": \"Route start binnen 10 minuten.\",\"content\": [{\"type\": \"text/plain\", \"value\": \"Er begint een route binnen 10 minuten.\"}]}"
 
       log [ $CURRENT_EPOCH ] Notification send!
 
