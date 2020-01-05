@@ -126,6 +126,38 @@ app.get('/time', function(req, res) {
   db.exec(query,res);
 });
 
+
+/**
+ * @api {get} /user/ Return a specific user
+ * @apiName User
+ * @apiGroup Internal
+ * @apiParam {Integer} id The uniq id of the user.
+
+ * @apiSuccess {Integer} id The id of the user
+ * @apiSuccess {String} username The username of the user.
+ * @apiSuccess {String} password The password of the user.
+ * @apiSuccess {String} auth_token The authentication token.
+ * @apiSuccess {String} email The email of the user 
+ * @apiSuccessExample Success-Response:
+ * [
+ *   {
+ *     "user_id": 85,
+ *     "username": "admin",
+ *     "password": "P@$$w0rd",
+ *     "auth_token": "0r987hf756hg5yrg6y9t6u9u8o9553tgre35ed543ftr345tyv76567uyghui878",
+ *     "email": "email@email.email"
+ *   }
+ * ]
+*/
+
+app.get('/user', function(req, res) {
+  let data = req.body;
+  let id = data.id;
+  let query = "SELECT * FROM Users WHERE user_id='" + id + "';";
+  db.exec(query,res);
+});
+
+
 /**
  * @api {get} /stops/ Return the known data of a stop.
  * @apiName Stops
