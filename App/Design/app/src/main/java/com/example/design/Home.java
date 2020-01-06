@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.design.user.LoginData;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Home extends AppCompatActivity {
@@ -64,6 +65,15 @@ public class Home extends AppCompatActivity {
                 startActivity(new Intent(Home.this, Settings.class));
             }
 
+        });
+
+        final Context context = this;
+        Button logoutButton = findViewById(R.id.logoutButton);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginData.logout(context);
+            }
         });
     }
 
