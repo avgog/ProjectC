@@ -141,6 +141,7 @@ public class RouteManager {
             myTitle.setTypeface(Typeface.DEFAULT_BOLD);
             myTitle.setTextSize(19);
             images.setImageResource(R.drawable.pointer);
+            //myTitle.setText(routes[position].route_name + "(ID:"+routes[position].getRouteId()+")"); //voor debuggen
             myTitle.setText(routes[position].route_name);
 
             return row;

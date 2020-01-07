@@ -60,6 +60,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.design.routes.Route;
 import com.example.design.routes.RouteManager;
+import com.example.design.user.UserToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -115,7 +116,10 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_route_page);
         Log.i("okidoki", String.valueOf(routeId)+ "startf");
+
+        RoutePage.routeId = getIntent().getIntExtra("routeId",-1); //get the routeId value that was stored by the MainActivity
         jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/get/from_route",String.valueOf(RoutePage.routeId),null,null, null,null,"startup");
+
         Button AgendaButton = findViewById(R.id.agenda);
 
 
@@ -140,7 +144,6 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
         final EditText toLocationField = findViewById(R.id.ToLocationButton);
         Button saveButton = findViewById(R.id.Save);
 
-        RoutePage.routeId = getIntent().getIntExtra("routeId",-1); //get the routeId value that was stored by the MainActivity
         editTextView.setText("Unknown Route");
         if(routeId != -1){
             routeManager.getRouteByRouteId(routeId, new Response.Listener() {
@@ -330,6 +333,7 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
     }
 
     public void jsonParse(Context context, String url, final String routeid, final String endtime, final String date,final String timeid,final String routename, final String type) {
+        Log.i("jsonParse","Route id: " + String.valueOf(routeid));
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest sr = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -368,8 +372,11 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
             protected  Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
                 Log.i("okidoki",routeid + " " + endtime + " " + date);
-                params.put("token",LoginPage.token);
-                params.put("user_id",String.valueOf(LoginPage.userID));
+                String token = UserToken.currentUser.getToken();
+                int userID = UserToken.currentUser.getUserId();
+
+                params.put("token",token);
+                params.put("user_id",String.valueOf(userID));
                 if(timeid!=null){
                     params.put("time_id", timeid);
                 }
