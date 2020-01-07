@@ -55,7 +55,7 @@ public class register extends AppCompatActivity {
                 if(passwordId.getText().toString().isEmpty()) {
                     Toast.makeText(getApplicationContext(),"enter password",Toast.LENGTH_SHORT).show();
                 }else {
-                    if (!passwordId.getText().toString().trim().matches(passwordPattern)) {
+                    if ((passwordId.getText()== null)) {
                         Toast.makeText(getApplicationContext(),"Invalid password", Toast.LENGTH_SHORT).show();
                     }
                 }
