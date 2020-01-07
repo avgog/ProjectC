@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -22,6 +23,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -31,12 +33,17 @@ public class Settings extends AppCompatActivity implements DialogPassword.Exampl
 
     static String language;
     static String shouldRestart;
-    static String user_id;
+    TextView usernameText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
+        TextView emailText = findViewById(R.id.emailtext);
+        usernameText = findViewById(R.id.usernametext);
+        emailText.setText(LoginPage.email);
+        usernameText.setText(LoginPage.username);
+        int userID = LoginPage.userID;
         Button closeButton = findViewById(R.id.CloseButton);
         Button changeUsernameButton = findViewById(R.id.changeusernamebutton);
         Button changePasswordButton = findViewById(R.id.changepasswordbutton);
@@ -67,7 +74,7 @@ public class Settings extends AppCompatActivity implements DialogPassword.Exampl
                     finish();
                     startActivity(getIntent());
                     overridePendingTransition(0, 0);
-                    Toast.makeText(Settings.this, "ENGELS", Toast.LENGTH_SHORT).show();
+
                     Settings.shouldRestart = "yes";
 
                 } else {
@@ -76,7 +83,7 @@ public class Settings extends AppCompatActivity implements DialogPassword.Exampl
                     finish();
                     startActivity(getIntent());
                     overridePendingTransition(0, 0);
-                    Toast.makeText(Settings.this, "NIEDERLANDISCH", Toast.LENGTH_SHORT).show();
+
                     Settings.shouldRestart = "yes";
                 }
 
@@ -109,12 +116,24 @@ public class Settings extends AppCompatActivity implements DialogPassword.Exampl
         Dialog.show(getSupportFragmentManager(), "dialog");
     }
 
-    public void jsonParse(Context context,final String url, final String username, final String password) {
+    public void jsonParse(Context context, final String url, final String username, final String password, final boolean auth) {
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest sr = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.i("okidoki",response);
+                try {
+                    JSONObject json = new JSONObject(response);
+                    JSONArray array = json.getJSONArray("result");
+                    Log.i("okidoki", array.toString());
+                    for (int i=0; i <array.length();i++) {
+                        JSONObject respJson = array.getJSONObject(i);
+                        String auth_token = (respJson.getString("auth_token"));
+                        LoginPage.token = auth_token;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -125,8 +144,10 @@ public class Settings extends AppCompatActivity implements DialogPassword.Exampl
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
-                params.put("auth_token","081848afca7affee3e760bd18b80bf51ef1f1133ae70dbd5e26e64f553c33779");
-                params.put("id","6");
+                if(auth) {
+                    params.put("auth_token", LoginPage.token);
+                    params.put("id", String.valueOf(LoginPage.userID));
+                }
                 if(!(username==null)){
                     params.put("username",username);
                 }
@@ -144,12 +165,13 @@ public class Settings extends AppCompatActivity implements DialogPassword.Exampl
 
     @Override
     public void applyTextsPassword(String password){
-        jsonParse(this,"http://projectc.caslayoort.nl/public/auth/change/password",null,password);
+        jsonParse(this,"http://projectc.caslayoort.nl/public/auth/change/password",null,password,false);
     }
 
     @Override
     public void applyTextsUsername(String username){
-        jsonParse(this,"http://projectc.caslayoort.nl/public/auth/change/password",username,null);
+        jsonParse(this,"http://projectc.caslayoort.nl/public/auth/change/password",username,null,false);
+        usernameText.setText(username);
     }
 
 

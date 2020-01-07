@@ -99,8 +99,8 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
     static String time;
     static String toLocation;
     static String fromLocation;
-    static Button activeButton;
-    static String routeid;
+    static EditText activeButton;
+    static int routeId;
 
 
 
@@ -114,13 +114,12 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_route_page);
-        routeid = "34";
-        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/get/from_route",routeid,null,null, null,"startup");
+        Log.i("okidoki", String.valueOf(routeId)+ "startf");
+        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/get/from_route",String.valueOf(RoutePage.routeId),null,null, null,null,"startup");
         Button AgendaButton = findViewById(R.id.agenda);
-        Button SaveButton = findViewById(R.id.Save);
 
-        final Button fromLocationButton = findViewById(R.id.FromLocationButton);
-        final Button toLocationButton = findViewById(R.id.ToLocationButton);
+
+
         final ToggleButton Monday = (findViewById(R.id.mondaybutton));
         final ToggleButton Tuesday = (findViewById(R.id.tuesdaybutton));
         final ToggleButton Wednesday = (findViewById(R.id.wednesdaybutton));
@@ -141,7 +140,7 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
         final EditText toLocationField = findViewById(R.id.ToLocationButton);
         Button saveButton = findViewById(R.id.Save);
 
-        int routeId = getIntent().getIntExtra("routeId",-1); //get the routeId value that was stored by the MainActivity
+        RoutePage.routeId = getIntent().getIntExtra("routeId",-1); //get the routeId value that was stored by the MainActivity
         editTextView.setText("Unknown Route");
         if(routeId != -1){
             routeManager.getRouteByRouteId(routeId, new Response.Listener() {
@@ -194,6 +193,7 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
                 routeManager.changeRouteName(currentRoute, listener,errorListener);
                 routeManager.changeRouteStartPoint(currentRoute, listener,errorListener);
                 routeManager.changeRouteEndPoint(currentRoute, listener,errorListener);
+                finish();
             }
         });
 
@@ -309,32 +309,27 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
 
             }
         });
-              toLocationButton.setOnClickListener(new View.OnClickListener() {
+              toLocationField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RoutePage.activeButton = toLocationButton;
+                RoutePage.activeButton = toLocationField;
                 showPopup(v);
             }
         });
-        fromLocationButton.setOnClickListener(new View.OnClickListener() {
+        fromLocationField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RoutePage.activeButton = fromLocationButton;
+                RoutePage.activeButton = fromLocationField;
                 showPopup(v);
 
 
 
             }
         });
-        SaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listView.setAdapter(null);
-            }
-        });
+
     }
 
-    public void jsonParse(Context context, String url, final String routeid, final String endtime, final String date,final String timeid, final String type) {
+    public void jsonParse(Context context, String url, final String routeid, final String endtime, final String date,final String timeid,final String routename, final String type) {
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest sr = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -372,8 +367,9 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
             @Override
             protected  Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
-                params.put("token","081848afca7affee3e760bd18b80bf51ef1f1133ae70dbd5e26e64f553c33779");
-                params.put("user_id","6");
+                Log.i("okidoki",routeid + " " + endtime + " " + date);
+                params.put("token",LoginPage.token);
+                params.put("user_id",String.valueOf(LoginPage.userID));
                 if(timeid!=null){
                     params.put("time_id", timeid);
                 }
@@ -386,6 +382,9 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
                 }
                 if (date != null) {
                     params.put("date", date);
+                }
+                if (routename != null) {
+
                 }
 
                 return params;
@@ -407,7 +406,7 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
 
     @Override
     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-        String time = (String.format("%02d:%02d", hour, minute));
+        RoutePage.time = (String.format("%02d:%02d", hour, minute));
         /*mTime.add(time);
         mDate.add(RoutePage.date);*/
         boolean stop = true;
@@ -418,14 +417,14 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
             }
 
         }
-
-        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/add",routeid,time,RoutePage.date,null,"add");
-        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/get/from_route",routeid,null,null, null,"startup");
+        Log.i("okidoki", String.valueOf(routeId));
+        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/add",String.valueOf(RoutePage.routeId),RoutePage.time,RoutePage.date,null,null,"add");
+        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/get/from_route",String.valueOf(RoutePage.routeId),null,null, null,null,"startup");
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        RoutePage.date = String.valueOf(year) + "-" + String.valueOf(month) + "-" + String.valueOf(dayOfMonth);
+        RoutePage.date = String.valueOf(year) + "-" + String.valueOf(month + 1) + "-" + String.valueOf(dayOfMonth);
         DialogFragment timePickerFragment = new TimePickerFragment();
         timePickerFragment.setCancelable(false);
         timePickerFragment.show(getSupportFragmentManager(), "timePicker");
@@ -469,14 +468,11 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
             deletebutton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i("okidoki",String.valueOf("position:" + position));
-                    Log.i("okidoki", String.valueOf("mTime:" + mTime));
-                    Log.i("okidoki", String.valueOf("mTimeid:" + mTimeid));
                     mTime.remove(position);
                     mDate.remove(position);
-                    jsonParse(RoutePage.this, "http://projectc.caslayoort.nl:80/public/times/remove",routeid,null,null,String.valueOf(mTimeid.get(position)),"delete");
+                    jsonParse(RoutePage.this, "http://projectc.caslayoort.nl:80/public/times/remove",String.valueOf(RoutePage.routeId),null,null,String.valueOf(mTimeid.get(position)),null,"delete");
                     mTimeid.remove(position);
-                    jsonParse(RoutePage.this, "http://projectc.caslayoort.nl:80/public/times/get/from_route",routeid,null,null, null,"startup");
+                    jsonParse(RoutePage.this, "http://projectc.caslayoort.nl:80/public/times/get/from_route",String.valueOf(RoutePage.routeId),null,null, null,null,"startup");
 
                 }
             });

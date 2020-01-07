@@ -24,8 +24,12 @@ import org.json.JSONObject;
 
 public class LoginPage extends AppCompatActivity {
     private AccountManager manager;
+    static String token;
+    static int userID;
+    static String username;
+    static String password;
+    static String email;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_page);
@@ -49,29 +53,30 @@ public class LoginPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //get the username and password from the fields
-                String username = usernameField.getText().toString();
-                String password = passwordField.getText().toString();
+                username = usernameField.getText().toString();
+                password = passwordField.getText().toString();
+
 
                 //run a login request
                 manager.login(username, password, new Response.Listener() {
                     @Override
                     public void onResponse(Object response) {
                         //default values of the user (in case of a failed login)
-                        String token = "";
-                        int userId = -1;
+                        token = "";
+                        userID = -1;
                         try{
                             JSONObject resObject = new JSONArray(response.toString()).getJSONObject(0);
 
                             if(resObject.has("auth_token")){ //check if it has a token field
                                 token = resObject.getString("auth_token");
-                                userId = resObject.getInt("id");
-
-                                UserToken.currentUser = new UserToken(userId, token); //create a new token object and set it as current
+                                userID = resObject.getInt("id");
+                                email = resObject.getString("email");
+                                UserToken.currentUser = new UserToken(userID, token); //create a new token object and set it as current
                                 startActivity(new Intent(LoginPage.this, Home.class)); //open new page
                             }
                             else{
                                 loginErrorText.setVisibility(View.VISIBLE); //show the login error
-                                UserToken.currentUser = new UserToken(userId, token);
+                                UserToken.currentUser = new UserToken(userID, token);
                             }
                         }
                         catch (JSONException e){

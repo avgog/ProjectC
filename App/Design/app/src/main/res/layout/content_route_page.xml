@@ -144,7 +144,7 @@
 
     <Button
         android:id="@+id/Save"
-        android:layout_width="63dp"
+        android:layout_width="wrap_content"
         android:layout_height="37dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
@@ -185,12 +185,7 @@
         android:layout_marginTop="154dp"
         android:layout_marginEnd="22dp"
         android:layout_marginRight="22dp"
-<<<<<<< HEAD
-        android:background="#EEEEEE"
         android:text="@string/enter_location"
-=======
-        android:text="Enter location"
->>>>>>> remotes/origin/master
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView

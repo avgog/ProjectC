@@ -23,8 +23,8 @@
 
     <ToggleButton
         android:id="@+id/changelangbutton"
-        android:layout_width="wrap_content"
-        android:layout_height="26dp"
+        android:layout_width="100dp"
+        android:layout_height="27dp"
         android:layout_below="@+id/changepasswordbutton"
         android:layout_centerVertical="true"
         android:layout_marginStart="32dp"
@@ -213,7 +213,7 @@
 
     <ToggleButton
         android:id="@+id/ThemeButton"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="27dp"
         android:layout_below="@+id/changepasswordbutton"
         android:layout_centerVertical="true"

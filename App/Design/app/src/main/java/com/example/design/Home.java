@@ -116,8 +116,6 @@ public class Home extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         startActivity(new Intent(Home.this, Home.class));
-        Toast toast = Toast.makeText(this, "test",Toast.LENGTH_LONG);
-        toast.show();
     }
 
     public void jsonParse(Context context, String url, final String routeid, final String endtime, final String date,final String timeid, final String type) {
