@@ -552,6 +552,356 @@ app.post('/public/auth/change/username', function(req, res){
 });
 
 
+/**
+ * @api {post} /public/routes/add Add route.
+ * @apiName route_add
+ * @apiGroup Public
+
+ * @apiParam {String} token Generated authentication token of the user.
+ * @apiParam {Integer} user_id Id of the user.
+ * @apiParam {String} start_point Starting point of the route.
+ * @apiParam {String} end_point Destination of the route.
+ * @apiParam {String} route_name Name of the route.
+ 
+ * @apiSuccess {String} error Is empty on success
+ * @apiSuccess {String} result Contains information of the insert.
+ * @apiSuccessExample Success-Response:
+ * [
+ *   {
+ *     "error": "",
+ *     "result": ""
+ *   }
+ * ]
+
+ * @apiError Token Invalid token.
+ * @apiErrorExample Error-Response:
+ * { 
+ *    "error": "Invalid token.", 
+ *    "result":""
+ * }
+*/
+
+/**
+ * @api {post} /public/routes/get/from_id Get route by route id.
+ * @apiName route_get_by_id
+ * @apiGroup Public
+
+ * @apiParam {String} token Generated authentication token of the user.
+ * @apiParam {Integer} user_id Id of the user.
+ * @apiParam {Integer} route_id Id of the route.
+ 
+ * @apiSuccess {String} error Is empty on success
+ * @apiSuccess {String} result Contains a route if found, else empty.
+ * @apiSuccessExample Success-Response:
+ * [
+ *   {
+ *     "error": "",
+ *     "result": ""
+ *   }
+ * ]
+
+ * @apiError Token Invalid token.
+ * @apiErrorExample Error-Response:
+ * { 
+ *    "error": "Invalid token.", 
+ *    "result":""
+ * }
+*/
+
+/**
+ * @api {post} /public/routes/get/from_user Get routes by user id.
+ * @apiName route_get_by_user
+ * @apiGroup Public
+
+ * @apiParam {String} token Generated authentication token of the user.
+ * @apiParam {Integer} user_id Id of the user.
+ 
+ * @apiSuccess {String} error Is empty on success
+ * @apiSuccess {String} result Can contain multiple routes.
+ * @apiSuccessExample Success-Response:
+ * [
+ *   {
+ *     "error": "",
+ *     "result": ""
+ *   }
+ * ]
+
+ * @apiError Token Invalid token.
+ * @apiErrorExample Error-Response:{ "error": "Invalid token.", "result":""}
+*/
+
+/**
+ * @api {post} /public/routes/change/start_point Change route start point.
+ * @apiName route_change_start
+ * @apiGroup Public
+
+ * @apiParam {String} token Generated authentication token of the user.
+ * @apiParam {Integer} user_id Id of the user.
+ * @apiParam {String} start_point Place of departure.
+ 
+ * @apiSuccess {String} error Is empty on success
+ * @apiSuccess {String} result Contains info about the modification.
+ * @apiSuccessExample Success-Response:
+ * [
+ *   {
+ *     "error": "",
+ *     "result": ""
+ *   }
+ * ]
+
+ * @apiError Token Invalid token.
+ * @apiErrorExample Error-Response:
+ * { 
+ *    "error": "Invalid token.", 
+ *    "result":""
+ * }
+*/
+
+/**
+ * @api {post} /public/routes/change/end_point Change route end point.
+ * @apiName route_change_end
+ * @apiGroup Public
+
+ * @apiParam {String} token Generated authentication token of the user.
+ * @apiParam {Integer} user_id Id of the user.
+ * @apiParam {String} end_point Destination.
+ 
+ * @apiSuccess {String} error Is empty on success
+ * @apiSuccess {String} result Contains info about the modification.
+ * @apiSuccessExample Success-Response:
+ * [
+ *   {
+ *     "error": "",
+ *     "result": ""
+ *   }
+ * ]
+
+ * @apiError Token Invalid token.
+ * @apiErrorExample Error-Response:
+ * { 
+ *    "error": "Invalid token.", 
+ *    "result":""
+ * }
+*/
+
+/**
+ * @api {post} /public/routes/change/route_name Change route name.
+ * @apiName route_change_name
+ * @apiGroup Public
+
+ * @apiParam {String} token Generated authentication token of the user.
+ * @apiParam {Integer} user_id Id of the user.
+ * @apiParam {String} route_name Name of the route.
+ 
+ * @apiSuccess {String} error Is empty on success
+ * @apiSuccess {String} result Contains info about the modification.
+ * @apiSuccessExample Success-Response:
+ * [
+ *   {
+ *     "error": "",
+ *     "result": ""
+ *   }
+ * ]
+
+ * @apiError Token Invalid token.
+ * @apiErrorExample Error-Response:
+ * { 
+ *    "error": "Invalid token.", 
+ *    "result":""
+ * }
+*/
+
+/**
+ * @api {post} /public/routes/remove Remove route.
+ * @apiName route_remove
+ * @apiGroup Public
+
+ * @apiParam {String} token Generated authentication token of the user.
+ * @apiParam {Integer} user_id Id of the user.
+ * @apiParam {Integer} route_id Id of the route to be removed.
+ 
+ * @apiSuccess {String} error Is empty on success
+ * @apiSuccess {String} result Contains info about the removal.
+ * @apiSuccessExample Success-Response:
+ * [
+ *   {
+ *     "error": "",
+ *     "result": ""
+ *   }
+ * ]
+
+ * @apiError Token Invalid token.
+ * @apiErrorExample Error-Response:
+ * { 
+ *    "error": "Invalid token.", 
+ *    "result":""
+ * }
+*/
+
+/**
+ * @api {post} /public/times/get/from_id Get time by time id.
+ * @apiName time_get_by_id
+ * @apiGroup Public
+ 
+ * @apiParam {String} token Generated authentication token of the user.
+ * @apiParam {Integer} user_id Id of the user.
+ * @apiParam {Integer} time_id Id of the time.
+ 
+ * @apiSuccess {String} error Is empty on success
+ * @apiSuccess {String} result Contains a time if found, is empty otherwise.
+ * @apiSuccessExample Success-Response:
+ * [
+ *   {
+ *     "error": "",
+ *     "result": ""
+ *   }
+ * ]
+
+ * @apiError Token Invalid token.
+ * @apiErrorExample Error-Response:
+ * { 
+ *    "error": "Invalid token.", 
+ *    "result":""
+ * }
+*/
+
+/**
+ * @api {post} /public/times/get/from_route Get times by route id.
+ * @apiName time_get_by_route
+ * @apiGroup Public
+
+ * @apiParam {String} token Generated authentication token of the user.
+ * @apiParam {Integer} user_id Id of the user.
+ * @apiParam {Integer} route_id Id of the route.
+ 
+ * @apiSuccess {String} error Is empty on success
+ * @apiSuccess {String} result Can contain multiple time rows.
+ * @apiSuccessExample Success-Response:
+ * [
+ *   {
+ *     "error": "",
+ *     "result": ""
+ *   }
+ * ]
+
+ * @apiError Token Invalid token.
+ * @apiErrorExample Error-Response:
+ * { 
+ *    "error": "Invalid token.", 
+ *    "result":""
+ * }
+*/
+
+/**
+ * @api {post} /public/times/add Add time.
+ * @apiName time_add
+ * @apiGroup Public
+
+ * @apiParam {String} token Generated authentication token of the user.
+ * @apiParam {Integer} user_id Id of the user.
+ * @apiParam {Integer} route_id Id of the route.
+ * @apiParam {String} end_time Prefered time of departure.
+ * @apiParam {String} date Date of departure.
+ 
+ * @apiSuccess {String} error Is empty on success
+ * @apiSuccess {String} result Contains info about the insert.
+ * @apiSuccessExample Success-Response:
+ * [
+ *   {
+ *     "error": "",
+ *     "result": ""
+ *   }
+ * ]
+
+ * @apiError Token Invalid token.
+ * @apiErrorExample Error-Response:
+ * { 
+ *    "error": "Invalid token.", 
+ *    "result":""
+ * }
+*/
+
+/**
+ * @api {post} /public/times/change/time change time.
+ * @apiName change_time
+ * @apiGroup Public
+
+ * @apiParam {String} token Generated authentication token of the user.
+ * @apiParam {Integer} user_id Id of the user.
+ * @apiParam {Integer} time_id Id of the time.
+ * @apiParam {String} date Date of departure.
+ * @apiParam {String} end_time Prefered time of departure.
+ * 
+ * @apiSuccess {String} error Is empty on success
+ * @apiSuccess {String} result Contains info about the modification.
+ * @apiSuccessExample Success-Response:
+ * [
+ *   {
+ *     "error": "",
+ *     "result": ""
+ *   }
+ * ]
+
+ * @apiError Token Invalid token.
+ * @apiErrorExample Error-Response:
+ * { 
+ *    "error": "Invalid token.", 
+ *    "result":""
+ * }
+*/
+
+/**
+ * @api {post} /public/times/remove Remove time.
+ * @apiName remove_time
+ * @apiGroup Public
+
+ * @apiParam {String} token Generated authentication token of the user.
+ * @apiParam {Integer} user_id Id of the user.
+ * @apiParam {Integer} time_id Id of the time.
+ 
+ * @apiSuccess {String} error Is empty on success
+ * @apiSuccess {String} result Contains info about the removal.
+ * @apiSuccessExample Success-Response:
+ * [
+ *   {
+ *     "error": "",
+ *     "result": ""
+ *   }
+ * ]
+
+ * @apiError Token Invalid token.
+ * @apiErrorExample Error-Response:
+ * { 
+ *    "error": "Invalid token.", 
+ *    "result":""
+ * }
+*/
+
+/**
+ * @api {post} /public/user/exists Check if username is used.
+ * @apiName username_exists
+ * @apiGroup Public
+
+ * @apiParam {Integer} username Username to check on whether is already used.
+ 
+ * @apiSuccess {String} error Is empty on success
+ * @apiSuccess {String} result Contains how many accounts exist with that username.
+ * @apiSuccessExample Success-Response:
+ * [
+ *   {
+ *     "error": "",
+ *     "result": ""
+ *   }
+ * ]
+
+ * @apiError Token Invalid token.
+ * @apiErrorExample Error-Response:
+ * { 
+ *    "error": "Invalid token.", 
+ *    "result":""
+ * }
+*/
+
 // AUDI //
 //list of API url's and query indices
 const requests = [
@@ -567,9 +917,9 @@ const requests = [
   {url:"/public/times/add", queryIndex:functions.Query.TIME_ADD},
   {url:"/public/times/change/time", queryIndex:functions.Query.TIME_CHANGE_TIME},
   {url:"/public/times/remove", queryIndex:functions.Query.TIME_REMOVE},
-  {url:"/public/user/change", queryIndex:functions.Query.USER_CHANGE},
+  //{url:"/public/user/change", queryIndex:functions.Query.USER_CHANGE}, [deprecated]
   {url:"/public/user/exists", queryIndex:functions.Query.USER_NAME_EXIST, skipTokenCheck:true},
-  {url:"/public/user/register", queryIndex:functions.Query.USER_REGISTER, skipTokenCheck:true}
+  //{url:"/public/user/register", queryIndex:functions.Query.USER_REGISTER, skipTokenCheck:true} [deprecated]
 ];
 
 function defaultCallback(err, res,callbackData){

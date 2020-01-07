@@ -26,7 +26,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "/opt/projectc/index.js",
+    "filename": "api/index.js",
     "groupTitle": "Internal"
   },
   {
@@ -56,7 +56,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "/opt/projectc/index.js",
+    "filename": "api/index.js",
     "groupTitle": "Internal"
   },
   {
@@ -79,7 +79,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "/opt/projectc/index.js",
+    "filename": "api/index.js",
     "groupTitle": "Internal"
   },
   {
@@ -102,7 +102,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "/opt/projectc/index.js",
+    "filename": "api/index.js",
     "groupTitle": "Internal"
   },
   {
@@ -173,7 +173,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "/opt/projectc/index.js",
+    "filename": "api/index.js",
     "groupTitle": "Internal"
   },
   {
@@ -203,7 +203,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "/opt/projectc/index.js",
+    "filename": "api/index.js",
     "groupTitle": "Internal"
   },
   {
@@ -288,7 +288,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "/opt/projectc/index.js",
+    "filename": "api/index.js",
     "groupTitle": "Internal"
   },
   {
@@ -373,7 +373,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "/opt/projectc/index.js",
+    "filename": "api/index.js",
     "groupTitle": "Internal"
   },
   {
@@ -445,7 +445,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "/opt/projectc/index.js",
+    "filename": "api/index.js",
     "groupTitle": "Internal"
   },
   {
@@ -516,7 +516,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "/opt/projectc/index.js",
+    "filename": "api/index.js",
     "groupTitle": "Internal"
   },
   {
@@ -526,7 +526,7 @@
     "name": "All_Stops",
     "group": "Public",
     "version": "0.0.0",
-    "filename": "/opt/projectc/index.js",
+    "filename": "api/index.js",
     "groupTitle": "Public"
   },
   {
@@ -602,7 +602,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "/opt/projectc/index.js",
+    "filename": "api/index.js",
     "groupTitle": "Public"
   },
   {
@@ -691,7 +691,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "/opt/projectc/index.js",
+    "filename": "api/index.js",
     "groupTitle": "Public"
   },
   {
@@ -773,7 +773,102 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "/opt/projectc/index.js",
+    "filename": "api/index.js",
+    "groupTitle": "Public"
+  },
+  {
+    "type": "post",
+    "url": "/public/TEST_TEST",
+    "title": "TEST_TEST.",
+    "name": "TEST_TEST",
+    "group": "Public",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The id of the user.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>The new username for the user.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "auth_token",
+            "description": "<p>The current authentication token for the user.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Message",
+            "description": "<p>Username updated!</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "auth_token",
+            "description": "<p>The new authentication token of that user.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "[\n  {\n    \"Message\": \"Username updated!\",\n    \"auth_token\": \"c65f1eb100e84eeec4c3c0067f70e7c0d70579a4c4b61d0dd92013df754649b8\"\n  }\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Token",
+            "description": "<p>Invalid token.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserDoesNotExists",
+            "description": "<p>User does not exists.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UsernameExists",
+            "description": "<p>Username exists.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "{\n  \"ERROR\": \"Invalid token.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "api/index.js",
     "groupTitle": "Public"
   },
   {
@@ -868,7 +963,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "/opt/projectc/index.js",
+    "filename": "api/index.js",
     "groupTitle": "Public"
   }
 ]
