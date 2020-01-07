@@ -57,7 +57,8 @@
         android:layout_marginTop="3dp"
         android:layout_marginEnd="3dp"
         android:layout_marginRight="3dp"
-        android:background="@drawable/profile" />
+        android:background="@drawable/profile"
+        style="?android:attr/borderlessButtonStyle"/>
 
     <TextView
         android:id="@+id/textView7"
@@ -91,8 +92,18 @@
         android:layout_marginRight="2dp"
         android:layout_marginBottom="54dp"
         app:fontFamily="@font/proxima">
-
     </ListView>
+
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="56dp"
+        android:background="@drawable/exit"
+        style="?android:attr/borderlessButtonStyle"/>
 
 
 </RelativeLayout>

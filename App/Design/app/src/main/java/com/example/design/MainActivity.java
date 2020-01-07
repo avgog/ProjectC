@@ -1,5 +1,6 @@
 package com.example.design;
 
+import android.content.Context;
 import android.content.Intent;
 
 import android.content.res.Configuration;
@@ -33,6 +34,7 @@ import com.example.design.routes.Route;
 import com.example.design.routes.response.RouteListErrorListener;
 import com.example.design.routes.response.RouteListListener;
 import com.example.design.routes.RouteManager;
+import com.example.design.user.LoginData;
 import com.example.design.user.UserToken;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -107,6 +109,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 v.setEnabled(true);
+            }
+        });
+
+        final Context context = this;
+        Button logoutButton = findViewById(R.id.logoutButton);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginData.logout(context);
             }
         });
     }
