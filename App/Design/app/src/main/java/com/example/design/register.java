@@ -111,6 +111,8 @@ public class register extends AppCompatActivity {
 
                             UserToken.currentUser = new UserToken(Integer.parseInt(user_id), auth_token);
                             LoginData.saveUser(context, new LoginData(usernameId.getText().toString(), passwordId.getText().toString()));
+                            LoginPage.email = emailId.getText().toString();
+
                             startActivity(new Intent(register.this, Home.class)); //open new page
                         }
                         else{
