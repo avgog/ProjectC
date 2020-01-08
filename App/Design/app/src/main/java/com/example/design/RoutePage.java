@@ -117,6 +117,7 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_route_page);
+        RoutePage.routeId = getIntent().getIntExtra("routeId",-1); //get the routeId value that was stored by the MainActivity
         jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/route_id",String.valueOf(RoutePage.routeId),null,null, null,null,"startup", null);
         Log.i("okidoki", String.valueOf(routeId)+ "start");
         Button AgendaButton = findViewById(R.id.agenda);
@@ -143,7 +144,7 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
         final EditText toLocationField = findViewById(R.id.ToLocationButton);
         Button saveButton = findViewById(R.id.Save);
 
-        RoutePage.routeId = getIntent().getIntExtra("routeId",-1); //get the routeId value that was stored by the MainActivity
+
         editTextView.setText("Unknown Route");
         if(routeId != -1){
             routeManager.getRouteByRouteId(routeId, new Response.Listener() {
