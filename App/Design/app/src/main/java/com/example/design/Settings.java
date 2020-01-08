@@ -1,6 +1,7 @@
 package com.example.design;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +36,7 @@ public class Settings extends AppCompatActivity implements DialogPassword.Exampl
 
     static String language;
     static String shouldRestart;
+    static String username;
     TextView usernameText;
 
     @Override
@@ -44,9 +46,6 @@ public class Settings extends AppCompatActivity implements DialogPassword.Exampl
         TextView emailText = findViewById(R.id.emailtext);
         usernameText = findViewById(R.id.usernametext);
         emailText.setText(LoginPage.email);
-
-        String token = UserToken.currentUser.getToken();
-        int userID = UserToken.currentUser.getUserId();
 
         String username = LoginData.loadUser(this).getUsername();
         usernameText.setText(username);
@@ -71,6 +70,7 @@ public class Settings extends AppCompatActivity implements DialogPassword.Exampl
 
             }
         });
+        //Changes the app language
         changeLanguageButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -111,17 +111,19 @@ public class Settings extends AppCompatActivity implements DialogPassword.Exampl
 
 
     }
-
+    //Dialog for changing password
     private void openPDialog() {
         DialogPassword Dialog = new DialogPassword();
         Dialog.show(getSupportFragmentManager(), "dialog");
 
     }
+    //Dialog for changing username
     private void openUDialog(){
         DialogUsername Dialog = new DialogUsername();
         Dialog.show(getSupportFragmentManager(), "dialog");
     }
 
+    //Creates http requests to the API. In the parameters variables can be passed if the variable is null it will be ignored and not passed on to the api.
     public void jsonParse(Context context, final String url, final String username, final String password, final boolean auth) {
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest sr = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -130,15 +132,14 @@ public class Settings extends AppCompatActivity implements DialogPassword.Exampl
                 Log.i("okidoki",response);
                 try {
                     JSONObject json = new JSONObject(response);
-                    JSONArray array = json.getJSONArray("result");
-                    Log.i("okidoki", array.toString());
-                    for (int i=0; i <array.length();i++) {
-                        JSONObject respJson = array.getJSONObject(i);
-                        String auth_token = (respJson.getString("auth_token"));
-
+                        String auth_token = json.getString("new_token");
                         UserToken.currentUser = new UserToken(UserToken.currentUser.getUserId(), auth_token);
-                    }
+                        LoginData data = LoginData.loadUser(Settings.this);
+                        data = new LoginData(username,data.getPassword());
+                        LoginData.saveUser(Settings.this,data);
+
                 } catch (JSONException e) {
+                    Toast.makeText(Settings.this, "Please choose something else", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }
@@ -148,13 +149,13 @@ public class Settings extends AppCompatActivity implements DialogPassword.Exampl
                 Log.i("okidoki",error.toString());
             }
         }){
+            //Maps the parameters so they can be sent off to the API
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
-                if(auth) {
-                    params.put("auth_token", UserToken.currentUser.getToken());
-                    params.put("id", String.valueOf(UserToken.currentUser.getUserId()));
-                }
+                Log.i("okidoki",UserToken.currentUser.getToken());
+                params.put("auth_token", UserToken.currentUser.getToken());
+                params.put("user_id", String.valueOf(UserToken.currentUser.getUserId()));
                 if(!(username==null)){
                     params.put("username",username);
                 }
@@ -177,8 +178,11 @@ public class Settings extends AppCompatActivity implements DialogPassword.Exampl
 
     @Override
     public void applyTextsUsername(String username){
-        jsonParse(this,"http://projectc.caslayoort.nl/public/auth/change/password",username,null,false);
-        usernameText.setText(username);
+        jsonParse(this,"http://projectc.caslayoort.nl/public/auth/change/username",username,null,false);
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+        this.overridePendingTransition(0, 0);
     }
 
 
