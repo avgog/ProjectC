@@ -35,6 +35,7 @@ public class RouteManager {
         serverURL = context.getResources().getString(R.string.server_url);
     }
 
+
     public void getRouteByRouteId(int id, Response.Listener listener, Response.ErrorListener errorListener){
         Map<String,String> params = new HashMap<>();
         params.put("token", UserToken.currentUser.getToken());
@@ -107,6 +108,7 @@ public class RouteManager {
         private Route routes[];
         private RouteManager manager;
         private ListView listView;
+
 
         public RouteListAdapter (Context context, Route routes[], RouteManager manager, ListView listView) {
             super(context, R.layout.row, R.id.textView1,routes);

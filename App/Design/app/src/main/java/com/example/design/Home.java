@@ -20,8 +20,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Request;
@@ -30,6 +32,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.design.user.UserToken;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
@@ -51,6 +54,7 @@ public class Home extends AppCompatActivity {
     static ArrayList<String> mTitle = new ArrayList<>();
     static ArrayList<String> mDate = new ArrayList<>();
     static ArrayList<String> mTime = new ArrayList<>();
+    static ArrayList<String> mName = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +65,12 @@ public class Home extends AppCompatActivity {
         }
         String routeid = "1";
         listView = findViewById(R.id.homeListview);
-        MyAdapter adapter = new MyAdapter(this, mTitle, mImgs, mTime, mDate);
+        MyAdapter adapter = new MyAdapter(this, mName, mImgs, mTime, mDate,mTitle);
         listView.setAdapter(adapter);
         profileButton = (findViewById(R.id.profileButton));
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
-        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/get/from_route",routeid,null,null, null,"startup");
+        jsonParse(this, "http://projectc.caslayoort.nl/public/times/active",null,null,null, null,"startup", null);
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(1);
         menuItem.setChecked(true);
@@ -126,7 +130,7 @@ public class Home extends AppCompatActivity {
         startActivity(new Intent(Home.this, Home.class));
     }
 
-    public void jsonParse(Context context, String url, final String routeid, final String endtime, final String date,final String timeid, final String type) {
+    public void jsonParse(Context context, String url, final String routeid, final String endtime, final String date,final String timeid, final String type, final String state) {
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest sr = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -136,24 +140,26 @@ public class Home extends AppCompatActivity {
                     mTime.clear();
                     mDate.clear();
                     mTitle.clear();
+                    mName.clear();
                     try {
-                        JSONObject json = new JSONObject(response);
-                        JSONArray array = json.getJSONArray("result");
+                        JSONArray array = new JSONArray(response);
                         Log.i("okidoki", array.toString());
                         for (int i=0; i <array.length();i++) {
                             JSONObject jsonTime = array.getJSONObject(i);
-                            mTitle.add(jsonTime.getString("route_id"));
-                            mTime.add(jsonTime.getString("timeofarrival"));
-                            mDate.add(jsonTime.getString("date"));
-
-
+                                mTitle.add(jsonTime.getString("id"));
+                                mTime.add(jsonTime.getString("timeofarrival"));
+                                mDate.add(jsonTime.getString("date"));
+                                mName.add(jsonTime.getString("route_name"));
+                                Log.i("okidoki", mTime.toString()+mTitle.toString()+mDate.toString()+mName.toString());
 
                         }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
                     listView.setAdapter(null);
-                    MyAdapter adapter = new Home.MyAdapter(Home.this,mTitle,mImgs, mTime, mDate);
+                    MyAdapter adapter = new Home.MyAdapter(Home.this, mName, mImgs, mTime, mDate,mTitle);
                     listView.setAdapter(adapter);
                 }
 
@@ -168,8 +174,9 @@ public class Home extends AppCompatActivity {
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
-                params.put("token","081848afca7affee3e760bd18b80bf51ef1f1133ae70dbd5e26e64f553c33779");
-                params.put("user_id","1");
+                Log.i("okidoki",UserToken.currentUser.getToken()+ String.valueOf(UserToken.currentUser.getUserId()));
+                params.put("token", UserToken.currentUser.getToken());
+                params.put("user_id", String.valueOf(UserToken.currentUser.getUserId()));
                 if(timeid!=null){
                     params.put("time_id", timeid);
                 }
@@ -182,6 +189,9 @@ public class Home extends AppCompatActivity {
                 }
                 if (date != null) {
                     params.put("date", date);
+                }
+                if (state != null) {
+                    params.put("state",state);
                 }
 
                 return params;
@@ -211,11 +221,13 @@ public class Home extends AppCompatActivity {
                 int rImgs;
                 ArrayList<String> rTime;
                 ArrayList<String> rDate;
+                ArrayList<String> rIds;
 
 
-                MyAdapter(Context c, ArrayList<String> title, int imgs, ArrayList<String> time, ArrayList<String> date) {
+                MyAdapter(Context c, ArrayList<String> title, int imgs, ArrayList<String> time, ArrayList<String> date, ArrayList<String> ids) {
                     super(c, R.layout.row, R.id.textView1, title);
                     this.context = c;
+                    this.rIds = ids;
                     this.rTitle = title;
                     this.rImgs = imgs;
                     this.rTime = time;
@@ -226,13 +238,27 @@ public class Home extends AppCompatActivity {
 
                 @NonNull
                 @Override
-                public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                     LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     View row = layoutInflater.inflate(R.layout.rowhome, parent, false);
                     ImageView images = row.findViewById(R.id.iconImage);
                     TextView myTitle = row.findViewById(R.id.homeTitle);
                     TextView myTime = row.findViewById(R.id.homeTime);
                     TextView myDate = row.findViewById(R.id.homeDate);
+                    Switch activeSwitch = row.findViewById(R.id.ActiveSwitch);
+                    activeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            if(isChecked) {
+                                Log.i("okidoki",rIds.toString());
+                                jsonParse(Home.this, "http://projectc.caslayoort.nl/public/times/state",null,null, rIds.get(position),rIds.get(position),"state","1");
+
+                            } else {
+                                Log.i("okidoki",rIds.toString());
+                                jsonParse(Home.this, "http://projectc.caslayoort.nl/public/times/state",null, null, rIds.get(position),rIds.get(position),"state","0");
+
+                            }
+                        }
+                    });
                     myTitle.setTypeface(Typeface.DEFAULT_BOLD);
                     myTitle.setTextSize(19);
                     images.setImageResource(rImgs);

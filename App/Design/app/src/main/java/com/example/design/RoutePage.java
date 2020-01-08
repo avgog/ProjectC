@@ -39,6 +39,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import android.widget.TimePicker;
@@ -91,6 +92,7 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
     static ArrayList<String> mTime = new ArrayList<>();
     static ArrayList<String> mDate = new ArrayList<>();
     static ArrayList<Integer> mTimeid = new ArrayList<>();
+    static ArrayList<Integer> mActive = new ArrayList<>();
     String activity;
     TextView editTextView;
     AlertDialog alertDialog;
@@ -115,11 +117,8 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_route_page);
-        Log.i("okidoki", String.valueOf(routeId)+ "startf");
-
-        RoutePage.routeId = getIntent().getIntExtra("routeId",-1); //get the routeId value that was stored by the MainActivity
-        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/get/from_route",String.valueOf(RoutePage.routeId),null,null, null,null,"startup");
-
+        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/route_id",String.valueOf(RoutePage.routeId),null,null, null,null,"startup", null);
+        Log.i("okidoki", String.valueOf(routeId)+ "start");
         Button AgendaButton = findViewById(R.id.agenda);
 
 
@@ -144,6 +143,7 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
         final EditText toLocationField = findViewById(R.id.ToLocationButton);
         Button saveButton = findViewById(R.id.Save);
 
+        RoutePage.routeId = getIntent().getIntExtra("routeId",-1); //get the routeId value that was stored by the MainActivity
         editTextView.setText("Unknown Route");
         if(routeId != -1){
             routeManager.getRouteByRouteId(routeId, new Response.Listener() {
@@ -207,7 +207,7 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
         editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(26)});
         alertDialog.setTitle(" Edit the text ");
         alertDialog.setView(editText);
-        MyAdapter adapter = new MyAdapter(this, mTime, mDate);
+        MyAdapter adapter = new MyAdapter(this, mTime, mDate, mActive);
         listView.setAdapter(adapter);
 
 
@@ -332,8 +332,7 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
 
     }
 
-    public void jsonParse(Context context, String url, final String routeid, final String endtime, final String date,final String timeid,final String routename, final String type) {
-        Log.i("jsonParse","Route id: " + String.valueOf(routeid));
+    public void jsonParse(Context context, String url, final String routeid, final String endtime, final String date,final String timeid,final String routename, final String type, final String state) {
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest sr = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -343,20 +342,22 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
                     mTimeid.clear();
                     mTime.clear();
                     mDate.clear();
+                    mActive.clear();
                     try {
-                        JSONObject json = new JSONObject(response);
-                        JSONArray array = json.getJSONArray("result");
+                        JSONArray array = new JSONArray(response);
                         for (int i=0; i <array.length();i++) {
                             JSONObject jsonTime = array.getJSONObject(i);
                             RoutePage.mTimeid.add(jsonTime.getInt("id"));
                             RoutePage.mTime.add(jsonTime.getString("timeofarrival"));
                             RoutePage.mDate.add(jsonTime.getString("date"));
+                            RoutePage.mActive.add(jsonTime.getInt("active"));
+                            Log.i("okidoki",mActive.toString());
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     listView.setAdapter(null);
-                    MyAdapter adapter = new MyAdapter(RoutePage.this, mTime, mDate);
+                    MyAdapter adapter = new MyAdapter(RoutePage.this, mTime, mDate, mActive);
                     listView.setAdapter(adapter);
                 }
 
@@ -371,12 +372,8 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
             @Override
             protected  Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
-                Log.i("okidoki",routeid + " " + endtime + " " + date);
-                String token = UserToken.currentUser.getToken();
-                int userID = UserToken.currentUser.getUserId();
-
-                params.put("token",token);
-                params.put("user_id",String.valueOf(userID));
+                params.put("token", UserToken.currentUser.getToken());
+                params.put("user_id", String.valueOf(UserToken.currentUser.getUserId()));
                 if(timeid!=null){
                     params.put("time_id", timeid);
                 }
@@ -387,11 +384,17 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
                     params.put("end_time", endtime);
 
                 }
+                if(timeid != null) {
+                    params.put("id", timeid);
+                }
                 if (date != null) {
                     params.put("date", date);
                 }
                 if (routename != null) {
-
+                    params.put("routename", routename);
+                }
+                if (state != null){
+                    params.put("state", state);
                 }
 
                 return params;
@@ -425,8 +428,8 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
 
         }
         Log.i("okidoki", String.valueOf(routeId));
-        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/add",String.valueOf(RoutePage.routeId),RoutePage.time,RoutePage.date,null,null,"add");
-        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/get/from_route",String.valueOf(RoutePage.routeId),null,null, null,null,"startup");
+        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/add",String.valueOf(RoutePage.routeId),RoutePage.time,RoutePage.date,null,null,"add", null);
+        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/route_id",String.valueOf(RoutePage.routeId),null,null, null,null,"startup", null);
     }
 
     @Override
@@ -454,13 +457,15 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
         Context context;
         ArrayList<String> rTime;
         ArrayList<String> rDate;
+        ArrayList<Integer> rActive;
 
 
-        MyAdapter(Context c, ArrayList<String> time, ArrayList<String> date) {
+        MyAdapter(Context c, ArrayList<String> time, ArrayList<String> date, ArrayList<Integer> active) {
             super(c, R.layout.rowroutepage, R.id.homeDate, date);
             this.context = c;
             this.rDate = date;
             this.rTime = time;
+            this.rActive = active;
 
         }
 
@@ -477,12 +482,51 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
                 public void onClick(View v) {
                     mTime.remove(position);
                     mDate.remove(position);
-                    jsonParse(RoutePage.this, "http://projectc.caslayoort.nl:80/public/times/remove",String.valueOf(RoutePage.routeId),null,null,String.valueOf(mTimeid.get(position)),null,"delete");
+                    mActive.remove(position);
+                    jsonParse(RoutePage.this, "http://projectc.caslayoort.nl:80/public/times/remove",String.valueOf(RoutePage.routeId),null,null,String.valueOf(mTimeid.get(position)),null,"delete",null);
                     mTimeid.remove(position);
-                    jsonParse(RoutePage.this, "http://projectc.caslayoort.nl:80/public/times/get/from_route",String.valueOf(RoutePage.routeId),null,null, null,null,"startup");
+                    jsonParse(RoutePage.this, "http://projectc.caslayoort.nl:80/public/times/route_id",String.valueOf(RoutePage.routeId),null,null, null,null,"startup",null);
 
                 }
             });
+            Switch activeSwitch = row.findViewById(R.id.ActiveSwitch);
+            if(rActive.get(position) == 1){
+                activeSwitch.setChecked(true);
+                Log.i("okidoki","triggered if switch 1");
+            } else {
+                activeSwitch.setChecked(false);
+                Log.i("okidoki","triggered if switch 2");
+            }
+            activeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked) {
+                        jsonParse(RoutePage.this, "http://projectc.caslayoort.nl/public/times/state",String.valueOf(RoutePage.routeId),null,null, String.valueOf(mTimeid.get(position)),null,"state","1");
+
+                        Log.i("okidoki","triggered click switch 1");
+                    } else {
+                        jsonParse(RoutePage.this, "http://projectc.caslayoort.nl/public/times/state",String.valueOf(RoutePage.routeId),null,null, String.valueOf(mTimeid.get(position)),null,"state","0");
+                        Log.i("okidoki","triggered click switch 2");
+                    }
+                }
+            });
+            /*activeSwitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(activeSwitch.isChecked()){
+                        jsonParse(RoutePage.this, "http://projectc.caslayoort.nl/public/times/state",String.valueOf(RoutePage.routeId),null,null, String.valueOf(mTimeid.get(position)),null,"state","1");
+                        //mActive.set(0,position);
+                        //activeSwitch.setChecked(true);
+                        //jsonParse(RoutePage.this, "http://projectc.caslayoort.nl:80/public/times/route_id",String.valueOf(RoutePage.routeId),null,null, null,null,"startup", null);
+                        Log.i("okidoki","triggered click switch 1");
+                    } else {
+                        Log.i("okidoki","triggered click switch 2");
+                        jsonParse(RoutePage.this, "http://projectc.caslayoort.nl/public/times/state",String.valueOf(RoutePage.routeId),null,null, String.valueOf(mTimeid.get(position)),null,"state","0");
+                        //mActive.set(1,position);
+                        //activeSwitch.setChecked(false);
+                        //jsonParse(RoutePage.this, "http://projectc.caslayoort.nl:80/public/times/route_id",String.valueOf(RoutePage.routeId),null,null, null,null,"startup", null);
+                    }
+                }
+            });*/
             TextView myDate = row.findViewById(R.id.homeDate);
             TextView myTime = row.findViewById(R.id.homeTime);
             myDate.setText(rDate.get(position));

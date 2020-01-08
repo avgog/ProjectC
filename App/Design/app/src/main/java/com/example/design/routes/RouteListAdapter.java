@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.design.R;
+import com.example.design.RoutePage;
 import com.example.design.routes.OnRemoveRouteClickListener;
 import com.example.design.routes.Route;
 import com.example.design.routes.RouteManager;
@@ -49,6 +50,7 @@ public class RouteListAdapter extends ArrayAdapter<Route> {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     bellbutton.setBackgroundResource(R.drawable.bell);
+
                 } else {
                     bellbutton.setBackgroundResource(R.drawable.emptybell);
                 }

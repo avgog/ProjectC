@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         profileButton = (findViewById(R.id.profileButton));
 
         //responsible for calling route related functions of the server API
+
         routeManager = new RouteManager(this);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
