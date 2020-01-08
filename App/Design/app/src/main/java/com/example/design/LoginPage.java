@@ -92,7 +92,6 @@ public class LoginPage extends AppCompatActivity {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("login", error.toString());
                         loginErrorText.setVisibility(View.VISIBLE); //show the login error
                     }
                 });

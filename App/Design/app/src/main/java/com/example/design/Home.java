@@ -63,7 +63,6 @@ public class Home extends AppCompatActivity {
         if(!(Settings.language == null)){
             setAppLocale(Settings.language);
         }
-        String routeid = "1";
         listView = findViewById(R.id.homeListview);
         MyAdapter adapter = new MyAdapter(this, mName, mImgs, mTime, mDate,mTitle);
         listView.setAdapter(adapter);
@@ -75,17 +74,7 @@ public class Home extends AppCompatActivity {
         MenuItem menuItem = menu.getItem(1);
         menuItem.setChecked(true);
 
-
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(view.getContext(), RoutePage.class);
-                startActivity(intent);
-
-            }
-        });
-
+        //Opens the settings
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,6 +93,7 @@ public class Home extends AppCompatActivity {
         });
     }
 
+
     public void setAppLocale(String appLocale){
         Locale locale = new Locale(appLocale);
         Locale.setDefault(locale);
@@ -113,6 +103,7 @@ public class Home extends AppCompatActivity {
 
     }
 
+    //Refreshes page when opened again
     protected void onResume(){
         super.onResume();
         try{
@@ -125,11 +116,13 @@ public class Home extends AppCompatActivity {
         } } catch (Exception e) { Log.i("okidoki",e.toString()); }
     }
 
+    //Makes sure the right activity gets opened on back press
     @Override
     public void onBackPressed(){
         startActivity(new Intent(Home.this, Home.class));
     }
 
+    //Creates http requests to the API. In the parameters variables can be passed if the variable is null it will be ignored and not passed on to the api.
     public void jsonParse(Context context, String url, final String routeid, final String endtime, final String date,final String timeid, final String type, final String state) {
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest sr = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -146,18 +139,19 @@ public class Home extends AppCompatActivity {
                         Log.i("okidoki", array.toString());
                         for (int i=0; i <array.length();i++) {
                             JSONObject jsonTime = array.getJSONObject(i);
-                                mTitle.add(jsonTime.getString("id"));
-                                mTime.add(jsonTime.getString("timeofarrival"));
-                                mDate.add(jsonTime.getString("date"));
-                                mName.add(jsonTime.getString("route_name"));
-                                Log.i("okidoki", mTime.toString()+mTitle.toString()+mDate.toString()+mName.toString());
+                            //retrieves everything from the response given by the JSON and puts it into lists so it can be initialized
+                            mTitle.add(jsonTime.getString("id"));
+                            mTime.add(jsonTime.getString("timeofarrival"));
+                            mDate.add(jsonTime.getString("date"));
+                            mName.add(jsonTime.getString("route_name"));
+
 
                         }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
+                    // Refreshes the listview
                     listView.setAdapter(null);
                     MyAdapter adapter = new Home.MyAdapter(Home.this, mName, mImgs, mTime, mDate,mTitle);
                     listView.setAdapter(adapter);
@@ -171,10 +165,10 @@ public class Home extends AppCompatActivity {
                 Log.i("okidoki",error.toString());
             }
         }){
+            //Maps the parameters so they can be sent off to the API
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
-                Log.i("okidoki",UserToken.currentUser.getToken()+ String.valueOf(UserToken.currentUser.getUserId()));
                 params.put("token", UserToken.currentUser.getToken());
                 params.put("user_id", String.valueOf(UserToken.currentUser.getUserId()));
                 if(timeid!=null){
@@ -246,14 +240,12 @@ public class Home extends AppCompatActivity {
                     TextView myTime = row.findViewById(R.id.homeTime);
                     TextView myDate = row.findViewById(R.id.homeDate);
                     Switch activeSwitch = row.findViewById(R.id.ActiveSwitch);
+                    // Checks if there is a change in the switch and then updates the active status to the API
                     activeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                             if(isChecked) {
-                                Log.i("okidoki",rIds.toString());
                                 jsonParse(Home.this, "http://projectc.caslayoort.nl/public/times/state",null,null, rIds.get(position),rIds.get(position),"state","1");
-
                             } else {
-                                Log.i("okidoki",rIds.toString());
                                 jsonParse(Home.this, "http://projectc.caslayoort.nl/public/times/state",null, null, rIds.get(position),rIds.get(position),"state","0");
 
                             }

@@ -121,8 +121,6 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
         Log.i("okidoki", String.valueOf(routeId)+ "start");
         Button AgendaButton = findViewById(R.id.agenda);
 
-
-
         final ToggleButton Monday = (findViewById(R.id.mondaybutton));
         final ToggleButton Tuesday = (findViewById(R.id.tuesdaybutton));
         final ToggleButton Wednesday = (findViewById(R.id.wednesdaybutton));
@@ -130,10 +128,9 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
         final ToggleButton Friday = (findViewById(R.id.fridaybutton));
         final ToggleButton Saturday = (findViewById(R.id.saterdaybutton));
         final ToggleButton Sunday = (findViewById(R.id.sundaybutton));
+
         listView = findViewById(R.id.listview2);
-
         listView.setAdapter(null);
-
 
         routeManager = new RouteManager(this);
 
@@ -241,7 +238,7 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
                 alertDialog.show();
             }
         });
-
+        //All the repeat Buttons that open a clock so you can chose the time of the timescheme
         Monday.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -331,7 +328,7 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
         });
 
     }
-
+    //Creates http requests to the API. In the parameters variables can be passed if the variable is null it will be ignored and not passed on to the api.
     public void jsonParse(Context context, String url, final String routeid, final String endtime, final String date,final String timeid,final String routename, final String type, final String state) {
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest sr = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -369,6 +366,7 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
                 Log.i("okidoki",error.toString());
             }
         }){
+            //Maps the parameters so they can be sent off to the API
             @Override
             protected  Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
@@ -413,7 +411,7 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
         popup.inflate(R.menu.popupmenu);
         popup.show();
     }
-
+    //Retrieves the date from onDateSet or one of the repeat buttons and passes these with the time to the API so a new time scheme can be created
     @Override
     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
         RoutePage.time = (String.format("%02d:%02d", hour, minute));
@@ -429,9 +427,11 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
         }
         Log.i("okidoki", String.valueOf(routeId));
         jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/add",String.valueOf(RoutePage.routeId),RoutePage.time,RoutePage.date,null,null,"add", null);
+        //Refreshes the layout by retrieving all the timeschemes
         jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/route_id",String.valueOf(RoutePage.routeId),null,null, null,null,"startup", null);
     }
 
+    //Allows you to pick a date for the timescheme
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         RoutePage.date = String.valueOf(year) + "-" + String.valueOf(month + 1) + "-" + String.valueOf(dayOfMonth);
@@ -478,6 +478,7 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
             View row = layoutInflater.inflate(R.layout.rowroutepage, parent, false);
             Button deletebutton =  row.findViewById(R.id.delete);
             deletebutton.setOnClickListener(new View.OnClickListener() {
+                //Removes the data from the lists so when refreshing the layout the timescheme is removed.
                 @Override
                 public void onClick(View v) {
                     mTime.remove(position);
@@ -509,24 +510,6 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
                     }
                 }
             });
-            /*activeSwitch.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(activeSwitch.isChecked()){
-                        jsonParse(RoutePage.this, "http://projectc.caslayoort.nl/public/times/state",String.valueOf(RoutePage.routeId),null,null, String.valueOf(mTimeid.get(position)),null,"state","1");
-                        //mActive.set(0,position);
-                        //activeSwitch.setChecked(true);
-                        //jsonParse(RoutePage.this, "http://projectc.caslayoort.nl:80/public/times/route_id",String.valueOf(RoutePage.routeId),null,null, null,null,"startup", null);
-                        Log.i("okidoki","triggered click switch 1");
-                    } else {
-                        Log.i("okidoki","triggered click switch 2");
-                        jsonParse(RoutePage.this, "http://projectc.caslayoort.nl/public/times/state",String.valueOf(RoutePage.routeId),null,null, String.valueOf(mTimeid.get(position)),null,"state","0");
-                        //mActive.set(1,position);
-                        //activeSwitch.setChecked(false);
-                        //jsonParse(RoutePage.this, "http://projectc.caslayoort.nl:80/public/times/route_id",String.valueOf(RoutePage.routeId),null,null, null,null,"startup", null);
-                    }
-                }
-            });*/
             TextView myDate = row.findViewById(R.id.homeDate);
             TextView myTime = row.findViewById(R.id.homeTime);
             myDate.setText(rDate.get(position));
