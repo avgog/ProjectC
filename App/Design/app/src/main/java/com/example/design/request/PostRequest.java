@@ -10,6 +10,7 @@ import com.android.volley.toolbox.StringRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+//Use this class for making a post request.
 public class PostRequest extends StringRequest {
     private Map<String,String> postParameters;
 
@@ -18,6 +19,7 @@ public class PostRequest extends StringRequest {
         this.postParameters = postParameters;
     }
 
+    //Is used for adding parameters in the request.
     @Override
     protected Map<String,String> getParams(){
         return postParameters;

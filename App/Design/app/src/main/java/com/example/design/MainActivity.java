@@ -45,6 +45,7 @@ import java.util.Locale;
 
 import static android.app.PendingIntent.getActivity;
 
+//Page that contains a list of all routes that belongs to the user.
 public class MainActivity extends AppCompatActivity {
     Button profileButton;
     ListView listView;

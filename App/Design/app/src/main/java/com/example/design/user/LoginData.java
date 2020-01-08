@@ -10,6 +10,8 @@ import androidx.preference.PreferenceManager;
 import com.example.design.Home;
 import com.example.design.LoginPage;
 
+//contains username and password
+//also has functions for storing and loading those variables.
 public class LoginData {
     private String username;
     private String password;

@@ -26,7 +26,7 @@ import com.example.design.user.UserToken;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RouteManager {
+public class RouteManager { //responsible for executing route api functions
     private RequestQueue queue;
     private String serverURL;
 
@@ -35,24 +35,26 @@ public class RouteManager {
         serverURL = context.getResources().getString(R.string.server_url);
     }
 
-
+    //find a route in the database by the id of the route
     public void getRouteByRouteId(int id, Response.Listener listener, Response.ErrorListener errorListener){
         Map<String,String> params = new HashMap<>();
         params.put("token", UserToken.currentUser.getToken());
         params.put("user_id", String.valueOf(UserToken.currentUser.getUserId()));
         params.put("route_id",String.valueOf(id));
         PostRequest request = new PostRequest(serverURL + "/public/routes/get/from_id", params, listener, errorListener);
-        queue.add(request);
+        queue.add(request); //execute the request
     }
 
+    //find all routes in the database that belongs to a certain user.
     public void getRoutesByUserId(Response.Listener listener, Response.ErrorListener errorListener){
         Map<String,String> params = new HashMap<>();
         params.put("token", UserToken.currentUser.getToken());
         params.put("user_id", String.valueOf(UserToken.currentUser.getUserId()));
         PostRequest request = new PostRequest(serverURL + "/public/routes/get/from_user", params, listener, errorListener);
-        queue.add(request);
+        queue.add(request); //execute the request
     }
 
+    //add a route in the database
     public void addRoute(Route route, Response.Listener listener, Response.ErrorListener errorListener){
         Map<String,String> params = new HashMap<>();
         params.put("token", UserToken.currentUser.getToken());
@@ -61,9 +63,10 @@ public class RouteManager {
         params.put("end_point",route.end_point);
         params.put("route_name",route.route_name);
         PostRequest request = new PostRequest(serverURL + "/public/routes/add", params, listener, errorListener);
-        queue.add(request);
+        queue.add(request); //execute the request
     }
 
+    //Change the place of departure of a route
     public void changeRouteStartPoint(Route route, Response.Listener listener, Response.ErrorListener errorListener){
         Map<String,String> params = new HashMap<>();
         params.put("token", UserToken.currentUser.getToken());
@@ -71,9 +74,10 @@ public class RouteManager {
         params.put("route_id",String.valueOf(route.getRouteId()));
         params.put("start_point",route.start_point);
         PostRequest request = new PostRequest(serverURL + "/public/routes/change/start_point", params, listener, errorListener);
-        queue.add(request);
+        queue.add(request); //execute the request
     }
 
+    //Change the destination of a route
     public void changeRouteEndPoint(Route route, Response.Listener listener, Response.ErrorListener errorListener){
         Map<String,String> params = new HashMap<>();
         params.put("token", UserToken.currentUser.getToken());
@@ -81,9 +85,10 @@ public class RouteManager {
         params.put("route_id",String.valueOf(route.getRouteId()));
         params.put("end_point",route.end_point);
         PostRequest request = new PostRequest(serverURL + "/public/routes/change/end_point", params, listener, errorListener);
-        queue.add(request);
+        queue.add(request); //execute the request
     }
 
+    //Change the name of a route.
     public void changeRouteName(Route route, Response.Listener listener, Response.ErrorListener errorListener){
         Map<String,String> params = new HashMap<>();
         params.put("token", UserToken.currentUser.getToken());
@@ -91,19 +96,20 @@ public class RouteManager {
         params.put("route_id",String.valueOf(route.getRouteId()));
         params.put("route_name",route.route_name);
         PostRequest request = new PostRequest(serverURL + "/public/routes/change/route_name", params, listener, errorListener);
-        queue.add(request);
+        queue.add(request); //execute the request
     }
 
+    //Remove a certain route
     public void removeRoute(int id, Response.Listener listener, Response.ErrorListener errorListener){
         Map<String,String> params = new HashMap<>();
         params.put("token", UserToken.currentUser.getToken());
         params.put("user_id", String.valueOf(UserToken.currentUser.getUserId()));
         params.put("route_id",String.valueOf(id));
         PostRequest request = new PostRequest(serverURL + "/public/routes/remove", params, listener, errorListener);
-        queue.add(request);
+        queue.add(request); //execute the request
     }
 
-    public static class RouteListAdapter extends ArrayAdapter<Route> {
+    public static class RouteListAdapter extends ArrayAdapter<Route> { //responsible for displaying routes on the screen
         private Context context;
         private Route routes[];
         private RouteManager manager;
@@ -120,7 +126,7 @@ public class RouteManager {
 
         @NonNull
         @Override
-        public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) { //executes on initialization and when scrolling
             LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View row = layoutInflater.inflate(R.layout.row, parent, false);
             final ToggleButton bellbutton = row.findViewById(R.id.notificationbutton);
