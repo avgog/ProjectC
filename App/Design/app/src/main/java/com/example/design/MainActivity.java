@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final Button addButton = (Button)v;
                 addButton.setEnabled(false); //temporary disables the button
-                Route route = new Route(0, UserToken.currentUser.getUserId(), "-", "-", "new route");
+                Route route = new Route(0, UserToken.currentUser.getUserId(), "-", "-", "new route", true);
                 routeManager.addRoute(route, new Response.Listener() {
                     @Override
                     public void onResponse(Object response) {

@@ -16,13 +16,15 @@ public class Route {
     public String start_point; //place of departure
     public String end_point;  //destination of the route
     public String route_name; //name that should be displayed on the route list
+    public boolean active;
 
-    public Route(int route_id, int user_id, String start_point, String end_point, String route_name){
+    public Route(int route_id, int user_id, String start_point, String end_point, String route_name, boolean active){
         this.route_id = route_id;
         this.user_id = user_id;
         this.start_point = start_point;
         this.end_point = end_point;
         this.route_name = route_name;
+        this.active = active;
     }
 
     public int getRouteId(){
@@ -45,7 +47,8 @@ public class Route {
                         jsonRoute.getInt("user_id"),
                         jsonRoute.getString("start"),
                         jsonRoute.getString("end"),
-                        jsonRoute.getString("route_name")
+                        jsonRoute.getString("route_name"),
+                        jsonRoute.getInt("active") != 0
                 );
 
                 routes.add(route);

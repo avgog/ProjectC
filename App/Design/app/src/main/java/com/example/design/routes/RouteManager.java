@@ -2,6 +2,7 @@ package com.example.design.routes;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import androidx.annotation.Nullable;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.example.design.R;
 import com.example.design.request.PostRequest;
@@ -109,6 +111,17 @@ public class RouteManager { //responsible for executing route api functions
         queue.add(request); //execute the request
     }
 
+    public void setRouteActiveState(int id, boolean active, Response.Listener listener, Response.ErrorListener errorListener){
+        Map<String,String> params = new HashMap<>();
+        params.put("token", UserToken.currentUser.getToken());
+        params.put("user_id", String.valueOf(UserToken.currentUser.getUserId()));
+        params.put("route_id",String.valueOf(id));
+        params.put("state",(String.valueOf((active)? 1 : 0)));
+
+        PostRequest request = new PostRequest(serverURL + "/public/route/state", params, listener, errorListener);
+        queue.add(request); //execute the request
+    }
+
     public static class RouteListAdapter extends ArrayAdapter<Route> { //responsible for displaying routes on the screen
         private Context context;
         private Route routes[];
@@ -133,6 +146,14 @@ public class RouteManager { //responsible for executing route api functions
             Button removeRouteButton = row.findViewById(R.id.deleteRouteButton);
             removeRouteButton.setOnClickListener(new OnRemoveRouteClickListener(manager, listView, routes[position]));
 
+            bellbutton.setOnCheckedChangeListener(null);
+            bellbutton.setChecked(routes[position].active);
+            if (routes[position].active) {
+                bellbutton.setBackgroundResource(R.drawable.bell);
+            } else {
+                bellbutton.setBackgroundResource(R.drawable.emptybell);
+            }
+
             bellbutton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -141,8 +162,21 @@ public class RouteManager { //responsible for executing route api functions
                     } else {
                         bellbutton.setBackgroundResource(R.drawable.emptybell);
                     }
+                    manager.setRouteActiveState(routes[position].getRouteId(), isChecked, new Response.Listener() {
+                        @Override
+                        public void onResponse(Object response) {
+                            Log.i("active toggle", "response: " + response.toString());
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("active toggle", error.toString());
+                        }
+                    });
                 }
             });
+
+
 
             ImageView images = row.findViewById(R.id.image);
             TextView myTitle = row.findViewById(R.id.textView1);
