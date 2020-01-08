@@ -120,6 +120,7 @@ public class LoginPage extends AppCompatActivity {
                         if(resObject.has("auth_token")){ //check if it has a token field
                             String token = resObject.getString("auth_token");
                             int userId = resObject.getInt("id");
+                            email = resObject.getString("email");
 
                             UserToken.currentUser = new UserToken(userId, token); //create a new token object and set it as current
                             startActivity(new Intent(LoginPage.this, Home.class)); //open new page

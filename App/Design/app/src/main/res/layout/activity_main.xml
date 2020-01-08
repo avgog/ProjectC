@@ -62,7 +62,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="3dp"
-        android:layout_marginRight="3dp"
         android:background="@drawable/profile"
         style="?android:attr/borderlessButtonStyle"/>
 
@@ -97,9 +96,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="120dp"
         android:layout_marginTop="4dp"
-        android:layout_marginEnd="0dp"
+        android:layout_marginEnd="54dp"
         android:layout_toStartOf="@+id/profileButton"
 
         android:text="+ADD"
