@@ -19,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.design.user.UserToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -145,8 +146,8 @@ public class Settings extends AppCompatActivity implements DialogPassword.Exampl
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
                 if(auth) {
-                    params.put("auth_token", LoginPage.token);
-                    params.put("id", String.valueOf(LoginPage.userID));
+                    params.put("token", UserToken.currentUser.getToken());
+                    params.put("user_id", String.valueOf(UserToken.currentUser.getUserId()));
                 }
                 if(!(username==null)){
                     params.put("username",username);
