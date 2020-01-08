@@ -137,7 +137,6 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
 
         routeManager = new RouteManager(this);
 
-
         Button closeButton = findViewById(R.id.CloseButton);
         editTextView = findViewById(R.id.routeTitle);
         final EditText fromLocationField = findViewById(R.id.FromLocationButton);
@@ -532,7 +531,6 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
             TextView myTime = row.findViewById(R.id.homeTime);
             myDate.setText(rDate.get(position));
             myTime.setText(rTime.get(position));
-
             return row;
         }
     }

@@ -23,10 +23,10 @@ import org.json.JSONObject;
 
 public class LoginPage extends AppCompatActivity {
     private AccountManager manager;
-    static String token;
-    static int userID;
-    static String username;
-    static String password;
+    //static String token; //gebruik UserToken.currentUser.getToken()
+    //static int userID; //gebruik UserToken.currentUser.getUserId()
+    //static String username; //gebruik LoginData.loadUser(this).getUsername()
+    //static String password; //gebruik LoginData.loadUser(this).getPassword()
     static String email;
 
     @Override
@@ -56,8 +56,8 @@ public class LoginPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //get the username and password from the fields
-                username = usernameField.getText().toString();
-                password = passwordField.getText().toString();
+                final String username = usernameField.getText().toString();
+                final String password = passwordField.getText().toString();
 
 
                 //run a login request
@@ -65,8 +65,8 @@ public class LoginPage extends AppCompatActivity {
                     @Override
                     public void onResponse(Object response) {
                         //default values of the user (in case of a failed login)
-                        token = "";
-                        userID = -1;
+                        String token = "";
+                        int userID = -1;
                         try{
                             JSONObject resObject = new JSONArray(response.toString()).getJSONObject(0);
 

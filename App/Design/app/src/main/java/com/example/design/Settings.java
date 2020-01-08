@@ -19,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.design.user.LoginData;
 import com.example.design.user.UserToken;
 
 import org.json.JSONArray;
@@ -43,8 +44,12 @@ public class Settings extends AppCompatActivity implements DialogPassword.Exampl
         TextView emailText = findViewById(R.id.emailtext);
         usernameText = findViewById(R.id.usernametext);
         emailText.setText(LoginPage.email);
-        usernameText.setText(LoginPage.username);
-        int userID = LoginPage.userID;
+
+        String token = UserToken.currentUser.getToken();
+        int userID = UserToken.currentUser.getUserId();
+
+        String username = LoginData.loadUser(this).getUsername();
+        usernameText.setText(username);
         Button closeButton = findViewById(R.id.CloseButton);
         Button changeUsernameButton = findViewById(R.id.changeusernamebutton);
         Button changePasswordButton = findViewById(R.id.changepasswordbutton);
@@ -130,7 +135,8 @@ public class Settings extends AppCompatActivity implements DialogPassword.Exampl
                     for (int i=0; i <array.length();i++) {
                         JSONObject respJson = array.getJSONObject(i);
                         String auth_token = (respJson.getString("auth_token"));
-                        LoginPage.token = auth_token;
+
+                        UserToken.currentUser = new UserToken(UserToken.currentUser.getUserId(), auth_token);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -146,8 +152,8 @@ public class Settings extends AppCompatActivity implements DialogPassword.Exampl
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
                 if(auth) {
-                    params.put("token", UserToken.currentUser.getToken());
-                    params.put("user_id", String.valueOf(UserToken.currentUser.getUserId()));
+                    params.put("auth_token", UserToken.currentUser.getToken());
+                    params.put("id", String.valueOf(UserToken.currentUser.getUserId()));
                 }
                 if(!(username==null)){
                     params.put("username",username);
