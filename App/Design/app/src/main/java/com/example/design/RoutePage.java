@@ -82,7 +82,7 @@ public class RoutePage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                startActivity(new Intent(RoutePage.this, Load.class ).putExtra("VALUE", 1));
+                startActivity(new Intent(RoutePage.this, Load.class ).putExtra("VALUE", 1).putExtra("destinationString",desStr ) );
             }
         });
 
@@ -90,9 +90,9 @@ public class RoutePage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                startActivity(new Intent(RoutePage.this, Load.class ).putExtra("VALUE", 2));
+                startActivity(new Intent(RoutePage.this, Load.class ).putExtra("VALUE", 2).putExtra("locationString",locStr ) );
             }
-            });
+        });
 
 
         Button AgendaButton = findViewById(R.id.agenda);

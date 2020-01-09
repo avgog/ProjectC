@@ -24,7 +24,8 @@ public class Search extends AppCompatActivity {
     // List view
     private ListView lv;
     int val;
-
+    String otherLoc1;
+    String otherloc2;
 
     ArrayAdapter<String> adapter;
 
@@ -41,6 +42,10 @@ public class Search extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         test = getIntent().getStringArrayListExtra("lists");
         val = getIntent().getIntExtra("VALUE", 1);
+        if(val == 1){ otherloc2 = getIntent().getStringExtra("destinationString");}
+        else{ otherloc2 = getIntent().getStringExtra("locationString");}
+
+
 
 
         lv = (ListView) findViewById(R.id.lvFirst);
@@ -75,10 +80,10 @@ public class Search extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 String stop = adapter.getItem(position);
                 if (val == 1) {
-                    startActivity(new Intent(Search.this, RoutePage.class).putExtra("locationString", stop));
+                    startActivity(new Intent(Search.this, RoutePage.class).putExtra("locationString", stop).putExtra("destinationString", otherloc2 ));
                 }
                 if (val == 2) {
-                    startActivity(new Intent(Search.this, RoutePage.class).putExtra("destinationString", stop));
+                    startActivity(new Intent(Search.this, RoutePage.class).putExtra("destinationString", stop).putExtra("locationString", otherloc2 ));
                 }
             }
         });
