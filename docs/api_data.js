@@ -379,7 +379,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/times/",
-    "title": "Return all timeschemes",
+    "title": "Return all active timeschemes",
     "name": "Times",
     "group": "Internal",
     "success": {
@@ -520,11 +520,195 @@ define({ "api": [
     "groupTitle": "Internal"
   },
   {
+    "type": "post",
+    "url": "/public/route/active",
+    "title": "Get active routes.",
+    "name": "Active_Routes",
+    "group": "Public",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>The id of the user.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>The current authentication token for the user.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Message",
+            "description": "<p>State changed</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "[\n  {\n    \"route_id\": 3,\n    \"start\": \"Nesselande, Rotterdam\",\n    \"end\": \"Beurs, Rotterdam\",\n    \"user_id\": 1,\n    \"route_name\": \"Werk\",\n    \"active\": 1\n  }\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "{ \"ERROR\": \"Entry does not exists.\" }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "/opt/projectc/index.js",
+    "groupTitle": "Public"
+  },
+  {
+    "type": "post",
+    "url": "/public/times/active",
+    "title": "Get active timeschemes.",
+    "name": "Active_Timeschemes",
+    "group": "Public",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>The id of the user.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>The current authentication token for the user.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Message",
+            "description": "<p>State changed</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "[\n{\n    \"route_id\": 3,\n    \"start\": \"Nesselande, Rotterdam\",\n    \"end\": \"Beurs, Rotterdam\",\n    \"user_id\": 1,\n    \"route_name\": \"Werk\",\n    \"active\": 1,\n    \"id\": 115,\n    \"timeofarrival\": \"01:10\",\n    \"timeofstart\": null,\n    \"date\": \"Wednesday\",\n    \"last_checked\": null,\n    \"notified\": null\n}\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "{ \"ERROR\": \"Entry does not exists.\" }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "/opt/projectc/index.js",
+    "groupTitle": "Public"
+  },
+  {
     "type": "get/post",
     "url": "/public/all_stops",
     "title": "Returns all stops that are known inside the app.",
     "name": "All_Stops",
     "group": "Public",
+    "version": "0.0.0",
+    "filename": "/opt/projectc/index.js",
+    "groupTitle": "Public"
+  },
+  {
+    "type": "post",
+    "url": "/public/times/route_id",
+    "title": "Get all timeschemes from route.",
+    "name": "All_Timeschemes",
+    "group": "Public",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>The id of the user.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "route_id",
+            "description": "<p>The id of the route.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>The current authentication token for the user.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Message",
+            "description": "<p>State changed</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "[\n  {\n    \"id\": 68,\n    \"route_id\": 34,\n    \"timeofarrival\": \"04:42\",\n    \"timeofstart\": \"23:12\",\n    \"date\": \"Wednesday\",\n    \"last_checked\": \"1578407690\",\n    \"notified\": null,\n    \"active\": 1\n  }\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "{ \"ERROR\": \"Entry does not exists.\" }",
+          "type": "json"
+        }
+      ]
+    },
     "version": "0.0.0",
     "filename": "/opt/projectc/index.js",
     "groupTitle": "Public"
@@ -778,6 +962,152 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/public/route/state",
+    "title": "Switch the route on or off.",
+    "name": "Route_state",
+    "group": "Public",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>The id of the user.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "route_id",
+            "description": "<p>The id of the route.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>The current authentication token for the user.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "state",
+            "description": "<p>The state of the route (1=on &amp; 0=off).</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Message",
+            "description": "<p>State changed</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{ \"Message\": \"State changed\" }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "{ \"ERROR\": \"Entry does not exists.\" }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "/opt/projectc/index.js",
+    "groupTitle": "Public"
+  },
+  {
+    "type": "post",
+    "url": "/public/times/state",
+    "title": "Switch the timescheme on or off.",
+    "name": "Timescheme_state",
+    "group": "Public",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>The id of the user.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "time_id",
+            "description": "<p>The id of the route.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>The current authentication token for the user.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "state",
+            "description": "<p>The state of the route (1=on &amp; 0=off).</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Message",
+            "description": "<p>State changed</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{ \"Message\": \"State changed\" }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "{ \"ERROR\": \"Entry does not exists.\" }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "/opt/projectc/index.js",
+    "groupTitle": "Public"
+  },
+  {
+    "type": "post",
     "url": "/public/auth/change/username",
     "title": "Change username.",
     "name": "Username",
@@ -789,7 +1119,7 @@ define({ "api": [
             "group": "Parameter",
             "type": "Integer",
             "optional": false,
-            "field": "id",
+            "field": "user_id",
             "description": "<p>The id of the user.</p>"
           },
           {
@@ -831,7 +1161,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "[\n  {\n    \"Message\": \"Username updated!\",\n    \"auth_token\": \"c65f1eb100e84eeec4c3c0067f70e7c0d70579a4c4b61d0dd92013df754649b8\"\n  }\n]",
+          "content": "[\n  {\n    \"Message\": \"Username updated!\",\n    \"new_token\": \"c65f1eb100e84eeec4c3c0067f70e7c0d70579a4c4b61d0dd92013df754649b8\"\n  }\n]",
           "type": "json"
         }
       ]
