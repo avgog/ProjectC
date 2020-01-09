@@ -3,6 +3,7 @@ package com.example.design;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -48,6 +49,10 @@ public class RoutePage extends AppCompatActivity {
     Calendar calender;
     String date;
     DatePickerDialog datepicker;
+    static String locStr;
+    static String desStr;
+    EditText fromLocationField;
+    EditText toLocationField;
 
     RouteManager routeManager;
     Route currentRoute;
@@ -56,6 +61,40 @@ public class RoutePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_route_page);
+
+        locStr = getIntent().getStringExtra("locationString");
+        desStr = getIntent().getStringExtra("destinationString");
+
+        fromLocationField = findViewById(R.id.FromLocationButton);
+        toLocationField = findViewById(R.id.ToLocationButton);
+
+        fromLocationField.setText(locStr);
+        toLocationField.setText(desStr);
+
+        if(locStr == null){
+            fromLocationField.setText("-");
+        }
+        if(desStr == null){
+            toLocationField.setText("-");
+        }
+
+        fromLocationField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivity(new Intent(RoutePage.this, Load.class ).putExtra("VALUE", 1));
+            }
+        });
+
+        toLocationField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivity(new Intent(RoutePage.this, Load.class ).putExtra("VALUE", 2));
+            }
+            });
+
+
         Button AgendaButton = findViewById(R.id.agenda);
         final ToggleButton Monday = (findViewById(R.id.mondaybutton));
         final ToggleButton Tuesday = (findViewById(R.id.tuesdaybutton));
@@ -69,8 +108,9 @@ public class RoutePage extends AppCompatActivity {
         routeManager = new RouteManager(this);
         Button closeButton = findViewById(R.id.CloseButton);
         editTextView = findViewById(R.id.routeTitle);
-        final EditText fromLocationField = findViewById(R.id.FromLocationButton);
-        final EditText toLocationField = findViewById(R.id.ToLocationButton);
+
+
+
         Button saveButton = findViewById(R.id.Save);
 
         int routeId = getIntent().getIntExtra("routeId",-1); //get the routeId value that was stored by the MainActivity

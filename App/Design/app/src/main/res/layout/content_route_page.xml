@@ -158,6 +158,7 @@
 
     <EditText
         android:id="@+id/FromLocationButton"
+        android:focusable="false"
         android:layout_width="297dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -171,11 +172,11 @@
         android:shadowDx="1"
         android:shadowDy="1"
         android:shadowRadius="1"
-        android:text="Enter location"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <EditText
         android:id="@+id/ToLocationButton"
+        android:focusable="false"
         android:layout_width="297dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -185,7 +186,6 @@
         android:layout_marginTop="154dp"
         android:layout_marginEnd="22dp"
         android:layout_marginRight="22dp"
-        android:text="Enter location"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
