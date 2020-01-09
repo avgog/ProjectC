@@ -1,6 +1,8 @@
 package com.example.design;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +17,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.design.user.LoginData;
+import com.example.design.user.UserToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,21 +49,34 @@ public class register extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(emailId.getText().toString().isEmpty()) {
-                    Toast.makeText(getApplicationContext(),"enter email address",Toast.LENGTH_SHORT).show();
-                }else {
-                    if (!emailId.getText().toString().trim().matches(emailPattern)) {
-                        Toast.makeText(getApplicationContext(),"Invalid email address", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                if(passwordId.getText().toString().isEmpty()) {
-                    Toast.makeText(getApplicationContext(),"enter password",Toast.LENGTH_SHORT).show();
-                }else {
-                    if (!passwordId.getText().toString().trim().matches(passwordPattern)) {
-                        Toast.makeText(getApplicationContext(),"Invalid password", Toast.LENGTH_SHORT).show();
-                    }
-                }
+                String username = usernameId.getText().toString();
+                String email = emailId.getText().toString();
+                String password = passwordId.getText().toString();
 
+                if(username.isEmpty()){
+                    Toast.makeText(getApplicationContext(),"Enter username",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(email.isEmpty()) {
+                    Toast.makeText(getApplicationContext(),"Enter email",Toast.LENGTH_SHORT).show();
+                    return;
+                }else {
+                    if (!email.trim().matches(emailPattern)) {
+                        Toast.makeText(getApplicationContext(),"Invalid email address", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+                if(password.isEmpty()) {
+                    Toast.makeText(getApplicationContext(),"enter password",Toast.LENGTH_SHORT).show();
+                    return;
+                }else {
+                    if ((password.trim().matches(passwordPattern))) {
+                        Toast.makeText(getApplicationContext(),"Invalid password", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+                Toast.makeText(getApplicationContext(),"Registering...",Toast.LENGTH_SHORT).show();
+                Log.i("register", String.format("Registering user... [username: %s, email: %s]", username,password));
                 String myurl = "http://projectc.caslayoort.nl/public/auth/register";
                 jsonParse(register.this,myurl);
 
@@ -68,37 +85,59 @@ public class register extends AppCompatActivity {
         });
     }
 
-    public void jsonParse(Context context,final String url) {
+    public void jsonParse(final Context context, final String url) {
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest sr = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Log.i("register", "response: " + response);
+
                 try {
                     JSONObject json = new JSONObject(response);
-                    JSONArray array = json.getJSONArray("result");
-                    Log.i("okidoki", array.toString());
-                    for (int i=0; i <array.length();i++) {
-                        JSONObject respJson = array.getJSONObject(i);
-                        String error = (respJson.getString("error"));
-                        String user_id = (respJson.getString("user_id"));
-                        String auth_token = (respJson.getString("auth_token"));
-
-                    String[] jsonArray = new String[3];
-                    jsonArray[0] = error;
-                    jsonArray[1] = user_id;
-                    jsonArray[2] = auth_token;
-
-                    System.out.println(jsonArray);
-
+                    if(json.has("ERROR")){
+                        String error = json.getString("ERROR");
+                        Log.e("register", "ERROR: " + error);
+                        Toast.makeText(getApplicationContext(),error,Toast.LENGTH_LONG).show();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                } catch (JSONException e) { //json string doesn't contain an exception
+                    try{
+                        JSONArray array = new JSONArray(response);
+                        Log.i("register", array.toString());
+                        //for (int i=0; i <array.length();i++) {
+                        if(array.length()>0){
+                            JSONObject respJson = array.getJSONObject(0);
+                            String user_id = (respJson.getString("id"));
+                            String auth_token = (respJson.getString("auth_token"));
+
+                            UserToken.currentUser = new UserToken(Integer.parseInt(user_id), auth_token);
+                            LoginData.saveUser(context, new LoginData(usernameId.getText().toString(), passwordId.getText().toString()));
+                            LoginPage.email = emailId.getText().toString();
+
+                            startActivity(new Intent(register.this, Home.class)); //open new page
+                        }
+                        else{
+                            Log.e("register","array is empty");
+                            Toast.makeText(getApplicationContext(),"Something went wrong with registering, try again later.",Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    catch (JSONException e2){
+                        e2.printStackTrace();
+                        Log.e("register", "json error: " + e2.toString());
+                    }
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i("okidoki",error.toString());
+                Log.e("register",error.toString());
+
+                if(error.toString().contains("com.android.volley.NoConnectionError")){
+                    Log.e("register","No connection");
+                    Toast.makeText(getApplicationContext(),"Unable to connect to the server",Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"Something went wrong with registering, try again later.",Toast.LENGTH_LONG).show();
+                }
             }
         }){
             @Override
