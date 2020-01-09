@@ -20,6 +20,7 @@ public class Load extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load);
         val = getIntent().getIntExtra("VALUE", 1);
+
         if(val == 1){otherLoc1 = "destinationString";
                 otherloc2 = getIntent().getStringExtra("destinationString");}
         else{otherLoc1 = "locationString";

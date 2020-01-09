@@ -65,6 +65,9 @@ public class RoutePage extends AppCompatActivity {
         locStr = getIntent().getStringExtra("locationString");
         desStr = getIntent().getStringExtra("destinationString");
 
+        System.out.println(desStr);
+        System.out.println(locStr);
+
         fromLocationField = findViewById(R.id.FromLocationButton);
         toLocationField = findViewById(R.id.ToLocationButton);
 
@@ -159,6 +162,7 @@ public class RoutePage extends AppCompatActivity {
                         Log.e("Route update request", "error:"+error.toString());
                     }
                 };
+
                 currentRoute.start_point = fromLocationField.getText().toString();
                 currentRoute.end_point = toLocationField.getText().toString();
                 currentRoute.route_name = editTextView.getText().toString();
