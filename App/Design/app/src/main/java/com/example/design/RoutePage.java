@@ -310,7 +310,7 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
 
             }
         });
-              toLocationField.setOnClickListener(new View.OnClickListener() {
+        toLocationField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 RoutePage.activeButton = toLocationField;
