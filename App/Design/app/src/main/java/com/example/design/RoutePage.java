@@ -65,27 +65,22 @@ public class RoutePage extends AppCompatActivity {
         locStr = getIntent().getStringExtra("locationString");
         desStr = getIntent().getStringExtra("destinationString");
 
-        System.out.println(desStr);
-        System.out.println(locStr);
+        final int routeId = getIntent().getIntExtra("routeId",-1); //get the routeId value that was stored by the MainActivity
 
         fromLocationField = findViewById(R.id.FromLocationButton);
         toLocationField = findViewById(R.id.ToLocationButton);
 
-        fromLocationField.setText(locStr);
-        toLocationField.setText(desStr);
+        System.out.println(routeId);
 
-        if(locStr == null){
-            fromLocationField.setText("-");
-        }
-        if(desStr == null){
-            toLocationField.setText("-");
-        }
+
+
+
 
         fromLocationField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                startActivity(new Intent(RoutePage.this, Load.class ).putExtra("VALUE", 1).putExtra("destinationString",desStr ) );
+                startActivity(new Intent(RoutePage.this, Load.class ).putExtra("VALUE", 1).putExtra("destinationString",desStr ).putExtra("routeId",routeId )   );
             }
         });
 
@@ -93,7 +88,7 @@ public class RoutePage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                startActivity(new Intent(RoutePage.this, Load.class ).putExtra("VALUE", 2).putExtra("locationString",locStr ) );
+                startActivity(new Intent(RoutePage.this, Load.class ).putExtra("VALUE", 2).putExtra("locationString",locStr ).putExtra("routeId",routeId ) );
             }
         });
 
@@ -116,7 +111,7 @@ public class RoutePage extends AppCompatActivity {
 
         Button saveButton = findViewById(R.id.Save);
 
-        int routeId = getIntent().getIntExtra("routeId",-1); //get the routeId value that was stored by the MainActivity
+
         editTextView.setText("Unknown Route");
         if(routeId != -1){
             routeManager.getRouteByRouteId(routeId, new Response.Listener() {
@@ -128,8 +123,16 @@ public class RoutePage extends AppCompatActivity {
                         Route[] routes = Route.fromJSONRoutes(array);
                         if(routes.length > 0){ //check if a route has been found
                             editTextView.setText(routes[0].route_name);
-                            fromLocationField.setText(routes[0].start_point);
-                            toLocationField.setText(routes[0].end_point);
+                            if(locStr == null){
+                                fromLocationField.setText(routes[0].start_point);
+                            } else { fromLocationField.setText(locStr); }
+                            if(desStr == null){
+                                toLocationField.setText(routes[0].end_point);
+                            } else { toLocationField.setText(desStr); }
+                            //fromLocationField.setText(routes[0].start_point);
+                            //toLocationField.setText(routes[0].end_point);
+
+
                             currentRoute = routes[0];
                         }
                     }
@@ -144,6 +147,8 @@ public class RoutePage extends AppCompatActivity {
                 }
             });
         }
+
+
 
         //add event to the button for storing new values on the database
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -162,9 +167,10 @@ public class RoutePage extends AppCompatActivity {
                         Log.e("Route update request", "error:"+error.toString());
                     }
                 };
-
-                currentRoute.start_point = fromLocationField.getText().toString();
-                currentRoute.end_point = toLocationField.getText().toString();
+                System.out.println(desStr);
+                System.out.println(locStr);
+                currentRoute.start_point = locStr;
+                currentRoute.end_point = desStr;
                 currentRoute.route_name = editTextView.getText().toString();
 
                 routeManager.changeRouteName(currentRoute, listener,errorListener);

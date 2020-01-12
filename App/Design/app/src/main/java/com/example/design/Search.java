@@ -41,9 +41,12 @@ public class Search extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         test = getIntent().getStringArrayListExtra("lists");
+        final int routeId = getIntent().getIntExtra("routeId",-1);
         val = getIntent().getIntExtra("VALUE", 1);
         if(val == 1){ otherloc2 = getIntent().getStringExtra("destinationString");}
         else{ otherloc2 = getIntent().getStringExtra("locationString");}
+
+        System.out.println(routeId);
 
 
 
@@ -80,10 +83,10 @@ public class Search extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 String stop = adapter.getItem(position);
                 if (val == 1) {
-                    startActivity(new Intent(Search.this, RoutePage.class).putExtra("locationString", stop).putExtra("destinationString", otherloc2 ));
+                    startActivity(new Intent(Search.this, RoutePage.class).putExtra("locationString", stop).putExtra("destinationString", otherloc2 ).putExtra("routeId",routeId ) );
                 }
                 if (val == 2) {
-                    startActivity(new Intent(Search.this, RoutePage.class).putExtra("destinationString", stop).putExtra("locationString", otherloc2 ));
+                    startActivity(new Intent(Search.this, RoutePage.class).putExtra("destinationString", stop).putExtra("locationString", otherloc2 ).putExtra("routeId",routeId ) );
                 }
             }
         });
