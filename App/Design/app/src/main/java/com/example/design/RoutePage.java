@@ -84,6 +84,8 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 import org.json.JSONObject;
 
 public class RoutePage extends AppCompatActivity implements TimePickerFragment.TimePickerListener, DatePickerDialog.OnDateSetListener {
@@ -120,6 +122,9 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_route_page);
         RoutePage.routeId = getIntent().getIntExtra("routeId",-1); //get the routeId value that was stored by the MainActivity
+        if(Settings.language==null){
+            Settings.language = "empty";
+        }
         jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/route_id",String.valueOf(RoutePage.routeId),null,null, null,null,"startup", null);
         Log.i("okidoki", String.valueOf(routeId)+ "start");
         Button AgendaButton = findViewById(R.id.agenda);
@@ -453,6 +458,12 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
         }
         Log.i("okidoki", String.valueOf(routeId));
         jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/add",String.valueOf(RoutePage.routeId),RoutePage.time,RoutePage.date,null,null,"add", null);
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         //Refreshes the layout by retrieving all the timeschemes
         jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/route_id",String.valueOf(RoutePage.routeId),null,null, null,null,"startup", null);
     }
@@ -494,9 +505,6 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
             this.rActive = active;
 
         }
-
-
-
         @NonNull
         @Override
         public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -538,6 +546,33 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
             });
             TextView myDate = row.findViewById(R.id.homeDate);
             TextView myTime = row.findViewById(R.id.homeTime);
+            Log.i("okidoki",Settings.language);
+            if(Settings.language=="nl") {
+                Log.i("okidoki",rDate.get(position));
+                    if (rDate.get(position).equals("Monday")) {
+                        Log.i("okidoki","TRIGGERED");
+                        rDate.set(position,"Maandag");
+                    }
+                    if (rDate.get(position).equals("Tuesday")) {
+                        rDate.set(position,"Dinsdag");
+                    }
+                    if (rDate.get(position).equals("Wednesday")) {
+                        rDate.set(position,"Woensdag");
+                    }
+                    if (rDate.get(position).equals("Thursday")) {
+                        rDate.set(position,"Donderdag");
+                    }
+                    if (rDate.get(position).equals("Friday")){
+                        rDate.set(position,"Vrijdag");
+                    }
+                    if (rDate.get(position).equals("Saturday")) {
+                        rDate.set(position,"Zaterdag");
+                    }
+                    if (rDate.get(position).equals("Sunday")) {
+                        rDate.set(position,"Zondag");
+                    }
+                }
+
             myDate.setText(rDate.get(position));
             myTime.setText(rTime.get(position));
             return row;

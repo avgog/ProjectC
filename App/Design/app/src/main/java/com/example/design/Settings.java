@@ -53,7 +53,6 @@ public class Settings extends AppCompatActivity implements DialogPassword.Exampl
         Button changeUsernameButton = findViewById(R.id.changeusernamebutton);
         Button changePasswordButton = findViewById(R.id.changepasswordbutton);
         ToggleButton changeLanguageButton = findViewById(R.id.changelangbutton);
-        //ToggleButton themeButton = findViewById(R.id.ThemeButton);
         if(language=="nl"){
         changeLanguageButton.setChecked(true); } else {
             changeLanguageButton.setChecked(false);
