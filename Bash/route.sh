@@ -9,6 +9,10 @@ saveRoutes="/routes"                                 #
 apiPort=666                                          #
 apiHost="localhost"                                  #
 intermediateStops="true"                             #
+<<<<<<< HEAD
+from_email="my@from.email"                           #
+=======
+>>>>>>> 5fbe0e2caca0d5d2de18b3c077ef7f0eaf77e56f
 ######################################################
 #                      Commands                      #
 ######################################################
@@ -124,6 +128,45 @@ Route(){ # The program that runs...
   $echo $currentRoute | $jq '.legs | .[] | {from,to,mode,startTime,endTime}' > ${saveRoutes}/${from}-${to}-${date}T${time}.route
 
   updateTime $CURRENT_TIMESCHEME_ID $startTime
+<<<<<<< HEAD
+
+  ## Check if the time the route starts is still the same, if not get the route and resend email with scheme and time of department.
+  if [[ "$startTime" != "$TIMESCHEME_LEAVE" ]]; then
+    # NOTIFY USER THAT HE / SHE HAS TO LEAVE AN OTHER TIME THAN BEFORE
+    PATH_TO_ROUTE="${saveRoutes}/${from}-${to}-${date}T${time}-full.route"
+
+    FULL_ROUTE=$($cat $PATH_TO_ROUTE | $jq -s '.')
+    ROUTE_LENGTH=$($echo $FULL_ROUTE | $jq '. | length'); ROUTE_LENGTH=$((${ROUTE_LENGTH} - 1))
+    
+    SCHEME=""
+    for i in $($seq 0 $ROUTE_LENGTH); do
+      LOCATION_FROM=$( $echo $FULL_ROUTE | $jq ".[$i].from.name" | $sed 's/"//g')
+      LOCATION_TO=$( $echo $FULL_ROUTE | $jq ".[$i].to.name" | $sed 's/"//g')
+      MODE=$( $echo $FULL_ROUTE | $jq ".[$i].mode" | $sed 's/"//g')
+      STARTTIME=$(( $( $echo $FULL_ROUTE | $jq ".[$i].startTime" | $sed 's/"//g') - 3600000 ))
+      ENDTIME=$(( $( $echo $FULL_ROUTE | $jq ".[$i].endTime" | $sed 's/"//g') - 3600000 ))
+      if [[ "$LOCATION_TO" != "NONE" ]]; then
+        if [[ "$LOCATION_FROM" != "NONE" ]]; then
+          SCHEME="${SCHEME}\\n\\n$($echo "$($DATE -d @$( $echo $STARTTIME | $cut -c 1-10 ) +'%H:%M') - $($DATE -d @$( $echo $ENDTIME | cut -c 1-10 ) +'%H:%M') | $MODE | $LOCATION_FROM -> $LOCATION_TO")"
+        else
+          SCHEME="${SCHEME}\\n\\n$($echo "$($DATE -d @$( $echo $STARTTIME | $cut -c 1-10 ) +'%H:%M') - $($DATE -d @$( $echo $ENDTIME | cut -c 1-10 ) +'%H:%M') | $MODE | -> $LOCATION_TO")"
+        fi
+      fi
+    done
+    
+    TEMPLATE='--- NEDERLANDS ---\n\nBeste USER,\n\nUw route begint op DATUM_NL om TIJD. Onderaan deze mail vind u het schema van de route. Het is mogelijk dat deze nog verandert maar dan houden we u op de hoogte.\n\n\n--- English ---\n\nDear USER,\n\nYour route starts DATUM_EN at TIJD. At the end of this email you will find the scheme of the route. It is possible that it will change over time but we will notify you if so.\n\n---\n\nSCHEME'
+
+    DATA=$($echo $SCHEME | $sed 's/\\/\\\\/g' )
+    MAIL=$($echo $TEMPLATE | $sed "s/SCHEME/$DATA/g; s/DATUM_EN/$date/g; s/DATUM_NL/$(date -d $date +'%d-%m-%Y')/g; s/TIJD/$startTime/g; s/USER/$username/g")
+
+    $curl --request POST \
+            --url https://api.sendgrid.com/v3/mail/send \
+            --header "Authorization: Bearer $SENDGRID_API_KEY" \
+            --header 'Content-Type: application/json' \
+            --data "{\"personalizations\": [{\"to\": [{\"email\": \"$email\"}]}],\"from\": {\"email\": \"$from_email\"},\"subject\": \"Test.\",\"content\": [{\"type\": \"text/plain\", \"value\": \"$MAIL\"}]}"
+  fi
+=======
+>>>>>>> 5fbe0e2caca0d5d2de18b3c077ef7f0eaf77e56f
 }
 
 
@@ -133,11 +176,97 @@ Route(){ # The program that runs...
 CURRENT_TIMESCHEME_ID=$1
   CURRENT_TIMESCHEME=$( getTimeScheme $CURRENT_TIMESCHEME_ID )
   CURRENT_ROUTE=$(getRoute $( $echo $CURRENT_TIMESCHEME | $jq '.route_id') )
+<<<<<<< HEAD
+  LAST_NOTIFIED_EPOCH=$( $echo $CURRENT_TIMESCHEME | $jq '.notified' | sed 's/"//g' )
+  TIMESCHEME_LEAVE=$( $echo $CURRENT_TIMESCHEME | $jq '.timeofstart' | sed 's/"//g' )
+  LAST_CHECK=$( $echo $CURRENT_TIMESCHEME | $jq '.last_checked' | $sed 's/\"//g' )
+  user_id=$($echo $CURRENT_ROUTE | $jq '.[0].user_id' | $sed -e 's/"//g')
+  CURRENT_USER=$(getUser $user_id)
+  email=$($echo $CURRENT_USER | $jq '.email' | $sed -e 's/"//g')
+  username=$($echo $CURRENT_USER | $jq '.username' | $sed -e 's/"//g')
+=======
+>>>>>>> 5fbe0e2caca0d5d2de18b3c077ef7f0eaf77e56f
   from=$(getPlace $($echo $CURRENT_ROUTE | $jq '.[0].start' | $sed -e 's/ /_/g') | $sed -e 's/"//g')
   to=$(getPlace $($echo $CURRENT_ROUTE | $jq '.[0].end' | $sed -e 's/ /_/g') | $sed -e 's/"//g')
   time=$( $echo $CURRENT_TIMESCHEME | $jq '.timeofarrival' | $sed -e 's/"//g')
   date='2019-11-10'
   dateTime="${date}T$( convertUTC2 $time )"
+<<<<<<< HEAD
+  CURRENT_EPOCH=$( $echo $($DATE +%s) )
+  CHECK_IF=$($echo $(($LAST_CHECK + 3600)))
+  TODAY=$( $DATE +%A )
+  TODAY_DATE=$( $DATE '+%Y-%m-%d' )
+  if [[ $CURRENT_EPOCH > $CHECK_IF || $LAST_CHECK -eq 'NULL' || $LAST_CHECK -eq 'null' ]]; then
+    if [[ $date -eq $TODAY || $date -eq $TODAY_DATE ]]; then
+      dateTime="${TODAY_DATE}T$( convertUTC2 $time )"
+      date=${TODAY_DATE}
+    fi
+      Route
+      log RENEWED TIMESCHEME $CURRENT_TIMESCHEME_ID
+#  else
+#    log does not renew
+  fi
+
+
+CURRENT_TIMESCHEME=$( getTimeScheme $CURRENT_TIMESCHEME_ID )
+startTime=$( $echo $CURRENT_TIMESCHEME | $jq '.timeofstart' | $sed 's/"//g' )
+
+## Function that notifies user that he / she needs to leave in 10 minutes
+Notify(){
+  AWAY_EPOCH=$($echo $($DATE --date="$TODAY_DATE $startTime" +"%s" )) ## Epoch time format of the time of department
+  NOTIFY_EPOCH=$( $echo $(($AWAY_EPOCH - 600)) ) ## Get the time you notified.
+
+  ## Check if time you need to leave is in a 10 minute margin, if so, notify and update timestamp so it does not send twice.
+  if [[ $CURRENT_EPOCH -lt $AWAY_EPOCH && $CURRENT_EPOCH -ge $NOTIFY_EPOCH ]]; then
+    ## CHECK IF NOT ALREADY NOTIFIED
+    if [[ $LAST_NOTIFIED_EPOCH -eq 'NULL' || $LAST_NOTIFIED_EPOCH -eq 'null' ]]
+    then
+      Route ## For getting the latest route information.
+      PATH_TO_ROUTE="${saveRoutes}/${from}-${to}-${date}T${time}-full.route"
+      FULL_ROUTE=$($cat $PATH_TO_ROUTE | $jq -s '.')
+      ROUTE_LENGTH=$($echo $FULL_ROUTE | $jq '. | length'); ROUTE_LENGTH=$((${ROUTE_LENGTH} - 1))
+      
+      SCHEME=""
+      for i in $($seq 0 $ROUTE_LENGTH); do
+        LOCATION_FROM=$( $echo $FULL_ROUTE | $jq ".[$i].from.name" | $sed 's/"//g')
+        LOCATION_TO=$( $echo $FULL_ROUTE | $jq ".[$i].to.name" | $sed 's/"//g')
+        MODE=$( $echo $FULL_ROUTE | $jq ".[$i].mode" | $sed 's/"//g')
+        STARTTIME=$(( $( $echo $FULL_ROUTE | $jq ".[$i].startTime" | $sed 's/"//g') - 3600000 ))
+        ENDTIME=$(( $( $echo $FULL_ROUTE | $jq ".[$i].endTime" | $sed 's/"//g') - 3600000 ))
+        if [[ "$LOCATION_TO" != "NONE" ]]; then
+          if [[ "$LOCATION_FROM" != "NONE" ]]; then
+            SCHEME="${SCHEME}\\n\\n$($echo "$($DATE -d @$( $echo $STARTTIME | $cut -c 1-10 ) +'%H:%M') - $($DATE -d @$( $echo $ENDTIME | cut -c 1-10 ) +'%H:%M') | $MODE | $LOCATION_FROM -> $LOCATION_TO")"
+          else
+            SCHEME="${SCHEME}\\n\\n$($echo "$($DATE -d @$( $echo $STARTTIME | $cut -c 1-10 ) +'%H:%M') - $($DATE -d @$( $echo $ENDTIME | cut -c 1-10 ) +'%H:%M') | $MODE | -> $LOCATION_TO")"
+          fi
+        fi
+      done
+      
+      TEMPLATE='--- NEDERLANDS ---\n\nBeste USER,\n\nUw route begint binnen 10 minuten. Onderaan deze mail vind u het schema van de route.\n\n\n--- English ---\n\nDear USER,\n\nYour route starts in 10 minutes. At the end of this email you will find the scheme of the route.\n\n---\n\nSCHEME'
+      DATA=$($echo $SCHEME | $sed 's/\\/\\\\/g' )
+      MAIL=$($echo $TEMPLATE | $sed "s/SCHEME/$DATA/g; s/USER/$username/g")
+      $curl --request POST \
+              --url https://api.sendgrid.com/v3/mail/send \
+              --header "Authorization: Bearer $SENDGRID_API_KEY" \
+              --header 'Content-Type: application/json' \
+              --data "{\"personalizations\": [{\"to\": [{\"email\": \"$email\"}]}],\"from\": {\"email\": \"$from_email\"},\"subject\": \"Test.\",\"content\": [{\"type\": \"text/plain\", \"value\": \"$MAIL\"}]}"
+
+      log [ $CURRENT_EPOCH ] Notification send!
+
+      ## Update notified timestamp with the epoch time when you need to leave.
+      updateNotified $CURRENT_TIMESCHEME_ID $AWAY_EPOCH
+    fi
+  else
+    nullNotified $CURRENT_TIMESCHEME_ID
+  fi
+}
+
+if [[ $date -eq $TODAY || $date -eq $TODAY_DATE ]]; then
+  Notify
+fi
+
+=======
   Route
   #/bin/sleep 5
   #log I DID IT
+>>>>>>> 5fbe0e2caca0d5d2de18b3c077ef7f0eaf77e56f

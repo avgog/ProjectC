@@ -35,9 +35,39 @@ app.get('/routes', function(req, res) {
   db.exec(query,res);
 });
 
+<<<<<<< HEAD
+/**
+ * @api {get} /times/ Return all active timeschemes
+ * @apiName Times
+ * @apiGroup Internal
+
+ * @apiSuccess {Integer} id The id of the timescheme
+ * @apiSuccess {Integer} route_id The id of the route of this timescheme.
+ * @apiSuccess {String} timeofarrival The time of the arrival.
+ * @apiSuccess {String} timeofstart The time of the department.
+ * @apiSuccess {String} date Day or date the timescheme is active.
+ * @apiSuccess {Integer/null} last_checked The last time (epoch format) when the time you have to leave is calculated.
+ * @apiSuccess {Integer/null} notified The time (epoch format) you have been notified. (could be null)
+ * @apiSuccessExample Success-Response:
+ * [
+ *   {
+ *    "id": 68,
+ *    "route_id": 34,
+ *    "timeofarrival": "04:42",
+ *    "timeofstart": "03:45",
+ *    "date": "Wednesday",
+ *    "last_checked": "1577657898",
+ *    "notified": null
+ *  }
+ *]
+*/
+
+=======
 // Get all timeschemes
+>>>>>>> 5fbe0e2caca0d5d2de18b3c077ef7f0eaf77e56f
 app.get('/times', function(req, res) {
-  let query = "SELECT * FROM Times;";
+  //let query = "SELECT * FROM Times;";
+  let query = "SELECT Times.* FROM Routes JOIN Times on Times.route_id = Routes.route_id WHERE Routes.active='1' AND Times.active='1' AND Routes.start != '-' AND Routes.end != '-';";
   db.exec(query,res);
 });
 
@@ -102,7 +132,7 @@ app.get('/public/auth', function(req, res){
   let auth_token = crypto.createHash('sha256').update(string).digest('hex');
   //let db_entry = db.execInternalResponse("SELECT user_id AS id, auth_token FROM Users WHERE username='" + username + "' AND password='" + password + "';");
   let queryDatabase = db.execInternalResponse("UPDATE Users set auth_token='" + auth_token + "' WHERE username='" + username + "' AND password='" + password + "';")
-  let db_entry = db.execInternalResponse("SELECT user_id AS id, auth_token FROM Users WHERE username='" + username + "' AND password='" + password + "';");
+  let db_entry = db.execInternalResponse("SELECT user_id AS id, auth_token, email FROM Users WHERE username='" + username + "' AND password='" + password + "';");
   db_entry.then(function(output) {
     console.log("---");
     console.log("[]");
@@ -133,7 +163,7 @@ app.post('/public/auth', function(req, res){
   let auth_token = crypto.createHash('sha256').update(string).digest('hex');
   //let db_entry = db.execInternalResponse("SELECT user_id AS id, auth_token FROM Users WHERE username='" + username + "' AND password='" + password + "';");
   let queryDatabase = db.execInternalResponse("UPDATE Users set auth_token='" + auth_token + "' WHERE username='" + username + "' AND password='" + password + "';")
-  let db_entry = db.execInternalResponse("SELECT user_id AS id, auth_token FROM Users WHERE username='" + username + "' AND password='" + password + "';");
+  let db_entry = db.execInternalResponse("SELECT user_id AS id, auth_token, email FROM Users WHERE username='" + username + "' AND password='" + password + "';");
   db_entry.then(function(output) {
     console.log("---");
     console.log("[]");
@@ -155,6 +185,435 @@ app.post('/public/auth', function(req, res){
   });
 });
 
+<<<<<<< HEAD
+/**
+ * @api {post} /public/auth/register Register api.
+ * @apiName Register
+ * @apiGroup Public
+
+ * @apiParam {String} username The username of the user you want to register.
+ * @apiParam {String} password The password of the user you want to register.
+ 
+ * @apiSuccess {Integer} id The id of the user.
+ * @apiSuccess {String} auth_token The authentication token of that user
+ * @apiSuccessExample Success-Response:
+ * [
+ *   {
+ *     "id": 6,
+ *     "auth_token": "c65f1eb100e84eeec4c3c0067f70e7c0d70579a4c4b61d0dd92013df754649b8"
+ *   }
+ * ]
+
+ * @apiError Unauthorized The user does not enter the right credentials.
+ * @apiError Unknown Something went wrong authenticating your new user, please log in manualy
+ * @apiErrorExample Error-Response:
+ * {
+ *   "ERROR": "Unauthorized"
+ * }
+*/
+
+app.post('/public/auth/register', function(req, res){
+  let data = req.body;
+  let username = data.username;
+  let password = data.password;
+  let email = data.email;
+  console.log(username);
+  console.log(password);
+  console.log(email);
+  let string = username + "^63@431%32=21432*8421345fd2sSqla" + password;
+  let auth_token = crypto.createHash('sha256').update(string).digest('hex');
+  let exists = db.execInternalResponse("SELECT user_id AS id FROM Users WHERE username='" + username + "';");
+  exists.then(function(output) {
+    console.log(output);
+    var it_exists = 0;
+    if ( output.length > 0 ){
+      if ( JSON.parse(JSON.stringify(output[0])) != JSON.parse("{}") ) {
+        res.send("{ \"ERROR\": \"User exists\" }");
+        it_exists = 1;
+      }
+    }
+    
+    if (it_exists == 0){
+      if (email && password && username){
+        db.execInternalResponse("INSERT INTO Users (username,password,email) VALUES ('" + username + "', '" + password + "', '" + email + "');");
+        let queryDatabase = db.execInternalResponse("UPDATE Users set auth_token='" + auth_token + "' WHERE username='" + username + "';")
+        queryDatabase.then(function() {
+            let db_entry = db.execInternalResponse("SELECT user_id AS id, auth_token FROM Users WHERE username='" + username + "' AND password='" + password + "';");
+            db_entry.then(function(output) {
+              
+              if ( output.length > 0 ){
+                if ( JSON.parse(JSON.stringify(output[0])) != JSON.parse("{}") ) {
+                  res.send(output);
+                } else {
+                  res.send("{ \"ERROR\": \"Something went wrong authenticating your new user, please log in manualy\" }");
+                }
+              } else {
+                  res.send("{ \"ERROR\": \"Something went wrong authenticating your new user, please log in manualy\" }");
+                }
+            });
+        });
+      } else { res.send("{ \"ERROR\": \"Invalid parameters.\" }"); }
+    }
+  });
+});
+
+/**
+ * @api {post} /public/auth/change/password Change password.
+ * @apiName Password
+ * @apiGroup Public
+
+ * @apiParam {Integer} id The id of the user.
+ * @apiParam {String} password The new password for the user.
+ * @apiParam {String} auth_token The current authentication token for the user.
+ 
+ * @apiSuccess {String} Message Password updated!
+ * @apiSuccess {String} auth_token The new authentication token of that user.
+ * @apiSuccessExample Success-Response:
+ * [
+ *   {
+ *     "Message": "Password updated!",
+ *     "auth_token": "c65f1eb100e84eeec4c3c0067f70e7c0d70579a4c4b61d0dd92013df754649b8"
+ *   }
+ * ]
+
+ * @apiError Token Invalid token.
+ * @apiError UserDoesNotExists User does not exists.
+ * @apiErrorExample Error-Response:
+ * {
+ *   "ERROR": "Invalid token."
+ * }
+*/
+
+app.post('/public/auth/change/password', function(req, res){
+  let data = req.body;
+  let id = data.user_id; //existing user
+  let password = data.password; //new password
+  let auth_token = data.auth_token; //old auth token
+  //let string = username + "^63@431%32=21432*8421345fd2sSqla" + password;
+  //let new_auth_token = crypto.createHash('sha256').update(string).digest('hex');
+  let exists = db.execInternalResponse("SELECT auth_token,username FROM Users WHERE user_id='" + id + "';");
+  exists.then(function(output) {
+    var validated = 0;
+    if ( output.length > 0 ){
+      if ( JSON.parse(JSON.stringify(output[0])) != JSON.parse("{}") ) {
+        //user exists, auth token in output
+        let old_auth_token = output[0].auth_token;
+        let username = output[0].username;
+        let string = username + "^63@431%32=21432*8421345fd2sSqla" + password;
+        let new_auth_token = crypto.createHash('sha256').update(string).digest('hex');
+        if (auth_token == old_auth_token){
+          validated = 1;
+        let queryDatabase = db.execInternalResponse("UPDATE Users set auth_token='" + new_auth_token + "' WHERE user_id='" + id + "';");
+        queryDatabase.then(function(){let queryDatabase2 = db.execInternalResponse("UPDATE Users set password='" + password + "' WHERE user_id='" + id + "';");}).then(function() {
+          res.send("{ \"Message\": \"Password updated!\", \"new_token\": \"" + new_auth_token + "\" }")
+        });
+        } else { res.send("{ \"ERROR\": \"Invalid token.\" }"); }
+      }
+    }
+    
+    if (validated == 0){
+      res.send("{ \"ERROR\": \"User does not exist.\" }");
+    }
+  });
+});
+
+/**
+ * @api {post} /public/auth/change/username Change username.
+ * @apiName Username
+ * @apiGroup Public
+
+ * @apiParam {Integer} user_id The id of the user.
+ * @apiParam {String} username The new username for the user.
+ * @apiParam {String} auth_token The current authentication token for the user.
+ 
+ * @apiSuccess {String} Message Username updated!
+ * @apiSuccess {String} auth_token The new authentication token of that user.
+ * @apiSuccessExample Success-Response:
+ * [
+ *   {
+ *     "Message": "Username updated!",
+ *     "new_token": "c65f1eb100e84eeec4c3c0067f70e7c0d70579a4c4b61d0dd92013df754649b8"
+ *   }
+ * ]
+
+ * @apiError Token Invalid token.
+ * @apiError UserDoesNotExists User does not exists.
+ * @apiError UsernameExists Username exists.
+ * @apiErrorExample Error-Response:
+ * {
+ *   "ERROR": "Invalid token."
+ * }
+*/
+
+app.post('/public/auth/change/username', function(req, res){
+  let data = req.body;
+  let id = data.user_id; //existing user
+  let username = data.username; //new username
+  let auth_token = data.auth_token; //old auth token
+  var it_exists = 0;
+  let user_exists = db.execInternalResponse("SELECT user_id AS id FROM Users WHERE username='" + username + "';");
+  user_exists.then(function(output) {
+    console.log(output);
+    if ( output.length > 0 ){
+      if ( JSON.parse(JSON.stringify(output[0])) != JSON.parse("{}") ) {
+        res.send("{ \"ERROR\": \"Username exists\" }");
+        exit(0);
+      }
+    }
+  });
+
+  if (it_exists == 0){
+    let exists = db.execInternalResponse("SELECT auth_token,password FROM Users WHERE user_id='" + id + "';");
+    exists.then(function(output) {
+      var validated = 0;
+      if ( output.length > 0 ){
+        if ( JSON.parse(JSON.stringify(output[0])) != JSON.parse("{}") ) {
+          //user exists, auth token in output
+          let old_auth_token = output[0].auth_token;
+          let password = output[0].password;
+          let string = username + "^63@431%32=21432*8421345fd2sSqla" + password;
+          let new_auth_token = crypto.createHash('sha256').update(string).digest('hex');
+          if (auth_token == old_auth_token){
+            validated = 1;
+            let queryDatabase = db.execInternalResponse("UPDATE Users set auth_token='" + new_auth_token + "' WHERE user_id='" + id + "';");
+            queryDatabase.then(function(){ let queryDatabase2 = db.execInternalResponse("UPDATE Users set username='" + username + "' WHERE user_id='" + id + "';"); }).then(function() {
+              res.send("{ \"Message\": \"Username updated!\", \"new_token\": \"" + new_auth_token + "\" }");
+            });
+          } else { res.send("{ \"ERROR\": \"Invalid token.\" }"); }
+        }
+      }
+      
+      if (validated == 0){
+        res.send("{ \"ERROR\": \"User does not exist.\" }");
+      }
+    });
+  }
+});
+
+/**
+ * @api {post} /public/route/state Switch the route on or off.
+ * @apiName Route state
+ * @apiGroup Public
+
+ * @apiParam {Integer} user_id The id of the user.
+ * @apiParam {Integer} route_id The id of the route.
+ * @apiParam {String} token The current authentication token for the user.
+ * @apiParam {Integer} state The state of the route (1=on & 0=off).
+ 
+ * @apiSuccess {String} Message State changed
+ * @apiSuccessExample Success-Response:
+ * { "Message": "State changed" }
+ * @apiErrorExample Error-Response:
+ * { "ERROR": "Entry does not exists." }
+*/
+
+app.post('/public/route/state', function(req, res){
+  let data = req.body;
+  let id = data.user_id; //user
+  let route_id = data.route_id; //route
+  let auth_token = data.token; //auth token
+  let state = data.state; // 1 / 0
+  let exists = db.execInternalResponse("SELECT * FROM Users LEFT JOIN Routes ON Routes.user_id = Users.user_id LEFT JOIN Times ON Times.route_id = Routes.route_id WHERE Users.user_id='" + id + "' AND auth_token='" + auth_token + "' AND Routes.route_id='" + route_id + "';");
+  exists.then(function(output) {
+    var validated = 0;
+    if ( output.length > 0 ){
+      if ( JSON.parse(JSON.stringify(output[0])) != JSON.parse("{}") ) {
+        //entry exists
+        validated = 1;
+	db.execInternalResponse("UPDATE Routes SET active='" + state + "' WHERE route_id='" + route_id + "';").then(function(output) { res.send("{ \"Message\": \"State changed\" }"); });
+      }
+    }
+    
+    if (validated == 0){
+      res.send("{ \"ERROR\": \"Entry does not exists.\" }");
+    }
+  });
+});
+
+/**
+ * @api {post} /public/times/state Switch the timescheme on or off.
+ * @apiName Timescheme state
+ * @apiGroup Public
+
+ * @apiParam {Integer} user_id The id of the user.
+ * @apiParam {Integer} time_id The id of the route.
+ * @apiParam {String} token The current authentication token for the user.
+ * @apiParam {Integer} state The state of the route (1=on & 0=off).
+ 
+ * @apiSuccess {String} Message State changed
+ * @apiSuccessExample Success-Response:
+ * { "Message": "State changed" }
+ * @apiErrorExample Error-Response:
+ * { "ERROR": "Entry does not exists." }
+*/
+
+app.post('/public/times/state', function(req, res){
+  let data = req.body;
+  let id = data.user_id; //user
+  let time_id = data.time_id; //timescheme
+  let auth_token = data.token; //auth token
+  let state = data.state; // 1 / 0
+  let exists = db.execInternalResponse("SELECT * FROM Users LEFT JOIN Routes ON Routes.user_id = Users.user_id LEFT JOIN Times ON Times.route_id = Routes.route_id WHERE Users.user_id='" + id + "' AND auth_token='" + auth_token + "' AND Times.id='" + time_id + "';");
+  exists.then(function(output) {
+    var validated = 0; 
+    if ( output.length > 0 ){
+      if ( JSON.parse(JSON.stringify(output[0])) != JSON.parse("{}") ) {
+        //entry exists
+        validated = 1;
+        db.execInternalResponse("UPDATE Times SET active='" + state + "' WHERE id='" + time_id + "';").then(function(output) { res.send("{ \"Message\": \"State changed\" }"); });
+      }
+    }
+
+    if (validated == 0){
+      res.send("{ \"ERROR\": \"Entry does not exists.\" }");
+    }
+  });
+});
+
+/**
+ * @api {post} /public/route/active Get active routes.
+ * @apiName Active Routes
+ * @apiGroup Public
+
+ * @apiParam {Integer} user_id The id of the user.
+ * @apiParam {String} token The current authentication token for the user.
+ 
+ * @apiSuccess {String} Message State changed
+ * @apiSuccessExample Success-Response:
+ * [
+ *   {
+ *     "route_id": 3,
+ *     "start": "Nesselande, Rotterdam",
+ *     "end": "Beurs, Rotterdam",
+ *     "user_id": 1,
+ *     "route_name": "Werk",
+ *     "active": 1
+ *   }
+ * ]
+ * @apiErrorExample Error-Response:
+ * { "ERROR": "Entry does not exists." }
+*/
+
+app.post('/public/route/active', function(req, res){
+  let data = req.body;
+  let id = data.user_id; //user
+  let auth_token = data.token; //auth token
+  let exists = db.execInternalResponse("SELECT DISTINCT Routes.* FROM Users LEFT JOIN Routes ON Routes.user_id = Users.user_id LEFT JOIN Times ON Times.route_id = Routes.route_id WHERE Users.user_id='" + id + "' AND auth_token='" + auth_token + "' AND Routes.active='1';");
+  exists.then(function(output) {
+    var validated = 0;
+    if ( output.length > 0 ){
+      if ( JSON.parse(JSON.stringify(output[0])) != JSON.parse("{}") ) {
+        //entry exists
+	res.send(output);
+      }
+    }
+    
+    if (validated == 0){
+      res.send("{ \"ERROR\": \"Entry does not exists.\" }");
+    }
+  });
+});
+
+/**
+ * @api {post} /public/times/active Get active timeschemes.
+ * @apiName Active Timeschemes
+ * @apiGroup Public
+
+ * @apiParam {Integer} user_id The id of the user.
+ * @apiParam {String} token The current authentication token for the user.
+ 
+ * @apiSuccess {String} Message State changed
+ * @apiSuccessExample Success-Response:
+ * [
+ * {
+ *     "route_id": 3,
+ *     "start": "Nesselande, Rotterdam",
+ *     "end": "Beurs, Rotterdam",
+ *     "user_id": 1,
+ *     "route_name": "Werk",
+ *     "active": 1,
+ *     "id": 115,
+ *     "timeofarrival": "01:10",
+ *     "timeofstart": null,
+ *     "date": "Wednesday",
+ *     "last_checked": null,
+ *     "notified": null
+ * }
+ * ]
+ * @apiErrorExample Error-Response:
+ * { "ERROR": "Entry does not exists." }
+*/
+
+app.post('/public/times/active', function(req, res){
+  let data = req.body;
+  let id = data.user_id; //user
+  let auth_token = data.token; //auth token
+  let exists = db.execInternalResponse("SELECT DISTINCT Routes.*,Times.* FROM Users LEFT JOIN Routes ON Routes.user_id = Users.user_id LEFT JOIN Times ON Times.route_id = Routes.route_id WHERE Users.user_id='" + id + "' AND auth_token='" + auth_token + "' AND Times.active='1' AND Routes.active='1';");
+  exists.then(function(output) {
+    var validated = 0;
+    if ( output.length > 0 ){
+      if ( JSON.parse(JSON.stringify(output[0])) != JSON.parse("{}") ) {
+        //entry exists
+	res.send(output);
+      }
+    }
+    
+    if (validated == 0){
+      res.send("{ \"ERROR\": \"Entry does not exists.\" }");
+    }
+  });
+});
+
+
+/**
+ * @api {post} /public/times/route_id Get all timeschemes from route.
+ * @apiName All Timeschemes
+ * @apiGroup Public
+
+ * @apiParam {Integer} user_id The id of the user.
+ * @apiParam {Integer} route_id The id of the route.
+ * @apiParam {String} token The current authentication token for the user.
+ 
+ * @apiSuccess {String} Message State changed
+ * @apiSuccessExample Success-Response:
+ * [
+ *   {
+ *     "id": 68,
+ *     "route_id": 34,
+ *     "timeofarrival": "04:42",
+ *     "timeofstart": "23:12",
+ *     "date": "Wednesday",
+ *     "last_checked": "1578407690",
+ *     "notified": null,
+ *     "active": 1
+ *   }
+ * ]
+ * @apiErrorExample Error-Response:
+ * { "ERROR": "Entry does not exists." }
+*/
+
+app.post('/public/times/route_id', function(req, res){
+  let data = req.body;
+  let id = data.user_id; //user
+  let auth_token = data.token; //auth token
+  let route_id = data.route_id;
+  let exists = db.execInternalResponse("SELECT DISTINCT Times.* FROM Users LEFT JOIN Routes ON Routes.user_id = Users.user_id LEFT JOIN Times ON Times.route_id = Routes.route_id WHERE Users.user_id='" + id + "' AND auth_token='" + auth_token + "' AND Routes.route_id='" + route_id + "';");
+  exists.then(function(output) {
+    var validated = 0;
+    if ( output.length > 0 ){
+      if ( JSON.parse(JSON.stringify(output[0])) != JSON.parse("{}") ) {
+        //entry exists
+	res.send(output);
+      }
+    }
+    
+    if (validated == 0){
+      res.send("{ \"ERROR\": \"Entry does not exists.\" }");
+    }
+  });
+});
+=======
+>>>>>>> 5fbe0e2caca0d5d2de18b3c077ef7f0eaf77e56f
 
 // AUDI //
 //list of API url's and query indices
