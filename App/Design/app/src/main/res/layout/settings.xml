@@ -14,12 +14,46 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="1dp"
-        android:layout_marginTop="194dp"
+        android:layout_marginTop="196dp"
         android:layout_marginEnd="0dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginBottom="-1dp"
         android:background="#50ffffff"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme" />
+
+    <ToggleButton
+        android:id="@+id/changelangbutton"
+        android:layout_width="100dp"
+        android:layout_height="27dp"
+        android:layout_below="@+id/changepasswordbutton"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="18dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="83dp"
+        android:layout_toEndOf="@+id/Changelanguage"
+        android:layout_toRightOf="@+id/Changethemetext"
+        android:background="#ffffff"
+        android:text="ToggleButton"
+        android:textOff="@string/english"
+        android:textOn="@string/dutch" />
+
+    <TextView
+        android:id="@+id/Changelanguage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/changepasswordbutton"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="89dp"
+        android:layout_marginLeft="89dp"
+        android:layout_marginTop="14dp"
+        android:text="@string/change_language"
+        android:textColor="#000000"
+        android:textSize="15dp"
+        android:textStyle="bold" />
 
     <View
         android:id="@+id/border2"
@@ -115,7 +149,7 @@
         android:layout_marginStart="126dp"
         android:layout_marginLeft="126dp"
         android:layout_marginTop="91dp"
-        android:text="TestUser"
+        android:text="@string/testuser"
         android:textColor="#000000"
         android:textSize="25dp"
         app:fontFamily="@font/proxima" />
@@ -147,7 +181,7 @@
         android:layout_marginLeft="87dp"
         android:layout_marginTop="222dp"
         android:background="#ffffff"
-        android:text="Change Username" />
+        android:text="@string/change_username" />
 
     <Button
         android:id="@+id/changepasswordbutton"
@@ -161,38 +195,6 @@
         android:layout_marginLeft="89dp"
         android:layout_marginTop="282dp"
         android:background="#ffffff"
-        android:text="Change Password" />
-
-    <TextView
-        android:id="@+id/Changethemetext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/changepasswordbutton"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="101dp"
-        android:layout_marginLeft="101dp"
-        android:layout_marginTop="20dp"
-        android:text="Change theme"
-        android:textColor="#000000"
-        android:textSize="15dp"
-        android:textStyle="bold" />
-
-    <ToggleButton
-        android:id="@+id/ThemeButton"
-        android:layout_width="77dp"
-        android:layout_height="28dp"
-        android:layout_below="@+id/changepasswordbutton"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="18dp"
-        android:layout_toEndOf="@+id/Changethemetext"
-        android:layout_toRightOf="@+id/Changethemetext"
-        android:background="#ffffff"
-        android:text="ToggleButton"
-        android:textOff="Normal"
-        android:textOn="Dark" />
+        android:text="@string/change_password" />
 
 </RelativeLayout>

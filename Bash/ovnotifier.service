@@ -6,7 +6,8 @@ StartLimitIntervalSec=0
 [Service]
 Type=simple
 Restart=always
+RestartSec=0
 User=root
-ExecStart=/root/ovnotifier.sh
+ExecStart=/root/run.sh
 
 [Install]
