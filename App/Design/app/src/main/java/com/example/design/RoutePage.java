@@ -3,6 +3,7 @@ package com.example.design;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -87,7 +88,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
 
-public class RoutePage extends AppCompatActivity implements TimePickerFragment.TimePickerListener, DatePickerDialog.OnDateSetListener, MenuItem.OnMenuItemClickListener, PopupMenu.OnMenuItemClickListener {
+public class RoutePage extends AppCompatActivity implements TimePickerFragment.TimePickerListener, DatePickerDialog.OnDateSetListener {
 
     ListView listView;
     static ArrayList<String> emptylist = new ArrayList<>();
@@ -102,10 +103,11 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
     Calendar calender127;
     static String date;
     static String time;
-    static String toLocation;
-    static String fromLocation;
+
     static EditText activeButton;
     static int routeId;
+    static String locStr;
+    static String desStr;
 
 
 
@@ -127,6 +129,9 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
         Log.i("okidoki", String.valueOf(routeId)+ "start");
         Button AgendaButton = findViewById(R.id.agenda);
 
+        locStr = getIntent().getStringExtra("locationString");
+        desStr = getIntent().getStringExtra("destinationString");
+
         final ToggleButton Monday = (findViewById(R.id.mondaybutton));
         final ToggleButton Tuesday = (findViewById(R.id.tuesdaybutton));
         final ToggleButton Wednesday = (findViewById(R.id.wednesdaybutton));
@@ -146,6 +151,22 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
         final EditText toLocationField = findViewById(R.id.ToLocationButton);
         Button saveButton = findViewById(R.id.Save);
 
+        fromLocationField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivity(new Intent(RoutePage.this, Load.class ).putExtra("VALUE", 1).putExtra("destinationString",desStr ).putExtra("routeId",routeId )   );
+            }
+        });
+
+        toLocationField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivity(new Intent(RoutePage.this, Load.class ).putExtra("VALUE", 2).putExtra("locationString",locStr ).putExtra("routeId",routeId ) );
+            }
+        });
+
 
         editTextView.setText("Unknown Route");
         if(routeId != -1){
@@ -158,8 +179,12 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
                         Route[] routes = Route.fromJSONRoutes(array);
                         if(routes.length > 0){ //check if a route has been found
                             editTextView.setText(routes[0].route_name);
-                            fromLocationField.setText(routes[0].start_point);
-                            toLocationField.setText(routes[0].end_point);
+                            if(locStr == null){
+                                fromLocationField.setText(routes[0].start_point);
+                            } else { fromLocationField.setText(locStr); }
+                            if(desStr == null){
+                                toLocationField.setText(routes[0].end_point);
+                            } else { toLocationField.setText(desStr); }
                             currentRoute = routes[0];
                         }
                     }
@@ -199,7 +224,7 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
                 routeManager.changeRouteName(currentRoute, listener,errorListener);
                 routeManager.changeRouteStartPoint(currentRoute, listener,errorListener);
                 routeManager.changeRouteEndPoint(currentRoute, listener,errorListener);
-                finish();
+                startActivity(new Intent(RoutePage.this, MainActivity.class ));
             }
         });
 
@@ -217,7 +242,7 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                startActivity(new Intent(RoutePage.this, MainActivity.class ));
             }
         });
 
@@ -315,23 +340,23 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
 
             }
         });
-              toLocationField.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RoutePage.activeButton = toLocationField;
-                showPopup(v);
-            }
-        });
-        fromLocationField.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RoutePage.activeButton = fromLocationField;
-                showPopup(v);
+//     toLocationField.setOnClickListener(new View.OnClickListener() {
+//         @Override
+//         public void onClick(View v) {
+//             RoutePage.activeButton = toLocationField;
+//             showPopup(v);
+//         }
+//     });
+//     fromLocationField.setOnClickListener(new View.OnClickListener() {
+//         @Override
+//         public void onClick(View v) {
+//             RoutePage.activeButton = fromLocationField;
+//             showPopup(v);
 
 
 
-            }
-        });
+//         }
+//     });
 
     }
     //Creates http requests to the API. In the parameters variables can be passed if the variable is null it will be ignored and not passed on to the api.
@@ -411,12 +436,12 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
     }
 
 
-    public void showPopup(View v){
-        PopupMenu popup = new PopupMenu(this, v);
-        popup.setOnMenuItemClickListener(this);
-        popup.inflate(R.menu.popupmenu);
-        popup.show();
-    }
+//   public void showPopup(View v){
+//       PopupMenu popup = new PopupMenu(this, v);
+//       popup.setOnMenuItemClickListener(this);
+//       popup.inflate(R.menu.popupmenu);
+//       popup.show();
+//   }
     //Retrieves the date from onDateSet or one of the repeat buttons and passes these with the time to the API so a new time scheme can be created
     @Override
     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
@@ -452,17 +477,17 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
         timePickerFragment.show(getSupportFragmentManager(), "timePicker");
     }
 
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.beurs:
-                activeButton.setText("Beurs, Rotterdam");
-                break;
-            case R.id.capelsebrug:
-                activeButton.setText("Capelsebrug, Capelle aan den Ijssel");
-                break;
-        }
-        return false;    }
+// @Override
+// public boolean onMenuItemClick(MenuItem item) {
+//     switch (item.getItemId()) {
+//         case R.id.beurs:
+//             activeButton.setText("Beurs, Rotterdam");
+//             break;
+//         case R.id.capelsebrug:
+//             activeButton.setText("Capelsebrug, Capelle aan den Ijssel");
+//             break;
+//     }
+//     return false;    }
 
 
     class MyAdapter extends ArrayAdapter<String> {
