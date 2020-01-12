@@ -24,4 +24,5 @@
     <string name="m">M</string>
     <string name="f">F</string>
     <string name="add">+ADD</string>
+    <string name="loading_stops">Loading stops</string>
 </resources>
