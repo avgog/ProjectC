@@ -86,7 +86,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import org.json.JSONObject;
 
-public class RoutePage extends AppCompatActivity implements TimePickerFragment.TimePickerListener, DatePickerDialog.OnDateSetListener, MenuItem.OnMenuItemClickListener, PopupMenu.OnMenuItemClickListener {
+public class RoutePage extends AppCompatActivity {
 
     ListView listView;
     static ArrayList<String> emptylist = new ArrayList<>();
@@ -97,10 +97,13 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
     String activity;
     TextView editTextView;
     AlertDialog alertDialog;
+    static int routeId;
+    static String time;
     EditText editText;
+    static EditText activeButton;
 
     Calendar calender;
-    String date;
+    static String date;
     DatePickerDialog datepicker;
     static String locStr;
     static String desStr;
@@ -234,7 +237,7 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
                 routeManager.changeRouteName(currentRoute, listener,errorListener);
                 routeManager.changeRouteStartPoint(currentRoute, listener,errorListener);
                 routeManager.changeRouteEndPoint(currentRoute, listener,errorListener);
-                finish();
+                startActivity(new Intent(RoutePage.this, MainActivity.class ));
             }
         });
 
@@ -350,23 +353,6 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
 
             }
         });
-              toLocationField.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RoutePage.activeButton = toLocationField;
-                showPopup(v);
-            }
-        });
-        fromLocationField.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RoutePage.activeButton = fromLocationField;
-                showPopup(v);
-
-
-
-            }
-        });
 
     }
     //Creates http requests to the API. In the parameters variables can be passed if the variable is null it will be ignored and not passed on to the api.
@@ -446,52 +432,19 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
     }
 
 
-    public void showPopup(View v){
-        PopupMenu popup = new PopupMenu(this, v);
-        popup.setOnMenuItemClickListener(this);
-        popup.inflate(R.menu.popupmenu);
-        popup.show();
-    }
-    //Retrieves the date from onDateSet or one of the repeat buttons and passes these with the time to the API so a new time scheme can be created
-    @Override
-    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-        RoutePage.time = (String.format("%02d:%02d", hour, minute));
-        /*mTime.add(time);
-        mDate.add(RoutePage.date);*/
-        boolean stop = true;
-        for (int i=0; stop ;i++) {
-            if(!mTimeid.contains(i)) {
-                stop = false;
-                mTimeid.add(i);
-            }
 
-        }
-        Log.i("okidoki", String.valueOf(routeId));
-        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/add",String.valueOf(RoutePage.routeId),RoutePage.time,RoutePage.date,null,null,"add", null);
-        //Refreshes the layout by retrieving all the timeschemes
-        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/route_id",String.valueOf(RoutePage.routeId),null,null, null,null,"startup", null);
-    }
 
-    //Allows you to pick a date for the timescheme
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        RoutePage.date = String.valueOf(year) + "-" + String.valueOf(month + 1) + "-" + String.valueOf(dayOfMonth);
-        DialogFragment timePickerFragment = new TimePickerFragment();
-        timePickerFragment.setCancelable(false);
-        timePickerFragment.show(getSupportFragmentManager(), "timePicker");
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.beurs:
-                activeButton.setText("Beurs, Rotterdam");
-                break;
-            case R.id.capelsebrug:
-                activeButton.setText("Capelsebrug, Capelle aan den Ijssel");
-                break;
-        }
-        return false;    }
+//   @Override
+//   public boolean onMenuItemClick(MenuItem item) {
+//       switch (item.getItemId()) {
+//           case R.id.beurs:
+//               activeButton.setText("Beurs, Rotterdam");
+//               break;
+//           case R.id.capelsebrug:
+//               activeButton.setText("Capelsebrug, Capelle aan den Ijssel");
+//               break;
+//       }
+//       return false;    }
 
 
     class MyAdapter extends ArrayAdapter<String> {
