@@ -36,6 +36,7 @@
     <string name="f">F</string>
     <string name="s">S</string>
     <string name="add">+ADD</string>
+    <string name="loading_stops">Loading stops</string>
 
 
 </resources>

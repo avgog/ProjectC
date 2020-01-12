@@ -24,4 +24,5 @@
     <string name="m">M</string>
     <string name="f">V</string>
     <string name="add">+NIEUW</string>
+    <string name="loading_stops">Haltes laden</string>
 </resources>
