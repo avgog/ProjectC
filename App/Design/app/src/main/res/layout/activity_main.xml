@@ -62,12 +62,23 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="3dp"
-        android:layout_marginRight="3dp"
-        android:background="@drawable/profile" />
+        android:background="@drawable/profile"
+        style="?android:attr/borderlessButtonStyle"/>
+
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="56dp"
+        android:background="@drawable/exit"
+        style="?android:attr/borderlessButtonStyle"/>
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="132dp"
+        android:layout_width="wrap_content"
         android:layout_height="46dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
@@ -75,22 +86,25 @@
         android:layout_marginStart="23dp"
         android:layout_marginLeft="23dp"
         android:layout_marginTop="15dp"
-        android:text="All Routes"
+        android:text="@string/all_routes"
         android:textSize="22dp"
         app:fontFamily="@font/proxima" />
 
     <Button
         android:id="@+id/addRouteButton"
-        android:layout_width="100dp"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="120dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="146dp"
+
+        android:layout_toStartOf="@+id/profileButton"
         android:text="+ADD"
         android:textColor="@color/colorPrimary"
         android:textSize="22dp"
-        app:fontFamily="@font/proxima"
-
-        style="?android:attr/borderlessButtonStyle"
-        />
+        app:fontFamily="@font/proxima" />
 
 </RelativeLayout>

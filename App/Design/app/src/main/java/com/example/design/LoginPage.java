@@ -1,8 +1,8 @@
 package com.example.design;
 
-import androidx.annotation.IntDef;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,9 +13,8 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.example.design.R;
-import com.example.design.routes.Route;
 import com.example.design.user.AccountManager;
+import com.example.design.user.LoginData;
 import com.example.design.user.UserToken;
 
 import org.json.JSONArray;
@@ -24,6 +23,11 @@ import org.json.JSONObject;
 
 public class LoginPage extends AppCompatActivity {
     private AccountManager manager;
+    //static String token; //gebruik UserToken.currentUser.getToken()
+    //static int userID; //gebruik UserToken.currentUser.getUserId()
+    //static String username; //gebruik LoginData.loadUser(this).getUsername()
+    //static String password; //gebruik LoginData.loadUser(this).getPassword()
+    static String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,7 @@ public class LoginPage extends AppCompatActivity {
         final EditText usernameField = findViewById(R.id.usernameField);
         final EditText passwordField = findViewById(R.id.passwordField);
         final TextView loginErrorText = findViewById(R.id.loginErrorText);
+        final Context context = this; //for the onresponse function
 
         Button loginButton = findViewById(R.id.loginButton);
         Button registerButton = findViewById(R.id.registerButton);
@@ -45,12 +50,15 @@ public class LoginPage extends AppCompatActivity {
                 startActivity(intent);}
         });
 
+        tryAutoLogin();
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //get the username and password from the fields
-                String username = usernameField.getText().toString();
-                String password = passwordField.getText().toString();
+                final String username = usernameField.getText().toString();
+                final String password = passwordField.getText().toString();
+
 
                 //run a login request
                 manager.login(username, password, new Response.Listener() {
@@ -58,20 +66,22 @@ public class LoginPage extends AppCompatActivity {
                     public void onResponse(Object response) {
                         //default values of the user (in case of a failed login)
                         String token = "";
-                        int userId = -1;
+                        int userID = -1;
                         try{
                             JSONObject resObject = new JSONArray(response.toString()).getJSONObject(0);
 
                             if(resObject.has("auth_token")){ //check if it has a token field
                                 token = resObject.getString("auth_token");
-                                userId = resObject.getInt("id");
-
-                                UserToken.currentUser = new UserToken(userId, token); //create a new token object and set it as current
+                                userID = resObject.getInt("id");
+                                email = resObject.getString("email");
+                                UserToken.currentUser = new UserToken(userID, token); //create a new token object and set it as current
+                                //store the username and password
+                                LoginData.saveUser(context, new LoginData(username, password));
                                 startActivity(new Intent(LoginPage.this, Home.class)); //open new page
                             }
                             else{
                                 loginErrorText.setVisibility(View.VISIBLE); //show the login error
-                                UserToken.currentUser = new UserToken(userId, token);
+                                UserToken.currentUser = new UserToken(userID, token);
                             }
                         }
                         catch (JSONException e){
@@ -82,7 +92,6 @@ public class LoginPage extends AppCompatActivity {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("login", error.toString());
                         loginErrorText.setVisibility(View.VISIBLE); //show the login error
                     }
                 });
@@ -95,5 +104,37 @@ public class LoginPage extends AppCompatActivity {
         super.onResume();
         final TextView loginErrorText = findViewById(R.id.loginErrorText);
         loginErrorText.setVisibility(View.INVISIBLE); //hide tbe text
+    }
+
+    public void tryAutoLogin(){
+        LoginData loginData = LoginData.loadUser(this); //load the previously stored username and password
+
+        if(loginData.getUsername() != ""){
+            manager.login(loginData.getUsername(), loginData.getPassword(), new Response.Listener() {
+                @Override
+                public void onResponse(Object response) {
+                    try{
+                        JSONObject resObject = new JSONArray(response.toString()).getJSONObject(0);
+
+                        if(resObject.has("auth_token")){ //check if it has a token field
+                            String token = resObject.getString("auth_token");
+                            int userId = resObject.getInt("id");
+                            email = resObject.getString("email");
+
+                            UserToken.currentUser = new UserToken(userId, token); //create a new token object and set it as current
+                            startActivity(new Intent(LoginPage.this, Home.class)); //open new page
+                        }
+                    }
+                    catch (JSONException e){
+                        Log.e("json","error: " + e.toString());
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("auto login", error.toString());
+                }
+            });
+        }
     }
 }
