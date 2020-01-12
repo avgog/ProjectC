@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/homeDate"
-        android:layout_width="240dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_weight="0"
         android:text="DD-MM-YY"
@@ -19,7 +19,7 @@
 
     <TextView
         android:id="@+id/homeTime"
-        android:layout_width="180dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="9:00"
@@ -28,16 +28,9 @@
         android:textStyle="bold" />
 
     <Switch
-        android:id="@+id/ActiveSwitch"
+        android:id="@+id/switch1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0" />
-
-    <Button
-        android:id="@+id/delete"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_weight="0"
-        android:background="@drawable/ic_delete_black_24dp" />
 
 </LinearLayout>

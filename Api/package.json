@@ -1,16 +1,10 @@
 {
   "name": "project-c",
   "version": "1.0.0",
-  "description": "This api is the api for the ovnotifier. We made this project as a second year high school project. For the full project see: projectc.caslayoort.nl/git .",
-  "apidoc": {
-    "title": "Ov notifier api documentation",
-    "url": "projectc.caslayoort.nl",
-    "version": "1.0.0"
-  },
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run index.js && exit 0",
-    "docs": "bash -c ./mk_apidoc.sh"
+    "start": "npm run index.js && exit 0"
   },
   "author": "",
   "license": "ISC",
@@ -20,7 +14,6 @@
     "mysql": "^2.17.1"
   },
   "devDependencies": {
-    "eslint": "^6.7.2",
-    "grunt-apidoc": "^0.11.0"
+    "eslint": "^6.7.2"
   }
 }

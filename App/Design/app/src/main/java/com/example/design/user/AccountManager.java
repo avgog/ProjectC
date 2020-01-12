@@ -21,7 +21,6 @@ public class AccountManager {
         serverURL = context.getResources().getString(R.string.server_url);
     }
 
-    //Login with username + password. Use this function to get a token for using other api functions.
     public void login(String username, String password, Response.Listener listener, Response.ErrorListener errorListener){
         Map<String,String> params = new HashMap<>();
         params.put("username", username);

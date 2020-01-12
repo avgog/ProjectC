@@ -9,7 +9,6 @@ import com.android.volley.VolleyError;
 import com.example.design.routes.response.RouteListErrorListener;
 import com.example.design.routes.response.RouteListListener;
 
-//Is used for firing an event after a press on the remove route button.
 public class OnRemoveRouteClickListener implements View.OnClickListener {
 
     private RouteManager manager;
@@ -23,8 +22,8 @@ public class OnRemoveRouteClickListener implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View view){ //executed when the user presses on the button
-        manager.removeRoute( //remove the route
+    public void onClick(View view){
+        manager.removeRoute(
                 route.getRouteId(),
                 new Response.Listener() {
                     @Override
