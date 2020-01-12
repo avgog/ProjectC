@@ -49,7 +49,7 @@ module.exports.executeAPIQuery = async function(queryIndex, callbackObject, body
         case Query.TIME_GET_BY_ROUTE:   query=`select Times.* from Times ${routeJoin} where Times.route_id = ?;`; values=[body.user_id,body.route_id]; break;
         case Query.TIME_CHANGE_TIME:    query=`update Times ${routeJoin} set Times.timeofarrival = ?, Times.date = ? where Times.id = ?;`; values=[body.user_id,body.end_time,body.date,body.time_id]; break;
         case Query.TIME_REMOVE:         
-            query=`delete from Times where Times.id = ? and exists (select * from (select count(*) from Times join Routes on Routes.user_id = ? and Routes.route_id = Times.route_id and Times.id = ?) as T);`; 
+            query=`delete from Times where Times.id = ? and exists (select * from Times join Routes on Routes.user_id = ? and Routes.route_id = Times.route_id and Times.id = ?);`; 
             values=[body.time_id,body.user_id, body.time_id]; break;
         case Query.USER_CHANGE:
             if(!body.username || !body.password){
@@ -57,7 +57,7 @@ module.exports.executeAPIQuery = async function(queryIndex, callbackObject, body
                 executeQuery = false;
                 break;
             } 
-            query=`update users SET username=?, password=?, auth_token='' where user_id=? and not exists (select * from (select * from users where user_id != ? and username = ?) as T)`; 
+            query=`update users SET username=?, password=?, auth_token='' where user_id=? and not exists(select * from users where user_id != ? and username = ?)`; 
             values=[body.username, body.password, body.user_id, body.user_id, body.username]; break;
         case Query.USER_NAME_EXIST: query=`select count(*) as count from users where username = ?`; values=[body.username]; break;
         case Query.USER_REGISTER:

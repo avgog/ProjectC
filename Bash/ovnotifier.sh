@@ -57,7 +57,7 @@ for i in $($seq 0 `$expr $($echo $TIMESCHEME | $jq '. | length') - 1`); do      
   ##Prepair                                                                      #
     CURRENT_TIMESCHEME_ID=$($echo $TIMESCHEME | $jq ".[$i].id")                  #
     pids=$( $cat $pid_file | $wc -l)                                             #
-    # Creating the possibility of threading                                      # 
+#   while [ $pids -gt 3 ]; do                                                    #
     while [ $pids -gt $max_amount_of_subprocesses ]; do                          #
       WAITING_PID=$( $cat $pid_file | $head -n 1 )                               #
       wait $WAITING_PID                                                          #

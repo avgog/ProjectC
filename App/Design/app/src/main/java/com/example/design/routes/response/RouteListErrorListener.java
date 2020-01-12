@@ -8,7 +8,6 @@ import com.android.volley.VolleyError;
 import com.example.design.routes.Route;
 import com.example.design.routes.RouteManager;
 
-//Responsible for logging error when something went wrong with a Route request
 public class RouteListErrorListener implements Response.ErrorListener {
     private ListView listView;
     private RouteManager manager;

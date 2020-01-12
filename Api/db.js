@@ -4,8 +4,7 @@ const app_settings = JSON.parse( fs.readFileSync(__dirname + "/settings/unsafe.j
 
 module.exports.exec = function(query, res){
     db.query(query, function(err,resp){
-      //if(!err) { console.log("Query [ " + query + " ] succeded!"); res.send(resp); }
-      if(!err) { res.send(resp); }
+      if(!err) { console.log("Query [ " + query + " ] succeded!"); res.send(resp); }
       else { console.log(err); res.send("Error!"); }
     });
 };
