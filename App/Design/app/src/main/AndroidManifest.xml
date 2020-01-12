@@ -24,6 +24,12 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_home"/>
         <activity
+            android:name=".Search"
+            android:label="Search"/>
+        <activity
+            android:name=".Load"
+            android:label="Load"/>
+        <activity
             android:name=".RoutePage"
             android:label="@string/title_activity_route_page"
             android:theme="@style/AppTheme.NoActionBar" />
