@@ -3,6 +3,7 @@ package com.example.design;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -97,17 +98,14 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
     TextView editTextView;
     AlertDialog alertDialog;
     EditText editText;
-    Calendar calender127;
-    static String date;
-    static String time;
-    static String toLocation;
-    static String fromLocation;
-    static EditText activeButton;
-    static int routeId;
 
-
-
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    Calendar calender;
+    String date;
+    DatePickerDialog datepicker;
+    static String locStr;
+    static String desStr;
+    EditText fromLocationField;
+    EditText toLocationField;
 
     RouteManager routeManager;
     Route currentRoute;
@@ -117,9 +115,38 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_route_page);
-        RoutePage.routeId = getIntent().getIntExtra("routeId",-1); //get the routeId value that was stored by the MainActivity
-        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/route_id",String.valueOf(RoutePage.routeId),null,null, null,null,"startup", null);
-        Log.i("okidoki", String.valueOf(routeId)+ "start");
+
+
+        locStr = getIntent().getStringExtra("locationString");
+        desStr = getIntent().getStringExtra("destinationString");
+
+        final int routeId = getIntent().getIntExtra("routeId",-1); //get the routeId value that was stored by the MainActivity
+
+        fromLocationField = findViewById(R.id.FromLocationButton);
+        toLocationField = findViewById(R.id.ToLocationButton);
+
+        System.out.println(routeId);
+
+
+
+
+
+        fromLocationField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivity(new Intent(RoutePage.this, Load.class ).putExtra("VALUE", 1).putExtra("destinationString",desStr ).putExtra("routeId",routeId )   );
+            }
+        });
+
+        toLocationField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivity(new Intent(RoutePage.this, Load.class ).putExtra("VALUE", 2).putExtra("locationString",locStr ).putExtra("routeId",routeId ) );
+            }
+        });
+
         Button AgendaButton = findViewById(R.id.agenda);
 
         final ToggleButton Monday = (findViewById(R.id.mondaybutton));
@@ -137,8 +164,9 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
 
         Button closeButton = findViewById(R.id.CloseButton);
         editTextView = findViewById(R.id.routeTitle);
-        final EditText fromLocationField = findViewById(R.id.FromLocationButton);
-        final EditText toLocationField = findViewById(R.id.ToLocationButton);
+
+
+
         Button saveButton = findViewById(R.id.Save);
 
 
@@ -153,8 +181,16 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
                         Route[] routes = Route.fromJSONRoutes(array);
                         if(routes.length > 0){ //check if a route has been found
                             editTextView.setText(routes[0].route_name);
-                            fromLocationField.setText(routes[0].start_point);
-                            toLocationField.setText(routes[0].end_point);
+                            if(locStr == null){
+                                fromLocationField.setText(routes[0].start_point);
+                            } else { fromLocationField.setText(locStr); }
+                            if(desStr == null){
+                                toLocationField.setText(routes[0].end_point);
+                            } else { toLocationField.setText(desStr); }
+                            //fromLocationField.setText(routes[0].start_point);
+                            //toLocationField.setText(routes[0].end_point);
+
+
                             currentRoute = routes[0];
                         }
                     }
@@ -169,6 +205,8 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
                 }
             });
         }
+
+
 
         //add event to the button for storing new values on the database
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -187,8 +225,10 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
                         Log.e("Route update request", "error:"+error.toString());
                     }
                 };
-                currentRoute.start_point = fromLocationField.getText().toString();
-                currentRoute.end_point = toLocationField.getText().toString();
+                System.out.println(desStr);
+                System.out.println(locStr);
+                currentRoute.start_point = locStr;
+                currentRoute.end_point = desStr;
                 currentRoute.route_name = editTextView.getText().toString();
 
                 routeManager.changeRouteName(currentRoute, listener,errorListener);
