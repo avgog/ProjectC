@@ -11,7 +11,7 @@ saveRoutes="/routes"                                 #
 apiPort=666                                          #
 apiHost="localhost"                                  #
 intermediateStops="true"                             #
-from_email="<FROM@email>"                            #
+from_email="my@from.email"                           #
 ######################################################
 #                      Commands                      #
 ######################################################
@@ -153,18 +153,16 @@ Route(){ # The program that runs and fetches the new time
       fi
     done
     
-    TEMPLATE='--- NEDERLANDS ---\n\nBeste,\n\nUw route begint op DATUM om TIJD. Onderaan deze mail vind u het schema van de route. Het is mogelijk dat deze nog verandert maar dan houden we u op de hoogte.\n\n\n--- English ---\n\nDear,\n\nYour route starts DATUM at TIJD. At the end of this email you will find the scheme of the route. It is possible that it will change over time but we will notify you if so.\n\n---\n\nSCHEME'
+    TEMPLATE='--- NEDERLANDS ---\n\nBeste USER,\n\nUw route begint op DATUM_NL om TIJD. Onderaan deze mail vind u het schema van de route. Het is mogelijk dat deze nog verandert maar dan houden we u op de hoogte.\n\n\n--- English ---\n\nDear USER,\n\nYour route starts DATUM_EN at TIJD. At the end of this email you will find the scheme of the route. It is possible that it will change over time but we will notify you if so.\n\n---\n\nSCHEME'
 
     DATA=$($echo $SCHEME | $sed 's/\\/\\\\/g' )
-    MAIL=$($echo $TEMPLATE | $sed "s/SCHEME/$DATA/g; s/DATUM/$date/g; s/TIJD/$startTime/g")
+    MAIL=$($echo $TEMPLATE | $sed "s/SCHEME/$DATA/g; s/DATUM_EN/$date/g; s/DATUM_NL/$(date -d $date +'%d-%m-%Y')/g; s/TIJD/$startTime/g; s/USER/$username/g")
 
     $curl --request POST \
             --url https://api.sendgrid.com/v3/mail/send \
             --header "Authorization: Bearer $SENDGRID_API_KEY" \
             --header 'Content-Type: application/json' \
             --data "{\"personalizations\": [{\"to\": [{\"email\": \"$email\"}]}],\"from\": {\"email\": \"$from_email\"},\"subject\": \"Test.\",\"content\": [{\"type\": \"text/plain\", \"value\": \"$MAIL\"}]}"
-
-
   fi
 }
 
@@ -181,6 +179,7 @@ CURRENT_TIMESCHEME_ID=$1
   user_id=$($echo $CURRENT_ROUTE | $jq '.[0].user_id' | $sed -e 's/"//g')
   CURRENT_USER=$(getUser $user_id)
   email=$($echo $CURRENT_USER | $jq '.email' | $sed -e 's/"//g')
+  username=$($echo $CURRENT_USER | $jq '.username' | $sed -e 's/"//g')
   from=$(getPlace $($echo $CURRENT_ROUTE | $jq '.[0].start' | $sed -e 's/ /_/g') | $sed -e 's/"//g')
   to=$(getPlace $($echo $CURRENT_ROUTE | $jq '.[0].end' | $sed -e 's/ /_/g') | $sed -e 's/"//g')
   time=$( $echo $CURRENT_TIMESCHEME | $jq '.timeofarrival' | $sed -e 's/"//g')
@@ -236,9 +235,9 @@ Notify(){
         fi
       done
       
-      TEMPLATE='--- NEDERLANDS ---\n\nBeste,\n\nUw route begint binnen 10 minuten. Onderaan deze mail vind u het schema van de route.\n\n\n--- English ---\n\nDear,\n\nYour route starts in 10 minutes. At the end of this email you will find the scheme of the route.\n\n---\n\nSCHEME'
+      TEMPLATE='--- NEDERLANDS ---\n\nBeste USER,\n\nUw route begint binnen 10 minuten. Onderaan deze mail vind u het schema van de route.\n\n\n--- English ---\n\nDear USER,\n\nYour route starts in 10 minutes. At the end of this email you will find the scheme of the route.\n\n---\n\nSCHEME'
       DATA=$($echo $SCHEME | $sed 's/\\/\\\\/g' )
-      MAIL=$($echo $TEMPLATE | $sed "s/SCHEME/$DATA/g")
+      MAIL=$($echo $TEMPLATE | $sed "s/SCHEME/$DATA/g; s/USER/$username/g")
       $curl --request POST \
               --url https://api.sendgrid.com/v3/mail/send \
               --header "Authorization: Bearer $SENDGRID_API_KEY" \
