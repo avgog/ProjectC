@@ -259,10 +259,10 @@
         android:layout_marginLeft="81dp"
         android:layout_marginTop="263dp"
         android:background="#00ffffff"
-        android:text="M"
+        android:text="@string/m"
         android:textColor="@color/colorPrimary"
-        android:textOff="M"
-        android:textOn="M"
+        android:textOff="@string/m"
+        android:textOn="@string/m"
         android:textSize="18dp"
         android:textStyle="bold" />
 
@@ -277,10 +277,10 @@
         android:layout_marginLeft="133dp"
         android:layout_marginTop="263dp"
         android:background="#00ffffff"
-        android:text="T"
+        android:text="@string/t"
         android:textColor="@color/colorPrimary"
-        android:textOff="T"
-        android:textOn="T"
+        android:textOff="@string/t"
+        android:textOn="@string/t"
         android:textSize="18dp"
         android:textStyle="bold" />
 
@@ -296,10 +296,10 @@
         android:layout_marginEnd="190dp"
         android:layout_marginRight="190dp"
         android:background="#00ffffff"
-        android:text="W"
+        android:text="@string/w"
         android:textColor="@color/colorPrimary"
-        android:textOff="W"
-        android:textOn="W"
+        android:textOff="@string/w"
+        android:textOn="@string/w"
         android:textSize="18dp"
         android:textStyle="bold" />
 
@@ -314,10 +314,10 @@
         android:layout_marginEnd="132dp"
         android:layout_marginRight="132dp"
         android:background="#00ffffff"
-        android:text="T"
+        android:text="@string/t"
         android:textColor="@color/colorPrimary"
-        android:textOff="T"
-        android:textOn="T"
+        android:textOff="@string/t"
+        android:textOn="@string/t"
         android:textSize="18dp"
         android:textStyle="bold" />
 
@@ -330,10 +330,10 @@
         android:layout_marginTop="263dp"
         android:layout_marginEnd="79dp"
         android:background="#00ffffff"
-        android:text="F"
+        android:text="@string/f"
         android:textColor="@color/colorPrimary"
-        android:textOff="F"
-        android:textOn="F"
+        android:textOff="@string/f"
+        android:textOn="@string/f"
         android:textSize="18dp"
         android:textStyle="bold" />
 
@@ -346,10 +346,10 @@
         android:layout_marginTop="263dp"
         android:layout_marginEnd="25dp"
         android:background="#00ffffff"
-        android:text="S"
+        android:text="@string/s"
         android:textColor="@color/colorPrimary"
-        android:textOff="S"
-        android:textOn="S"
+        android:textOff="@string/s"
+        android:textOn="@string/s"
         android:textSize="18dp"
         android:textStyle="bold" />
 
@@ -364,10 +364,10 @@
         android:layout_marginLeft="26dp"
         android:layout_marginTop="263dp"
         android:background="#00ffffff"
-        android:text="S "
+        android:text="@string/s"
         android:textColor="@color/colorPrimary"
-        android:textOff="S"
-        android:textOn="S"
+        android:textOff="@string/s"
+        android:textOn="@string/s"
         android:textSize="18dp"
         android:textStyle="bold" />
 

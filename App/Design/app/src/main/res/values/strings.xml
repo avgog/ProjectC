@@ -29,6 +29,13 @@
     <string name="save">SAVE</string>
 
     <string name="server_url">http://projectc.caslayoort.nl:80</string>
+    <string name="m">M</string>
+    <string name="t">T</string>
+    <string name="w">W</string>
+
+    <string name="f">F</string>
+    <string name="s">S</string>
+    <string name="add">+ADD</string>
 
 
 </resources>
