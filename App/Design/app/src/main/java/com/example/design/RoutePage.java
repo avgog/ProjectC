@@ -86,7 +86,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import org.json.JSONObject;
 
-public class RoutePage extends AppCompatActivity implements TimePickerFragment.TimePickerListener, DatePickerDialog.OnDateSetListener, MenuItem.OnMenuItemClickListener, PopupMenu.OnMenuItemClickListener {
+public class RoutePage extends AppCompatActivity {
 
     ListView listView;
     static ArrayList<String> emptylist = new ArrayList<>();
@@ -97,20 +97,18 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
     String activity;
     TextView editTextView;
     AlertDialog alertDialog;
-    EditText editText;
-    Calendar calender127;
-    static String date;
+    static int routeId;
     static String time;
+    EditText editText;
+    static EditText activeButton;
+
+    Calendar calender;
+    static String date;
+    DatePickerDialog datepicker;
     static String locStr;
     static String desStr;
     EditText fromLocationField;
     EditText toLocationField;
-    static EditText activeButton;
-    static int routeId;
-
-
-
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
 
     RouteManager routeManager;
     Route currentRoute;
@@ -120,10 +118,7 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_route_page);
-        RoutePage.routeId = getIntent().getIntExtra("routeId",-1); //get the routeId value that was stored by the MainActivity
-        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/route_id",String.valueOf(RoutePage.routeId),null,null, null,null,"startup", null);
-        Log.i("okidoki", String.valueOf(routeId)+ "start");
-        Button AgendaButton = findViewById(R.id.agenda);
+
 
         locStr = getIntent().getStringExtra("locationString");
         desStr = getIntent().getStringExtra("destinationString");
@@ -133,24 +128,11 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
         fromLocationField = findViewById(R.id.FromLocationButton);
         toLocationField = findViewById(R.id.ToLocationButton);
 
-        final ToggleButton Monday = (findViewById(R.id.mondaybutton));
-        final ToggleButton Tuesday = (findViewById(R.id.tuesdaybutton));
-        final ToggleButton Wednesday = (findViewById(R.id.wednesdaybutton));
-        final ToggleButton Thursday = (findViewById(R.id.thursdaybutton));
-        final ToggleButton Friday = (findViewById(R.id.fridaybutton));
-        final ToggleButton Saturday = (findViewById(R.id.saterdaybutton));
-        final ToggleButton Sunday = (findViewById(R.id.sundaybutton));
+        System.out.println(routeId);
 
-        listView = findViewById(R.id.listview2);
-        listView.setAdapter(null);
 
-        routeManager = new RouteManager(this);
 
-        Button closeButton = findViewById(R.id.CloseButton);
-        editTextView = findViewById(R.id.routeTitle);
-        final EditText fromLocationField = findViewById(R.id.FromLocationButton);
-        final EditText toLocationField = findViewById(R.id.ToLocationButton);
-        Button saveButton = findViewById(R.id.Save);
+
 
         fromLocationField.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,6 +150,28 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
             }
         });
 
+        Button AgendaButton = findViewById(R.id.agenda);
+
+        final ToggleButton Monday = (findViewById(R.id.mondaybutton));
+        final ToggleButton Tuesday = (findViewById(R.id.tuesdaybutton));
+        final ToggleButton Wednesday = (findViewById(R.id.wednesdaybutton));
+        final ToggleButton Thursday = (findViewById(R.id.thursdaybutton));
+        final ToggleButton Friday = (findViewById(R.id.fridaybutton));
+        final ToggleButton Saturday = (findViewById(R.id.saterdaybutton));
+        final ToggleButton Sunday = (findViewById(R.id.sundaybutton));
+
+        listView = findViewById(R.id.listview2);
+        listView.setAdapter(null);
+
+        routeManager = new RouteManager(this);
+
+        Button closeButton = findViewById(R.id.CloseButton);
+        editTextView = findViewById(R.id.routeTitle);
+
+
+
+        Button saveButton = findViewById(R.id.Save);
+
 
         editTextView.setText("Unknown Route");
         if(routeId != -1){
@@ -178,7 +182,7 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
                         JSONObject json = new JSONObject(response.toString());
                         JSONArray array = json.getJSONArray("result");
                         Route[] routes = Route.fromJSONRoutes(array);
-                        if(routes.length > 0){//check if a route has been found
+                        if(routes.length > 0){ //check if a route has been found
                             editTextView.setText(routes[0].route_name);
                             if(locStr == null){
                                 fromLocationField.setText(routes[0].start_point);
@@ -186,6 +190,10 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
                             if(desStr == null){
                                 toLocationField.setText(routes[0].end_point);
                             } else { toLocationField.setText(desStr); }
+                            //fromLocationField.setText(routes[0].start_point);
+                            //toLocationField.setText(routes[0].end_point);
+
+
                             currentRoute = routes[0];
                         }
                     }
@@ -200,6 +208,8 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
                 }
             });
         }
+
+
 
         //add event to the button for storing new values on the database
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -218,8 +228,10 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
                         Log.e("Route update request", "error:"+error.toString());
                     }
                 };
-                currentRoute.start_point = fromLocationField.getText().toString();
-                currentRoute.end_point = toLocationField.getText().toString();
+                System.out.println(desStr);
+                System.out.println(locStr);
+                currentRoute.start_point = locStr;
+                currentRoute.end_point = desStr;
                 currentRoute.route_name = editTextView.getText().toString();
 
                 routeManager.changeRouteName(currentRoute, listener,errorListener);
@@ -420,52 +432,19 @@ public class RoutePage extends AppCompatActivity implements TimePickerFragment.T
     }
 
 
-    public void showPopup(View v){
-        PopupMenu popup = new PopupMenu(this, v);
-        popup.setOnMenuItemClickListener(this);
-        popup.inflate(R.menu.popupmenu);
-        popup.show();
-    }
-    //Retrieves the date from onDateSet or one of the repeat buttons and passes these with the time to the API so a new time scheme can be created
-    @Override
-    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-        RoutePage.time = (String.format("%02d:%02d", hour, minute));
-        /*mTime.add(time);
-        mDate.add(RoutePage.date);*/
-        boolean stop = true;
-        for (int i=0; stop ;i++) {
-            if(!mTimeid.contains(i)) {
-                stop = false;
-                mTimeid.add(i);
-            }
 
-        }
-        Log.i("okidoki", String.valueOf(routeId));
-        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/add",String.valueOf(RoutePage.routeId),RoutePage.time,RoutePage.date,null,null,"add", null);
-        //Refreshes the layout by retrieving all the timeschemes
-        jsonParse(this, "http://projectc.caslayoort.nl:80/public/times/route_id",String.valueOf(RoutePage.routeId),null,null, null,null,"startup", null);
-    }
 
-    //Allows you to pick a date for the timescheme
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        RoutePage.date = String.valueOf(year) + "-" + String.valueOf(month + 1) + "-" + String.valueOf(dayOfMonth);
-        DialogFragment timePickerFragment = new TimePickerFragment();
-        timePickerFragment.setCancelable(false);
-        timePickerFragment.show(getSupportFragmentManager(), "timePicker");
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.beurs:
-                activeButton.setText("Beurs, Rotterdam");
-                break;
-            case R.id.capelsebrug:
-                activeButton.setText("Capelsebrug, Capelle aan den Ijssel");
-                break;
-        }
-        return false;    }
+//   @Override
+//   public boolean onMenuItemClick(MenuItem item) {
+//       switch (item.getItemId()) {
+//           case R.id.beurs:
+//               activeButton.setText("Beurs, Rotterdam");
+//               break;
+//           case R.id.capelsebrug:
+//               activeButton.setText("Capelsebrug, Capelle aan den Ijssel");
+//               break;
+//       }
+//       return false;    }
 
 
     class MyAdapter extends ArrayAdapter<String> {
